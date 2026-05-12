@@ -159,6 +159,7 @@ function App() {
   const [chatMessages, setChatMessages] = useState(chatbotSeedMessages)
   const [draftMessage, setDraftMessage] = useState('')
   const [openFaq, setOpenFaq] = useState(financialAid.faqs[0].id)
+  const [selectedCourseGrades, setSelectedCourseGrades] = useState(null)
   const hasLoadedSavedState = true
 
   useEffect(() => {
@@ -306,6 +307,13 @@ function App() {
     setDraftMessage('')
   }
 
+  function handleOpenCourseGrades(course, summary) {
+    setSelectedCourseGrades({
+      ...course,
+      summary,
+    })
+  }
+
   const activeContent = {
     dashboard: (
       <DashboardView
@@ -320,6 +328,7 @@ function App() {
         selectedQuarterKey={selectedQuarterKey}
         onSelectQuarter={setSelectedQuarterKey}
         onAddSuggestedCourse={handleAddSuggestedCourse}
+        onOpenCourseGrades={handleOpenCourseGrades}
         plannedCourseCodes={plannedCourseCodes}
       />
     ),
@@ -342,6 +351,7 @@ function App() {
         draftMessage={draftMessage}
         messages={chatMessages}
         onDraftChange={setDraftMessage}
+        onOpenCourseGrades={handleOpenCourseGrades}
         onSendMessage={handleSendMessage}
       />
     ),
@@ -469,6 +479,11 @@ function App() {
           {activeContent}
         </main>
       </div>
+
+      <CourseGradesDetailModal
+        course={selectedCourseGrades}
+        onClose={() => setSelectedCourseGrades(null)}
+      />
     </div>
   )
 }
@@ -590,6 +605,7 @@ function PlannerView({
   selectedQuarterKey,
   onSelectQuarter,
   onAddSuggestedCourse,
+  onOpenCourseGrades,
   plannedCourseCodes,
 }) {
   const plannerCourseCodes = useMemo(
@@ -659,10 +675,17 @@ function PlannerView({
                   const quarterUnits = courses.reduce((sum, course) => sum + course.units, 0)
 
                   return (
-                    <button
+                    <div
                       key={quarter}
-                      type="button"
                       onClick={() => onSelectQuarter(quarterKey)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault()
+                          onSelectQuarter(quarterKey)
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
                       className={`rounded-[24px] border p-4 text-left transition ${
                         isSelected
                           ? 'border-[#FEBC11]/40 bg-[#FEBC11]/10 shadow-[0_0_0_1px_rgba(254,188,17,0.14)]'
@@ -683,9 +706,16 @@ function PlannerView({
 
                       <div className="mt-4 space-y-3">
                         {courses.map((course, index) => (
-                          <div
+                          <button
                             key={`${course.code}-${index}`}
-                            className={`rounded-2xl border p-3 ${plannerLegend[course.type].badgeClass}`}
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              if (!isLoadingGrades) {
+                                onOpenCourseGrades(course, gradeSummaries[course.code] ?? null)
+                              }
+                            }}
+                            className={`w-full rounded-2xl border p-3 text-left transition hover:border-white/30 ${plannerLegend[course.type].badgeClass}`}
                           >
                             <div className="flex items-center justify-between gap-3">
                               <div className="font-semibold">{course.code}</div>
@@ -698,10 +728,10 @@ function PlannerView({
                               isLoading={isLoadingGrades}
                               summary={gradeSummaries[course.code] ?? null}
                             />
-                          </div>
+                          </button>
                         ))}
                       </div>
-                    </button>
+                    </div>
                   )
                 })}
               </div>
@@ -739,7 +769,15 @@ function PlannerView({
                   className="rounded-2xl border border-white/10 bg-slate-950/45 p-4"
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!isLoadingGrades) {
+                          onOpenCourseGrades(course, gradeSummaries[course.code] ?? null)
+                        }
+                      }}
+                      className="min-w-0 flex-1 text-left"
+                    >
                       <div className="flex items-center gap-2">
                         <span className="text-base font-semibold">{course.code}</span>
                         <span className={`rounded-full px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
@@ -752,7 +790,7 @@ function PlannerView({
                         isLoading={isLoadingGrades}
                         summary={gradeSummaries[course.code] ?? null}
                       />
-                    </div>
+                    </button>
                     <button
                       type="button"
                       disabled={isAdded}
@@ -794,17 +832,22 @@ function CourseGradesSummary({ summary, isLoading }) {
 
   if (!summary) {
     return (
-      <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-400">
-        Daily Nexus grades unavailable for this course.
+      <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-400">
+        <span>Daily Nexus grades unavailable for this course.</span>
+        <span className="text-slate-500">Click for details</span>
       </div>
     )
   }
 
   return (
-    <div className="mt-3 grid gap-2 sm:grid-cols-3">
-      <GradeStat label="Avg GPA" value={summary.avgGpa ?? 'N/A'} />
-      <GradeStat label="A range" value={summary.aRangeRate != null ? `${summary.aRangeRate}%` : 'N/A'} />
-      <GradeStat label="Latest term" value={summary.latestTerm} />
+    <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+      <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-semibold text-emerald-100">
+        Avg A range {summary.aRangeRate != null ? `${summary.aRangeRate}%` : 'N/A'}
+      </span>
+      <span className="rounded-full border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 font-semibold text-sky-100">
+        Usually {summary.usualOfferedLabel}
+      </span>
+      <span className="text-slate-400">Click for grade breakdown</span>
     </div>
   )
 }
@@ -814,6 +857,126 @@ function GradeStat({ label, value }) {
     <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
       <div className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{label}</div>
       <div className="mt-1 text-sm font-semibold text-white">{value}</div>
+    </div>
+  )
+}
+
+function GradeDistributionBar({ label, value, toneClass }) {
+  return (
+    <div>
+      <div className="mb-2 flex items-center justify-between gap-3 text-sm">
+        <span className="text-slate-300">{label}</span>
+        <span className="font-semibold text-white">{value != null ? `${value}%` : 'N/A'}</span>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-white/8">
+        <div
+          className={`h-full rounded-full bg-gradient-to-r ${toneClass}`}
+          style={{ width: `${value ?? 0}%` }}
+        />
+      </div>
+    </div>
+  )
+}
+
+function CourseGradesDetailModal({ course, onClose }) {
+  if (!course) {
+    return null
+  }
+
+  const { summary } = course
+  const latestInstructors =
+    summary?.latestInstructors?.length > 0
+      ? summary.latestInstructors.slice(0, 3).join(', ')
+      : 'Instructor history unavailable'
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4 py-6 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[32px] border border-white/10 bg-[#07192f] p-6 shadow-[0_30px_120px_rgba(2,8,23,0.7)]"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-5">
+          <div>
+            <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Daily Nexus grade history</p>
+            <h3 className="mt-2 text-2xl font-semibold tracking-tight">{course.code}</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-300">{course.title}</p>
+            {course.note && <p className="mt-2 text-sm leading-6 text-slate-400">{course.note}</p>}
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-semibold text-slate-200 transition hover:border-white/20"
+          >
+            Close
+          </button>
+        </div>
+
+        {!summary ? (
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm leading-6 text-slate-300">
+            Daily Nexus grade history is not available for this course yet.
+          </div>
+        ) : (
+          <>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <GradeStat label="Avg GPA" value={summary.avgGpa ?? 'N/A'} />
+              <GradeStat
+                label="Avg A range"
+                value={summary.aRangeRate != null ? `${summary.aRangeRate}%` : 'N/A'}
+              />
+              <GradeStat label="Usually offered" value={summary.usualOfferedLabel} />
+              <GradeStat label="Latest term" value={summary.latestTerm} />
+            </div>
+
+            <div className="mt-6 rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-sm font-semibold text-white">Grade distribution</div>
+                  <div className="mt-1 text-sm text-slate-400">
+                    Historical percentages across {summary.offeringCount} offerings and{' '}
+                    {summary.totalStudents} enrolled students.
+                  </div>
+                </div>
+                <AppIcon name="spark" className="h-5 w-5 text-[#FEBC11]" />
+              </div>
+
+              <div className="mt-5 space-y-4">
+                <GradeDistributionBar
+                  label="A range"
+                  value={summary.aRangeRate}
+                  toneClass="from-emerald-400 to-emerald-300"
+                />
+                <GradeDistributionBar
+                  label="B range"
+                  value={summary.bRangeRate}
+                  toneClass="from-sky-400 to-sky-300"
+                />
+                <GradeDistributionBar
+                  label="C or below"
+                  value={summary.cOrBelowRate}
+                  toneClass="from-rose-400 to-orange-300"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Latest instructors</div>
+                <div className="mt-2 text-sm leading-6 text-white">{latestInstructors}</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Best planning signal</div>
+                <div className="mt-2 text-sm leading-6 text-slate-300">
+                  This course is most commonly offered in {summary.usualOfferedLabel.toLowerCase()}, so
+                  those quarters are your safest targets when building future terms.
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   )
 }
@@ -1005,7 +1168,7 @@ function ChecklistView({
   )
 }
 
-function ChatView({ draftMessage, messages, onDraftChange, onSendMessage }) {
+function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, onSendMessage }) {
   const { error: gradesError, isLoading: isLoadingGrades, summaries: gradeSummaries } =
     useCourseGradeSummaries(advisorSuggestedCourses.map((course) => course.code))
 
@@ -1105,7 +1268,16 @@ function ChatView({ draftMessage, messages, onDraftChange, onSendMessage }) {
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">Suggested next quarter</h3>
           <div className="mt-4 space-y-3">
             {advisorSuggestedCourses.map((course) => (
-              <div key={course.code} className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
+              <button
+                key={course.code}
+                type="button"
+                onClick={() => {
+                  if (!isLoadingGrades) {
+                    onOpenCourseGrades(course, gradeSummaries[course.code] ?? null)
+                  }
+                }}
+                className="w-full rounded-2xl border border-white/10 bg-white/6 px-4 py-3 text-left transition hover:border-white/20"
+              >
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">{course.code}</span>
                   <span className={`rounded-full px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
@@ -1118,7 +1290,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onSendMessage }) {
                   isLoading={isLoadingGrades}
                   summary={gradeSummaries[course.code] ?? null}
                 />
-              </div>
+              </button>
             ))}
           </div>
 

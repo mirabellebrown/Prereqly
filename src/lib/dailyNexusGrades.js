@@ -39,6 +39,22 @@ function buildTermLabel(quarter, year) {
   return `${quarter} ${year}`
 }
 
+function buildQuarterListLabel(quarters) {
+  if (quarters.length === 0) {
+    return 'Varies'
+  }
+
+  if (quarters.length === 1) {
+    return quarters[0]
+  }
+
+  if (quarters.length === 2) {
+    return `${quarters[0]} and ${quarters[1]}`
+  }
+
+  return `${quarters.slice(0, -1).join(', ')}, and ${quarters.at(-1)}`
+}
+
 function aggregateLatestOfferings(offerings, latestTerm) {
   const latestOfferings = offerings.filter(
     (offering) => offering.year === latestTerm.year && offering.quarter === latestTerm.quarter,
@@ -84,6 +100,15 @@ function summarizeCourseOfferings(course, offerings) {
       totalStudents: 0,
     },
   )
+  const quarterCounts = offerings.reduce(
+    (counts, offering) => {
+      if (offering.quarter) {
+        counts[offering.quarter] = (counts[offering.quarter] ?? 0) + 1
+      }
+      return counts
+    },
+    {},
+  )
 
   const latestTerm = offerings.reduce(
     (currentLatest, offering) =>
@@ -94,6 +119,17 @@ function summarizeCourseOfferings(course, offerings) {
   const latestSummary = aggregateLatestOfferings(offerings, latestTerm)
   const letterStudentsForRates =
     totals.aRangeStudents + totals.bRangeStudents + totals.cOrBelowStudents
+  const sortedQuarterCounts = Object.entries(quarterCounts)
+    .filter(([, count]) => count > 0)
+    .sort(
+      ([leftQuarter, leftCount], [rightQuarter, rightCount]) =>
+        rightCount - leftCount || (QUARTER_ORDER[leftQuarter] ?? 0) - (QUARTER_ORDER[rightQuarter] ?? 0),
+    )
+  const highestQuarterCount = sortedQuarterCounts[0]?.[1] ?? 0
+  const usualQuarters = sortedQuarterCounts
+    .filter(([, count]) => count === highestQuarterCount || count >= Math.max(2, Math.ceil(totals.totalOfferings / 3)))
+    .map(([quarter]) => quarter)
+    .sort((left, right) => (QUARTER_ORDER[left] ?? 0) - (QUARTER_ORDER[right] ?? 0))
 
   return {
     aRangeRate:
@@ -119,6 +155,8 @@ function summarizeCourseOfferings(course, offerings) {
     latestTerm: buildTermLabel(latestTerm.quarter, latestTerm.year),
     offeringCount: totals.totalOfferings,
     totalStudents: totals.totalStudents,
+    usualOffered: usualQuarters,
+    usualOfferedLabel: buildQuarterListLabel(usualQuarters),
   }
 }
 
