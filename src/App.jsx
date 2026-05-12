@@ -882,6 +882,14 @@ function formatReviewDate(date) {
   }).format(parsedDate)
 }
 
+function formatCompactPercent(value) {
+  if (value == null || Number.isNaN(Number(value))) {
+    return 'N/A'
+  }
+
+  return `${Number(value).toFixed(2).replace(/\.?0+$/, '')}%`
+}
+
 function getGradeBarClass(grade) {
   if (grade.startsWith('A')) {
     return 'bg-[#3f9142]'
@@ -1020,7 +1028,7 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
           label="Would take again"
           value={
             professorReview.wouldTakeAgainPercent != null
-              ? `${professorReview.wouldTakeAgainPercent}%`
+              ? formatCompactPercent(professorReview.wouldTakeAgainPercent)
               : 'N/A'
           }
         />
