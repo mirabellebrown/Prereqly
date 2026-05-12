@@ -1091,8 +1091,8 @@ function MonthCard({ label, monthIndex, highlightedDays }) {
     <div className="rounded-[28px] border border-white/10 bg-white/6 p-5 backdrop-blur-xl">
       <div className="text-lg font-semibold tracking-tight">{label}</div>
       <div className="mt-4 grid grid-cols-7 gap-2 text-center text-xs uppercase tracking-[0.18em] text-slate-500">
-        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day) => (
-          <div key={`${label}-${day}`}>{day}</div>
+        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+          <div key={`${label}-${day}-${index}`}>{day}</div>
         ))}
       </div>
       <div className="mt-3 grid grid-cols-7 gap-2">
