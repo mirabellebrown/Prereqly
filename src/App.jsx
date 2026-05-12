@@ -902,16 +902,64 @@ function LetterGradeBreakdownTable({ gradeBreakdown }) {
   )
 }
 
+function HistoricalInstructorsList({ instructors }) {
+  if (instructors.length === 0) {
+    return <div className="mt-3 text-sm leading-6 text-slate-400">Instructor history unavailable.</div>
+  }
+
+  return (
+    <div className="mt-3 flex flex-wrap gap-2">
+      {instructors.map((instructor) => (
+        <span
+          key={instructor}
+          className="rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-sm text-slate-100"
+        >
+          {instructor}
+        </span>
+      ))}
+    </div>
+  )
+}
+
+function OfferingHistoryList({ offeringHistory }) {
+  return (
+    <div className="mt-4 space-y-3">
+      {offeringHistory.map((offering) => (
+        <div
+          key={offering.term}
+          className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="font-semibold text-white">{offering.term}</div>
+            <div className="text-slate-400">
+              {offering.offeringCount} {offering.offeringCount === 1 ? 'section' : 'sections'}
+            </div>
+          </div>
+          <div className="mt-2 leading-6 text-slate-300">
+            {offering.instructors.length > 0
+              ? offering.instructors.join(', ')
+              : 'Instructor data unavailable'}
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+            <span className="rounded-full border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 font-semibold text-sky-100">
+              {offering.totalStudents} students
+            </span>
+            <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-semibold text-emerald-100">
+              Avg GPA {offering.avgGpa ?? 'N/A'}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function CourseGradesDetailModal({ course, onClose }) {
   if (!course) {
     return null
   }
 
   const { summary } = course
-  const latestInstructors =
-    summary?.latestInstructors?.length > 0
-      ? summary.latestInstructors.slice(0, 3).join(', ')
-      : 'Instructor history unavailable'
 
   return (
     <div
@@ -993,8 +1041,8 @@ function CourseGradesDetailModal({ course, onClose }) {
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Latest instructors</div>
-                <div className="mt-2 text-sm leading-6 text-white">{latestInstructors}</div>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Historically taught by</div>
+                <HistoricalInstructorsList instructors={summary.historicalInstructors} />
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Best planning signal</div>
@@ -1003,6 +1051,20 @@ function CourseGradesDetailModal({ course, onClose }) {
                   those quarters are your safest targets when building future terms.
                 </div>
               </div>
+            </div>
+
+            <div className="mt-6 rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-sm font-semibold text-white">Historical offerings</div>
+                  <div className="mt-1 text-sm text-slate-400">
+                    See the terms when this course appeared and which instructors taught it.
+                  </div>
+                </div>
+                <AppIcon name="calendar" className="h-5 w-5 text-[#FEBC11]" />
+              </div>
+
+              <OfferingHistoryList offeringHistory={summary.offeringHistory} />
             </div>
           </>
         )}

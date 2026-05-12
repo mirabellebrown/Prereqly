@@ -74,6 +74,66 @@ function buildQuarterListLabel(quarters) {
   return `${quarters.slice(0, -1).join(', ')}, and ${quarters.at(-1)}`
 }
 
+function buildHistoricalInstructorList(offerings) {
+  const seenInstructors = new Set()
+  const historicalInstructors = []
+
+  for (const offering of [...offerings].sort((left, right) => compareTerms(right, left))) {
+    if (!offering.instructor || seenInstructors.has(offering.instructor)) {
+      continue
+    }
+
+    seenInstructors.add(offering.instructor)
+    historicalInstructors.push(offering.instructor)
+  }
+
+  return historicalInstructors
+}
+
+function buildOfferingHistory(offerings) {
+  const offeringsByTerm = offerings.reduce((history, offering) => {
+    const termKey = `${offering.year}-${offering.quarter}`
+
+    history[termKey] ??= {
+      instructorSet: new Set(),
+      offeringCount: 0,
+      quarter: offering.quarter,
+      term: buildTermLabel(offering.quarter, offering.year),
+      totalGpaPoints: 0,
+      totalLetterStudents: 0,
+      totalStudents: 0,
+      year: offering.year,
+    }
+
+    const termHistory = history[termKey]
+    termHistory.offeringCount += 1
+    termHistory.totalGpaPoints += offering.avgGpa * offering.nLetterStudents
+    termHistory.totalLetterStudents += offering.nLetterStudents
+    termHistory.totalStudents += offering.totalStudents
+
+    if (offering.instructor) {
+      termHistory.instructorSet.add(offering.instructor)
+    }
+
+    return history
+  }, {})
+
+  return Object.values(offeringsByTerm)
+    .sort((left, right) => compareTerms(right, left))
+    .map((termHistory) => ({
+      avgGpa:
+        termHistory.totalLetterStudents > 0
+          ? toRoundedNumber(termHistory.totalGpaPoints / termHistory.totalLetterStudents)
+          : null,
+      instructors: [...termHistory.instructorSet],
+      offeringCount: termHistory.offeringCount,
+      quarter: termHistory.quarter,
+      term: termHistory.term,
+      totalStudents: termHistory.totalStudents,
+      year: termHistory.year,
+    }))
+}
+
 function aggregateLatestOfferings(offerings, latestTerm) {
   const latestOfferings = offerings.filter(
     (offering) => offering.year === latestTerm.year && offering.quarter === latestTerm.quarter,
@@ -140,6 +200,8 @@ function summarizeCourseOfferings(course, offerings) {
   )
 
   const latestSummary = aggregateLatestOfferings(offerings, latestTerm)
+  const historicalInstructors = buildHistoricalInstructorList(offerings)
+  const offeringHistory = buildOfferingHistory(offerings)
   const letterStudentsForRates =
     totals.aRangeStudents + totals.bRangeStudents + totals.cOrBelowStudents
   const sortedQuarterCounts = Object.entries(quarterCounts)
@@ -180,11 +242,13 @@ function summarizeCourseOfferings(course, offerings) {
         ? Math.round((totals.cOrBelowStudents / letterStudentsForRates) * 100)
         : null,
     course,
+    historicalInstructors,
     latestAvgGpa: latestSummary.latestAvgGpa,
     latestInstructors: latestSummary.instructors,
     latestInstructorCount: latestSummary.instructorCount,
     latestTerm: buildTermLabel(latestTerm.quarter, latestTerm.year),
     offeringCount: totals.totalOfferings,
+    offeringHistory,
     gradeBreakdown,
     letterStudentCount: letterStudentsForRates,
     totalStudents: totals.totalStudents,
