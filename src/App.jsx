@@ -935,17 +935,34 @@ function OfferingHistoryList({ offeringHistory }) {
               {offering.offeringCount} {offering.offeringCount === 1 ? 'section' : 'sections'}
             </div>
           </div>
-          <div className="mt-2 leading-6 text-slate-300">
-            {offering.instructors.length > 0
-              ? offering.instructors.join(', ')
-              : 'Instructor data unavailable'}
-          </div>
+          {offering.instructors.length > 0 ? (
+            <div className="mt-3 space-y-2">
+              {offering.instructors.map((instructor) => (
+                <div
+                  key={`${offering.term}-${instructor.name}`}
+                  className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/8 bg-slate-950/45 px-3 py-2"
+                >
+                  <div className="font-medium text-slate-100">{instructor.name}</div>
+                  <div className="flex flex-wrap gap-2 text-xs">
+                    <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-semibold text-emerald-100">
+                      {instructor.aRangeRate != null ? `${instructor.aRangeRate}% A range` : 'A range N/A'}
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
+                      {instructor.letterStudents} letter grades
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-2 leading-6 text-slate-300">Instructor data unavailable</div>
+          )}
           <div className="mt-3 flex flex-wrap gap-2 text-xs">
             <span className="rounded-full border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 font-semibold text-sky-100">
               {offering.totalStudents} students
             </span>
-            <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-semibold text-emerald-100">
-              Avg GPA {offering.avgGpa ?? 'N/A'}
+            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
+              {offering.instructors.length} {offering.instructors.length === 1 ? 'instructor' : 'instructors'}
             </span>
           </div>
         </div>

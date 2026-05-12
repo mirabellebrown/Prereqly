@@ -95,24 +95,27 @@ function buildOfferingHistory(offerings) {
     const termKey = `${offering.year}-${offering.quarter}`
 
     history[termKey] ??= {
-      instructorSet: new Set(),
+      instructorsByName: {},
       offeringCount: 0,
       quarter: offering.quarter,
       term: buildTermLabel(offering.quarter, offering.year),
-      totalGpaPoints: 0,
-      totalLetterStudents: 0,
       totalStudents: 0,
       year: offering.year,
     }
 
     const termHistory = history[termKey]
     termHistory.offeringCount += 1
-    termHistory.totalGpaPoints += offering.avgGpa * offering.nLetterStudents
-    termHistory.totalLetterStudents += offering.nLetterStudents
     termHistory.totalStudents += offering.totalStudents
 
     if (offering.instructor) {
-      termHistory.instructorSet.add(offering.instructor)
+      termHistory.instructorsByName[offering.instructor] ??= {
+        aRangeStudents: 0,
+        letterStudents: 0,
+        name: offering.instructor,
+      }
+
+      termHistory.instructorsByName[offering.instructor].aRangeStudents += offering.aRangeStudents
+      termHistory.instructorsByName[offering.instructor].letterStudents += offering.nLetterStudents
     }
 
     return history
@@ -121,11 +124,21 @@ function buildOfferingHistory(offerings) {
   return Object.values(offeringsByTerm)
     .sort((left, right) => compareTerms(right, left))
     .map((termHistory) => ({
-      avgGpa:
-        termHistory.totalLetterStudents > 0
-          ? toRoundedNumber(termHistory.totalGpaPoints / termHistory.totalLetterStudents)
-          : null,
-      instructors: [...termHistory.instructorSet],
+      instructors: Object.values(termHistory.instructorsByName)
+        .map((instructor) => ({
+          aRangeRate:
+            instructor.letterStudents > 0
+              ? Math.round((instructor.aRangeStudents / instructor.letterStudents) * 100)
+              : null,
+          letterStudents: instructor.letterStudents,
+          name: instructor.name,
+        }))
+        .sort(
+          (left, right) =>
+            (right.aRangeRate ?? -1) - (left.aRangeRate ?? -1) ||
+            right.letterStudents - left.letterStudents ||
+            left.name.localeCompare(right.name),
+        ),
       offeringCount: termHistory.offeringCount,
       quarter: termHistory.quarter,
       term: termHistory.term,
