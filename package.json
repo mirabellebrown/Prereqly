@@ -7,7 +7,8 @@
     "dev": "next dev --webpack",
     "build": "next build",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "update:rmp-snapshot": "node scripts/update-rmp-snapshot.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
