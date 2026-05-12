@@ -910,7 +910,7 @@ function OfferingDistributionChart({ offering }) {
   )
 
   return (
-    <div className="mt-5 rounded-[28px] border border-white/10 bg-slate-950/80 p-4 text-slate-100 shadow-[0_20px_60px_rgba(2,8,23,0.3)]">
+    <div className="rounded-[28px] border border-white/10 bg-slate-950/80 p-4 text-slate-100 shadow-[0_20px_60px_rgba(2,8,23,0.3)]">
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="text-sm font-semibold text-white">{offering.instructor}</div>
@@ -937,7 +937,7 @@ function OfferingDistributionChart({ offering }) {
             <div className="border-t border-white/20" />
           </div>
 
-          <div className="relative grid h-52 grid-cols-[repeat(auto-fit,minmax(20px,1fr))] items-end gap-3 px-2">
+          <div className="relative grid h-52 grid-cols-[repeat(13,minmax(0,1fr))] items-end gap-3 px-2">
             {offering.gradeBreakdown.map((entry) => (
               <div key={entry.grade} className="flex flex-col items-center justify-end">
                 <div className="mb-2 text-center text-[11px] leading-4 text-slate-400">
@@ -962,7 +962,7 @@ function OfferingDistributionChart({ offering }) {
 
 function OfferingDistributionCharts({ offeringDistributions }) {
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className="grid gap-4">
       {offeringDistributions.map((offering) => (
         <OfferingDistributionChart key={offering.id} offering={offering} />
       ))}
@@ -1135,7 +1135,7 @@ function CourseGradesDetailModal({ course, onClose }) {
       onClick={handleClose}
     >
       <div
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[32px] border border-white/10 bg-[#07192f] p-6 shadow-[0_30px_120px_rgba(2,8,23,0.7)]"
+        className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[32px] border border-white/10 bg-[#07192f] p-6 shadow-[0_30px_120px_rgba(2,8,23,0.7)]"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-5">
