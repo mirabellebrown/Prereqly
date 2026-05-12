@@ -247,10 +247,10 @@ function App() {
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FEBC11] to-[#ffd95f] text-lg font-black text-[#003660] shadow-[0_0_30px_rgba(254,188,17,0.25)]">
-              GG
+              PR
             </div>
             <div>
-              <div className="text-lg font-semibold tracking-tight">GauchoGuide</div>
+              <div className="text-lg font-semibold tracking-tight">Prereqly</div>
               <div className="text-sm text-slate-400">UC Santa Barbara academic planning</div>
             </div>
           </div>
@@ -343,7 +343,7 @@ function App() {
                         {item.id === 'dashboard' && 'Overview, progress, and action cards'}
                         {item.id === 'planner' && 'Click-to-add roadmap across four years'}
                         {item.id === 'checklist' && 'Track requirements and transfer credit'}
-                        {item.id === 'chat' && 'Mock advising with Gaucho Guide'}
+                        {item.id === 'chat' && 'Mock advising with Prereqly AI'}
                         {item.id === 'dates' && 'Winter 2026 deadlines and calendar'}
                         {item.id === 'aid' && 'Aid package, refunds, and FAQs'}
                       </span>
@@ -776,7 +776,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onSendMessage }) {
         <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
           <div>
             <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">AI Advisor Chatbot</p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight">Chat with Gaucho Guide</h2>
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight">Chat with Prereqly AI</h2>
           </div>
           <div className="rounded-full border border-[#FEBC11]/25 bg-[#FEBC11]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#FEBC11]">
             Demo mode
@@ -797,7 +797,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onSendMessage }) {
                 }`}
               >
                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  {message.sender === 'user' ? studentProfile.firstName : 'Gaucho Guide'}
+                  {message.sender === 'user' ? studentProfile.firstName : 'Prereqly AI'}
                 </div>
                 <p className="text-sm leading-7 text-slate-100">{message.text}</p>
 

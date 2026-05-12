@@ -42,7 +42,7 @@ export const quickAccessCards = [
   },
   {
     id: 'chat',
-    title: 'Ask Gaucho Guide',
+    title: 'Ask Prereqly AI',
     description: 'Get mock advising guidance on prerequisites, sequencing, and UCSB planning tools.',
     accent: 'from-indigo-400/20 to-indigo-300/0',
   },
@@ -262,7 +262,7 @@ export const chatbotSeedMessages = [
   {
     id: 'bot-intro',
     sender: 'bot',
-    text: 'Hi Maya. I am Gaucho Guide, your planning assistant for UCSB. I can help with course sequencing, deadlines, and financial aid basics.',
+    text: 'Hi Maya. I am Prereqly AI, your planning assistant for UCSB. I can help with course sequencing, deadlines, and financial aid basics.',
   },
   {
     id: 'user-question',
