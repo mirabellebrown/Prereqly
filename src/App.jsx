@@ -15,6 +15,7 @@ import {
   upcomingDeadlines,
   winterDates,
 } from './mockData'
+import { useCourseGradeSummaries } from './lib/useCourseGradeSummaries'
 
 const quarters = ['Fall', 'Winter', 'Spring']
 const storageKeys = {
@@ -590,6 +591,16 @@ function PlannerView({
   onAddSuggestedCourse,
   plannedCourseCodes,
 }) {
+  const plannerCourseCodes = useMemo(
+    () =>
+      planner.flatMap((yearPlan) =>
+        quarters.flatMap((quarter) => yearPlan.quarters[quarter].map((course) => course.code)),
+      ),
+    [planner],
+  )
+  const { error: gradesError, isLoading: isLoadingGrades, summaries: gradeSummaries } =
+    useCourseGradeSummaries([...plannerCourseCodes, ...plannerSuggestions.map((course) => course.code)])
+
   return (
     <div className="grid gap-6 xl:grid-cols-[1.6fr,0.9fr]">
       <section className="space-y-6">
@@ -682,6 +693,10 @@ function PlannerView({
                               </span>
                             </div>
                             <div className="mt-1 text-sm leading-6 text-slate-100/90">{course.title}</div>
+                            <CourseGradesSummary
+                              isLoading={isLoadingGrades}
+                              summary={gradeSummaries[course.code] ?? null}
+                            />
                           </div>
                         ))}
                       </div>
@@ -732,6 +747,10 @@ function PlannerView({
                       </div>
                       <p className="mt-2 text-sm text-slate-300">{course.title}</p>
                       <p className="mt-2 text-sm leading-6 text-slate-400">{course.note}</p>
+                      <CourseGradesSummary
+                        isLoading={isLoadingGrades}
+                        summary={gradeSummaries[course.code] ?? null}
+                      />
                     </div>
                     <button
                       type="button"
@@ -750,8 +769,50 @@ function PlannerView({
               )
             })}
           </div>
+
+          {gradesError && (
+            <div className="mt-4 rounded-2xl border border-rose-400/25 bg-rose-500/10 p-4 text-sm text-rose-100">
+              Daily Nexus grade data is temporarily unavailable. Planner cards will keep working
+              without it.
+            </div>
+          )}
         </div>
       </aside>
+    </div>
+  )
+}
+
+function CourseGradesSummary({ summary, isLoading }) {
+  if (isLoading) {
+    return (
+      <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-300">
+        Loading Daily Nexus grades...
+      </div>
+    )
+  }
+
+  if (!summary) {
+    return (
+      <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-400">
+        Daily Nexus grades unavailable for this course.
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-3 grid gap-2 sm:grid-cols-3">
+      <GradeStat label="Avg GPA" value={summary.avgGpa ?? 'N/A'} />
+      <GradeStat label="A range" value={summary.aRangeRate != null ? `${summary.aRangeRate}%` : 'N/A'} />
+      <GradeStat label="Latest term" value={summary.latestTerm} />
+    </div>
+  )
+}
+
+function GradeStat({ label, value }) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+      <div className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{label}</div>
+      <div className="mt-1 text-sm font-semibold text-white">{value}</div>
     </div>
   )
 }
