@@ -861,42 +861,79 @@ function GradeStat({ label, value }) {
   )
 }
 
-function GradeDistributionBar({ label, value, toneClass }) {
-  return (
-    <div>
-      <div className="mb-2 flex items-center justify-between gap-3 text-sm">
-        <span className="text-slate-300">{label}</span>
-        <span className="font-semibold text-white">{value != null ? `${value}%` : 'N/A'}</span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-white/8">
-        <div
-          className={`h-full rounded-full bg-gradient-to-r ${toneClass}`}
-          style={{ width: `${value ?? 0}%` }}
-        />
-      </div>
-    </div>
-  )
+function getGradeBarClass(grade) {
+  if (grade.startsWith('A')) {
+    return 'bg-[#3f9142]'
+  }
+
+  if (grade.startsWith('B')) {
+    return 'bg-[#3e92cc]'
+  }
+
+  if (grade.startsWith('C')) {
+    return 'bg-[#dd6b20]'
+  }
+
+  if (grade.startsWith('D')) {
+    return 'bg-[#e11d48]'
+  }
+
+  return 'bg-black'
 }
 
-function LetterGradeBreakdownTable({ gradeBreakdown }) {
+function LetterGradeDistributionChart({ gradeBreakdown, totalStudents }) {
+  const maxCount = Math.max(...gradeBreakdown.map((entry) => entry.count), 1)
+  const tickCount = 5
+  const ticks = Array.from({ length: tickCount }, (_, index) =>
+    Math.round((maxCount * (tickCount - index)) / tickCount),
+  )
+
   return (
-    <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-      <div className="grid grid-cols-[0.8fr_1fr_1fr] gap-3 border-b border-white/10 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-        <span>Grade</span>
-        <span>Students</span>
-        <span>Percent</span>
-      </div>
-      <div className="divide-y divide-white/10">
-        {gradeBreakdown.map((entry) => (
-          <div
-            key={entry.grade}
-            className="grid grid-cols-[0.8fr_1fr_1fr] gap-3 px-4 py-3 text-sm text-slate-200"
-          >
-            <span className="font-semibold text-white">{entry.grade}</span>
-            <span>{entry.count}</span>
-            <span>{entry.rate != null ? `${entry.rate}%` : 'N/A'}</span>
+    <div className="mt-5 rounded-[28px] border border-white/10 bg-[#f5f5f4] p-4 text-slate-900">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="text-sm font-semibold text-slate-700">Letter grade distribution</div>
+          <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-500">
+            Count and share by final letter grade
           </div>
-        ))}
+        </div>
+        <div className="text-sm font-semibold text-slate-600">Total: {totalStudents}</div>
+      </div>
+
+      <div className="mt-5 grid grid-cols-[36px_1fr] gap-3">
+        <div className="flex h-52 flex-col justify-between pb-8 text-[11px] text-slate-500">
+          {ticks.map((tick) => (
+            <span key={tick}>{tick}</span>
+          ))}
+          <span>0</span>
+        </div>
+
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-0 flex flex-col justify-between pb-8">
+            {ticks.map((tick) => (
+              <div key={tick} className="border-t border-slate-300/70" />
+            ))}
+            <div className="border-t border-slate-400" />
+          </div>
+
+          <div className="relative grid h-52 grid-cols-[repeat(auto-fit,minmax(20px,1fr))] items-end gap-3 px-2">
+            {gradeBreakdown.map((entry) => (
+              <div key={entry.grade} className="flex flex-col items-center justify-end">
+                <div className="mb-2 text-center text-[11px] leading-4 text-slate-600">
+                  <div className="font-semibold text-slate-800">{entry.count}</div>
+                  <div>{entry.rate != null ? `${entry.rate}%` : 'N/A'}</div>
+                </div>
+                <div
+                  className={`w-full min-w-4 rounded-t-sm ${getGradeBarClass(entry.grade)}`}
+                  style={{
+                    height: `${Math.max((entry.count / maxCount) * 144, entry.count > 0 ? 6 : 0)}px`,
+                  }}
+                />
+                <div className="mt-2 text-[11px] font-medium text-slate-700">{entry.grade}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -1037,29 +1074,10 @@ function CourseGradesDetailModal({ course, onClose }) {
                 <AppIcon name="spark" className="h-5 w-5 text-[#FEBC11]" />
               </div>
 
-              <LetterGradeBreakdownTable gradeBreakdown={summary.gradeBreakdown} />
-
-              <div className="mt-6 border-t border-white/10 pt-5">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Range overview</div>
-              </div>
-
-              <div className="mt-5 space-y-4">
-                <GradeDistributionBar
-                  label="A range"
-                  value={summary.aRangeRate}
-                  toneClass="from-emerald-400 to-emerald-300"
-                />
-                <GradeDistributionBar
-                  label="B range"
-                  value={summary.bRangeRate}
-                  toneClass="from-sky-400 to-sky-300"
-                />
-                <GradeDistributionBar
-                  label="C or below"
-                  value={summary.cOrBelowRate}
-                  toneClass="from-rose-400 to-orange-300"
-                />
-              </div>
+              <LetterGradeDistributionChart
+                gradeBreakdown={summary.gradeBreakdown}
+                totalStudents={summary.letterStudentCount}
+              />
             </div>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
