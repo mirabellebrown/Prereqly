@@ -955,11 +955,17 @@ function OfferingHistoryList({ offeringHistory }) {
 }
 
 function CourseGradesDetailModal({ course, onClose }) {
+  const [expandedCourseCode, setExpandedCourseCode] = useState('')
+
   if (!course) {
     return null
   }
 
   const { summary } = course
+  const showAllHistory = expandedCourseCode === course.code
+  const visibleOfferingHistory = showAllHistory
+    ? summary.offeringHistory
+    : summary.offeringHistory.slice(0, 3)
 
   return (
     <div
@@ -1058,13 +1064,26 @@ function CourseGradesDetailModal({ course, onClose }) {
                 <div>
                   <div className="text-sm font-semibold text-white">Historical offerings</div>
                   <div className="mt-1 text-sm text-slate-400">
-                    See the terms when this course appeared and which instructors taught it.
+                    See the most recent three quarters when this course appeared and which instructors
+                    taught it.
                   </div>
                 </div>
                 <AppIcon name="calendar" className="h-5 w-5 text-[#FEBC11]" />
               </div>
 
-              <OfferingHistoryList offeringHistory={summary.offeringHistory} />
+              <OfferingHistoryList offeringHistory={visibleOfferingHistory} />
+
+              {summary.offeringHistory.length > 3 && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setExpandedCourseCode((current) => (current === course.code ? '' : course.code))
+                  }
+                  className="mt-4 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-white/20 hover:bg-white/8"
+                >
+                  {showAllHistory ? 'Show fewer quarters' : 'See all data'}
+                </button>
+              )}
             </div>
           </>
         )}
