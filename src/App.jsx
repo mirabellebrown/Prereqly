@@ -878,7 +878,7 @@ function getGradeBarClass(grade) {
     return 'bg-[#e11d48]'
   }
 
-  return 'bg-black'
+  return 'bg-slate-100'
 }
 
 function OfferingDistributionChart({ offering }) {
@@ -889,15 +889,15 @@ function OfferingDistributionChart({ offering }) {
   )
 
   return (
-    <div className="mt-5 rounded-[28px] border border-white/10 bg-[#f5f5f4] p-4 text-slate-900">
+    <div className="mt-5 rounded-[28px] border border-white/10 bg-slate-950/80 p-4 text-slate-100 shadow-[0_20px_60px_rgba(2,8,23,0.3)]">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <div className="text-sm font-semibold text-slate-700">{offering.instructor}</div>
-          <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-500">
+          <div className="text-sm font-semibold text-white">{offering.instructor}</div>
+          <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">
             {offering.term}
           </div>
         </div>
-        <div className="text-sm font-semibold text-slate-600">Total: {offering.letterStudentCount}</div>
+        <div className="text-sm font-semibold text-slate-300">Total: {offering.letterStudentCount}</div>
       </div>
 
       <div className="mt-5 grid grid-cols-[36px_1fr] gap-3">
@@ -911,25 +911,25 @@ function OfferingDistributionChart({ offering }) {
         <div className="relative">
           <div className="pointer-events-none absolute inset-0 flex flex-col justify-between pb-8">
             {ticks.map((tick) => (
-              <div key={tick} className="border-t border-slate-300/70" />
+              <div key={tick} className="border-t border-white/10" />
             ))}
-            <div className="border-t border-slate-400" />
+            <div className="border-t border-white/20" />
           </div>
 
           <div className="relative grid h-52 grid-cols-[repeat(auto-fit,minmax(20px,1fr))] items-end gap-3 px-2">
             {offering.gradeBreakdown.map((entry) => (
               <div key={entry.grade} className="flex flex-col items-center justify-end">
-                <div className="mb-2 text-center text-[11px] leading-4 text-slate-600">
-                  <div className="font-semibold text-slate-800">{entry.count}</div>
+                <div className="mb-2 text-center text-[11px] leading-4 text-slate-400">
+                  <div className="font-semibold text-white">{entry.count}</div>
                   <div>{entry.rate != null ? `${entry.rate}%` : 'N/A'}</div>
                 </div>
                 <div
-                  className={`w-full min-w-4 rounded-t-sm ${getGradeBarClass(entry.grade)}`}
+                  className={`w-full min-w-4 rounded-t-sm shadow-[0_6px_18px_rgba(15,23,42,0.35)] ${getGradeBarClass(entry.grade)}`}
                   style={{
                     height: `${Math.max((entry.count / maxCount) * 144, entry.count > 0 ? 6 : 0)}px`,
                   }}
                 />
-                <div className="mt-2 text-[11px] font-medium text-slate-700">{entry.grade}</div>
+                <div className="mt-2 text-[11px] font-medium text-slate-300">{entry.grade}</div>
               </div>
             ))}
           </div>
