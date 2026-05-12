@@ -861,6 +861,27 @@ function GradeStat({ label, value }) {
   )
 }
 
+function getSnapshotFreshnessLabel(snapshotMeta) {
+  if (!snapshotMeta?.quarter || !snapshotMeta?.year) {
+    return 'Quarterly snapshot'
+  }
+
+  return `Updated after ${snapshotMeta.quarter} ${snapshotMeta.year}`
+}
+
+function formatReviewDate(date) {
+  const parsedDate = new Date(date)
+  if (Number.isNaN(parsedDate.getTime())) {
+    return date
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(parsedDate)
+}
+
 function getGradeBarClass(grade) {
   if (grade.startsWith('A')) {
     return 'bg-[#3f9142]'
@@ -949,6 +970,124 @@ function OfferingDistributionCharts({ offeringDistributions }) {
   )
 }
 
+function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta }) {
+  if (!professorReview) {
+    return (
+      <div className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="text-lg font-semibold text-white">{instructorName}</div>
+            <div className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">
+              {getSnapshotFreshnessLabel(snapshotMeta)}
+            </div>
+          </div>
+        </div>
+        <div className="mt-4 text-sm leading-6 text-slate-300">
+          No Rate My Professor snapshot is available for this instructor yet.
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div className="text-lg font-semibold text-white">
+            {professorReview.firstName} {professorReview.lastName}
+          </div>
+          <div className="mt-1 text-sm text-slate-300">{instructorName}</div>
+          <div className="mt-2 text-xs uppercase tracking-[0.18em] text-slate-400">
+            {getSnapshotFreshnessLabel(snapshotMeta)}
+          </div>
+        </div>
+        {professorReview.profileUrl && (
+          <a
+            href={professorReview.profileUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-[#FEBC11]/35 hover:text-[#FEBC11]"
+          >
+            View on Rate My Professors
+          </a>
+        )}
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <GradeStat label="Avg rating" value={professorReview.avgRating ?? 'N/A'} />
+        <GradeStat label="Difficulty" value={professorReview.avgDifficulty ?? 'N/A'} />
+        <GradeStat
+          label="Would take again"
+          value={
+            professorReview.wouldTakeAgainPercent != null
+              ? `${professorReview.wouldTakeAgainPercent}%`
+              : 'N/A'
+          }
+        />
+        <GradeStat label="Ratings" value={professorReview.numRatings ?? 'N/A'} />
+      </div>
+
+      <div className="mt-5">
+        <div className="text-sm font-semibold text-white">10 most recent reviews</div>
+        <div className="mt-1 text-sm text-slate-400">
+          Recent student feedback pulled from the latest quarterly snapshot.
+        </div>
+      </div>
+
+      <div className="mt-4 space-y-3">
+        {professorReview.reviews.map((review) => (
+          <div
+            key={review.id}
+            className="rounded-2xl border border-white/10 bg-slate-950/45 p-4 text-sm"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="font-semibold text-white">{review.class || 'Course not listed'}</div>
+              <div className="text-slate-400">{formatReviewDate(review.date)}</div>
+            </div>
+
+            <div className="mt-3 flex flex-wrap gap-2 text-xs">
+              {review.grade && (
+                <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-semibold text-emerald-100">
+                  Grade {review.grade}
+                </span>
+              )}
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
+                Helpfulness {review.helpfulRating ?? 'N/A'}/5
+              </span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
+                Clarity {review.clarityRating ?? 'N/A'}/5
+              </span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
+                Difficulty {review.difficultyRating ?? 'N/A'}/5
+              </span>
+              {review.isForOnlineClass && (
+                <span className="rounded-full border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 font-semibold text-sky-100">
+                  Online class
+                </span>
+              )}
+            </div>
+
+            <p className="mt-4 leading-7 text-slate-200">{review.comment || 'No written review.'}</p>
+
+            {review.ratingTags.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {review.ratingTags.map((tag) => (
+                  <span
+                    key={`${review.id}-${tag}`}
+                    className="rounded-full border border-[#FEBC11]/20 bg-[#FEBC11]/10 px-3 py-1 text-xs font-semibold text-[#FEBC11]"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function HistoricalInstructorsList({ instructors }) {
   if (instructors.length === 0) {
     return <div className="mt-3 text-sm leading-6 text-slate-400">Instructor history unavailable.</div>
@@ -980,6 +1119,7 @@ function CourseGradesDetailModal({ course, onClose }) {
   const visibleOfferingDistributions = showAllHistory
     ? summary.offeringDistributions
     : summary.offeringDistributions.filter((offering) => offering.year >= summary.latestYear - 2)
+  const visibleInstructorNames = [...new Set(visibleOfferingDistributions.map((offering) => offering.instructor))]
   const hasOlderOfferingData = summary.offeringDistributions.some(
     (offering) => offering.year < summary.latestYear - 2,
   )
@@ -1068,6 +1208,29 @@ function CourseGradesDetailModal({ course, onClose }) {
                   This course is most commonly offered in {summary.usualOfferedLabel.toLowerCase()}, so
                   those quarters are your safest targets when building future terms.
                 </div>
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-[28px] border border-white/10 bg-slate-950/45 p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-sm font-semibold text-white">Rate My Professor</div>
+                  <div className="mt-1 text-sm text-slate-400">
+                    Recent reviews for the instructors shown in the current offering charts.
+                  </div>
+                </div>
+                <AppIcon name="arrow-up-right" className="h-5 w-5 text-[#FEBC11]" />
+              </div>
+
+              <div className="mt-5 space-y-4">
+                {visibleInstructorNames.map((instructorName) => (
+                  <ProfessorReviewSection
+                    key={instructorName}
+                    instructorName={instructorName}
+                    professorReview={summary.professorReviewsByName?.[instructorName] ?? null}
+                    snapshotMeta={summary.snapshotMeta}
+                  />
+                ))}
               </div>
             </div>
 
