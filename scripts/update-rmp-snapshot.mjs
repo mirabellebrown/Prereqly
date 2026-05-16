@@ -280,7 +280,7 @@ async function fetchGraphqlAuthKey() {
   const response = await fetchWithRetry('https://www.ratemyprofessors.com', {
     headers: {
       Accept: 'text/html,application/xhtml+xml',
-      'User-Agent': 'Mozilla/5.0 (compatible; PrereqlySnapshotBot/1.0)',
+      'User-Agent': 'Mozilla/5.0 (compatible; UcsbSilverSnapshotBot/1.0)',
     },
   })
 
@@ -336,7 +336,7 @@ async function requestGraphql(query, variables, authKey) {
       Accept: 'application/json',
       Authorization: `Basic ${authKey}`,
       'Content-Type': 'application/json',
-      'User-Agent': 'Mozilla/5.0 (compatible; PrereqlySnapshotBot/1.0)',
+      'User-Agent': 'Mozilla/5.0 (compatible; UcsbSilverSnapshotBot/1.0)',
     },
     body: JSON.stringify({ query, variables }),
   })

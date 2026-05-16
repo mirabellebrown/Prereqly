@@ -2,9 +2,9 @@ import './globals.css'
 import { Analytics } from '@vercel/analytics/react'
 
 export const metadata = {
-  title: 'Prereqly | UCSB Academic Planning',
+  title: 'UCSB SILVER | Planning alongside Gaucho GOLD',
   description:
-    'Prereqly is a clickable UCSB Letters & Science planning prototype for course planning, degree progress, important dates, and Campus Q&A with official sources.',
+    'UCSB SILVER is a clickable UCSB Letters & Science planning prototype for course planning, degree progress, important dates, and Campus Q&A with official sources—designed to work alongside Gaucho GOLD.',
   icons: {
     icon: '/favicon.svg',
   },

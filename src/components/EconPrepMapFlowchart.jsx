@@ -11,14 +11,16 @@ import {
   stripInvalidMapCompletions,
 } from '../lib/econPrepFlowchartUtils'
 
-const STORAGE_KEY = 'prereqly-econ-map'
+const STORAGE_KEY = 'ucsb-silver-econ-map'
+const LEGACY_STORAGE_KEY = 'prereqly-econ-map'
 
 function readStoredIds() {
   if (typeof window === 'undefined') {
     return null
   }
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
+    const raw =
+      window.localStorage.getItem(STORAGE_KEY) ?? window.localStorage.getItem(LEGACY_STORAGE_KEY)
     const parsed = raw ? JSON.parse(raw) : null
     if (Array.isArray(parsed) && parsed.every((id) => typeof id === 'string')) {
       return stripInvalidMapCompletions(parsed)
@@ -102,7 +104,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
             href="/"
             className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-[#FEBC11]/35 hover:text-[#FEBC11]"
           >
-            ← Back to Prereqly
+            ← Back to UCSB SILVER
           </Link>
           <p className="text-xs text-slate-500">Progress is saved only in this browser.</p>
         </div>

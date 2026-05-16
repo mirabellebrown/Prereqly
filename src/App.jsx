@@ -20,6 +20,12 @@ import { useCourseGradeSummaries } from './lib/useCourseGradeSummaries'
 
 const quarters = ['Fall', 'Winter', 'Spring']
 const storageKeys = {
+  planner: 'ucsb-silver-planner',
+  transferCredits: 'ucsb-silver-transfer-credits',
+  manualRequirementCompletions: 'ucsb-silver-manual-requirements',
+}
+
+const legacyStorageKeys = {
   planner: 'prereqly-planner',
   transferCredits: 'prereqly-transfer-credits',
   manualRequirementCompletions: 'prereqly-manual-requirements',
@@ -193,13 +199,15 @@ function getMonthMatrix(year, monthIndex) {
   return cells
 }
 
-function readStoredValue(key) {
+function readStoredValue(key, legacyKey) {
   if (typeof window === 'undefined') {
     return null
   }
 
   try {
-    const storedValue = window.localStorage.getItem(key)
+    const storedValue =
+      window.localStorage.getItem(key) ??
+      (legacyKey ? window.localStorage.getItem(legacyKey) : null)
     return storedValue ? JSON.parse(storedValue) : null
   } catch {
     return null
@@ -225,17 +233,21 @@ function plannerMatchesRequirement(item, plannedCourseCodes) {
 function App() {
   const [activeView, setActiveView] = useState('dashboard')
   const [planner, setPlanner] = useState(() => {
-    const storedPlanner = readStoredValue(storageKeys.planner)
+    const storedPlanner = readStoredValue(storageKeys.planner, legacyStorageKeys.planner)
     return Array.isArray(storedPlanner) ? storedPlanner : createPlannerState()
   })
   const [selectedQuarterKey, setSelectedQuarterKey] = useState('Year 2|Spring')
   const [transferCredits, setTransferCredits] = useState(() => {
-    const storedTransferCredits = readStoredValue(storageKeys.transferCredits)
+    const storedTransferCredits = readStoredValue(
+      storageKeys.transferCredits,
+      legacyStorageKeys.transferCredits,
+    )
     return typeof storedTransferCredits === 'boolean' ? storedTransferCredits : false
   })
   const [manualRequirementCompletions, setManualRequirementCompletions] = useState(() => {
     const storedManualRequirementCompletions = readStoredValue(
       storageKeys.manualRequirementCompletions,
+      legacyStorageKeys.manualRequirementCompletions,
     )
 
     return storedManualRequirementCompletions &&
@@ -452,12 +464,12 @@ function App() {
       <header className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FEBC11] to-[#ffd95f] text-lg font-black text-[#003660] shadow-[0_0_30px_rgba(254,188,17,0.25)]">
-              PR
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-200 to-slate-50 text-lg font-black text-[#003660] shadow-[0_0_30px_rgba(203,213,225,0.35)]">
+              Ag
             </div>
             <div>
-              <div className="text-lg font-semibold tracking-tight">Prereqly</div>
-              <div className="text-sm text-slate-400">UC Santa Barbara academic planning</div>
+              <div className="text-lg font-semibold tracking-tight">UCSB SILVER</div>
+              <div className="text-sm text-slate-400">Planning alongside Gaucho GOLD</div>
             </div>
           </div>
 

@@ -1,10 +1,10 @@
-# Prereqly
+# UCSB SILVER
 
-Prereqly is a Next.js prototype for a UC Santa Barbara academic planning app. It is designed as a clickable student experience for exploring course planning, degree progress, and deadlines in one place.
+UCSB SILVER is a Next.js prototype for a UC Santa Barbara academic planning app. It is designed as a clickable student experience for exploring course planning, degree progress, and deadlines—built to complement **Gaucho GOLD**, not replace it.
 
 ## Live demo
 
-[https://prereqly.vercel.app/](https://prereqly.vercel.app/)
+[https://prereqly.vercel.app/](https://prereqly.vercel.app/) *(deployment URL may be updated)*
 
 ## Functionality
 
