@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --color-silver: #cbd5e1;
+  --color-silver-bright: #f1f5f9;
+  --color-silver-dim: #94a3b8;
+  --color-gold: #febc11;
+  --color-gold-hover: #ffd457;
+  --color-gold-muted: #fff1bd;
+  --color-ucsb-navy: #003660;
+}
+
 :root {
   color: #f8fafc;
   background-color: #020816;
@@ -10,6 +20,12 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --surface-base: #020816;
+  --surface-elevated: rgba(255, 255, 255, 0.06);
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --silver-glow: rgba(203, 213, 225, 0.35);
+  --gold-glow: rgba(254, 188, 17, 0.35);
 }
 
 * {
@@ -32,8 +48,128 @@ input {
 }
 
 ::selection {
-  background: rgba(254, 188, 17, 0.35);
+  background: var(--silver-glow);
   color: #f8fafc;
+}
+
+.app-page-bg {
+  background:
+    radial-gradient(circle at top, rgba(148, 163, 184, 0.12), transparent 28%),
+    linear-gradient(180deg, #04101d 0%, #07192f 42%, #020816 100%);
+}
+
+.app-page-overlay {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.12), transparent 18%),
+    radial-gradient(circle at 80% 0%, rgba(148, 163, 184, 0.08), transparent 20%);
+}
+
+.text-label-caps {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+}
+
+.text-silver-accent {
+  color: var(--color-silver);
+}
+
+.badge-silver {
+  border: 1px solid color-mix(in srgb, var(--color-silver) 25%, transparent);
+  background: color-mix(in srgb, var(--color-silver) 10%, transparent);
+  color: var(--color-silver);
+}
+
+.badge-silver-strong {
+  border: 1px solid color-mix(in srgb, var(--color-silver) 35%, transparent);
+  background: color-mix(in srgb, var(--color-silver) 12%, transparent);
+  color: var(--color-silver-bright);
+}
+
+.surface-card {
+  border-radius: 28px;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-elevated);
+  box-shadow: 0 20px 80px rgba(2, 8, 23, 0.35);
+  backdrop-filter: blur(24px);
+}
+
+.snapshot-card {
+  border-radius: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--color-silver) 25%, transparent);
+  background: linear-gradient(to bottom right, var(--color-ucsb-navy), #0b2d52, #020617);
+  padding: 1.25rem;
+}
+
+.nav-active {
+  border-color: color-mix(in srgb, var(--color-silver) 35%, transparent);
+  background: color-mix(in srgb, var(--color-silver) 12%, transparent);
+  color: #fff;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-silver) 12%, transparent);
+}
+
+.nav-active-icon {
+  background: color-mix(in srgb, var(--color-silver) 18%, transparent);
+  color: var(--color-silver);
+}
+
+.progress-silver {
+  background: linear-gradient(
+    to right,
+    var(--color-silver),
+    var(--color-silver-bright),
+    #e2e8f0
+  );
+}
+
+.link-gold {
+  border: 1px solid color-mix(in srgb, var(--color-gold) 25%, transparent);
+  background: color-mix(in srgb, var(--color-gold) 10%, transparent);
+  color: var(--color-gold);
+  transition:
+    border-color 150ms ease,
+    color 150ms ease,
+    background 150ms ease;
+}
+
+.link-gold:hover {
+  border-color: color-mix(in srgb, var(--color-gold) 40%, transparent);
+  color: var(--color-gold-hover);
+}
+
+.btn-gold {
+  border-radius: 9999px;
+  background: var(--color-gold);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ucsb-navy);
+  transition: background 150ms ease;
+}
+
+.btn-gold:hover {
+  background: var(--color-gold-hover);
+}
+
+.btn-silver {
+  border-radius: 1rem;
+  background: var(--color-silver);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ucsb-navy);
+  transition: background 150ms ease;
+}
+
+.btn-silver:hover {
+  background: var(--color-silver-bright);
+}
+
+.focus-silver:focus {
+  border-color: color-mix(in srgb, var(--color-silver) 40%, transparent);
+  outline: none;
 }
 
 .page-enter {
