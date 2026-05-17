@@ -44,7 +44,7 @@ import { GeEasyPicks } from './components/GeEasyPicks'
 import { ResourcesView } from './components/ResourcesView'
 import { ImportantLinksPanel } from './components/ImportantLinksPanel'
 import { DashboardView } from './components/DashboardView'
-import { EconPrepMapFlowchart } from './components/EconPrepMapFlowchart'
+import { FlowchartLauncher } from './components/FlowchartLauncher'
 import { ProgressRing } from './components/ProgressRing'
 import { parseGePlaceholderCode, resolveGeAreaKey } from './lib/gePlaceholder'
 import { useGeEasyPicks } from './lib/useGeEasyPicks'
@@ -114,6 +114,10 @@ function App() {
   const [sidebarRevealed, setSidebarRevealed] = useState(false)
 
   function handleNavigate(viewId) {
+    if (viewId === 'flowchart') {
+      window.location.href = '/econ-prep-map'
+      return
+    }
     if (viewId === 'dashboard') {
       setSidebarRevealed(false)
     } else {
@@ -363,19 +367,7 @@ function App() {
         satisfiedCourseCodes={satisfiedCourseCodes}
       />
     ),
-    flowchart: (
-      <div className="space-y-6">
-        <section className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
-          <p className="text-label-caps-gold">Economics pathway</p>
-          <h2 className="mt-2 text-3xl font-semibold tracking-tight">Prep flowchart</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
-            2025–26 sheet: pre-major ECON 1, 2, and 10A; prep ECON 5 or PSTAT 120A plus calculus; UD core 100B,
-            101, and 140A; then seven UD electives. Tap courses when prerequisites are met—verify in GOLD.
-          </p>
-        </section>
-        <EconPrepMapFlowchart showBackLink={false} />
-      </div>
-    ),
+    flowchart: <FlowchartLauncher />,
     checklist: (
       <ChecklistView
         onOpenCourseGrades={handleOpenCourseGrades}

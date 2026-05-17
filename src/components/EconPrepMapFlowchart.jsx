@@ -16,10 +16,10 @@ import {
 
 const STORAGE_KEY = 'ucsb-silver-econ-map'
 const LEGACY_STORAGE_KEY = 'prereqly-econ-map'
-const ZOOM_MIN = 0.55
-const ZOOM_MAX = 1.25
-const ZOOM_STEP = 0.1
-const ZOOM_DEFAULT = 0.78
+const ZOOM_MIN = 0.4
+const ZOOM_MAX = 1.45
+const ZOOM_STEP = 0.08
+const ZOOM_DEFAULT = 0.58
 
 const ZONE_STYLES = {
   admission: {
@@ -66,13 +66,6 @@ const TRACK_STYLES = {
   },
 }
 
-const TRACK_BADGE = {
-  admission: { label: 'Step 1', fill: '#1d4ed8', stroke: '#93c5fd' },
-  prep: { label: 'Step 2', fill: '#0f766e', stroke: '#5eead4' },
-  major: { label: 'Step 3', fill: '#b45309', stroke: '#fde047' },
-}
-
-const MAJOR_DIVIDER_X = 638
 
 function readStoredIds() {
   if (typeof window === 'undefined') {
@@ -112,7 +105,7 @@ function ZoomButton({ children, onClick, disabled, title }) {
   )
 }
 
-export function EconPrepMapFlowchart({ showBackLink = true }) {
+export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalone' }) {
   const [completedIds, setCompletedIds] = useState(
     () => readStoredIds() ?? stripInvalidMapCompletions(['econ1', 'math3a']),
   )
@@ -123,7 +116,16 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
   }, [completedIds])
 
   const done = useMemo(() => new Set(completedIds), [completedIds])
-  const { width, height, edges, nodes, zones = [] } = econPrepFlowchart
+  const {
+    width,
+    height,
+    edges,
+    nodes,
+    zones = [],
+    dividerX = 632,
+    stepDividerY = 228,
+  } = econPrepFlowchart
+  const isStandalone = variant === 'standalone'
 
   const displayWidth = Math.round(width * zoom)
   const displayHeight = Math.round(height * zoom)
@@ -183,7 +185,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
 
   function renderZone(zone) {
     const style = ZONE_STYLES[zone.track] ?? ZONE_STYLES.prep
-    const headerH = 56
+    const headerH = 48
 
     return (
       <g key={zone.id}>
@@ -195,7 +197,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
           rx={16}
           fill={style.fill}
           stroke={style.stroke}
-          strokeWidth={3}
+          strokeWidth={2}
         />
         <rect
           x={zone.x}
@@ -205,27 +207,27 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
           rx={16}
           fill={style.headerFill}
         />
-        <rect x={zone.x} y={zone.y + 44} width={zone.w} height={14} fill={style.headerFill} />
+        <rect x={zone.x} y={zone.y + 38} width={zone.w} height={12} fill={style.headerFill} />
         <rect
-          x={zone.x + 14}
-          y={zone.y + 12}
-          width={72}
-          height={22}
-          rx={6}
+          x={zone.x + 12}
+          y={zone.y + 10}
+          width={64}
+          height={20}
+          rx={5}
           fill={style.stepFill}
         />
         <text
-          x={zone.x + 50}
-          y={zone.y + 28}
+          x={zone.x + 44}
+          y={zone.y + 24}
           textAnchor="middle"
-          className="fill-white text-[11px] font-bold uppercase tracking-[0.12em]"
+          className="fill-white text-[9px] font-bold uppercase tracking-[0.1em]"
         >
           {zone.step}
         </text>
-        <text x={zone.x + 96} y={zone.y + 26} className={`text-[15px] font-bold ${style.titleClass}`}>
+        <text x={zone.x + 84} y={zone.y + 22} className={`text-[13px] font-bold ${style.titleClass}`}>
           {zone.label}
         </text>
-        <text x={zone.x + 96} y={zone.y + 44} className={`text-[11px] ${style.subClass}`}>
+        <text x={zone.x + 84} y={zone.y + 38} className={`text-[10px] ${style.subClass}`}>
           {zone.sublabel}
         </text>
       </g>
@@ -262,28 +264,12 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
         </div>
       )}
 
-      <p className="text-sm leading-6 text-slate-400">
-        {ECON_MAJOR_SHEET_LABEL} Economics B.A. path. Steps 1–2 are{' '}
-        <strong className="font-semibold text-slate-200">before</strong> upper-division major credit; Step 3 is{' '}
-        <strong className="font-semibold text-amber-200">the major itself</strong> (40 UD units).
-      </p>
-
-      <div className="grid gap-2 sm:grid-cols-2">
-        <div className="rounded-2xl border-2 border-blue-400/50 bg-blue-950/50 px-4 py-3">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-blue-300">
-            Steps 1–2 · Not UD major units
-          </p>
-          <p className="mt-1 text-sm text-slate-200">
-            Pre-major admission, then preparation — qualify and get ready to declare.
-          </p>
-        </div>
-        <div className="rounded-2xl border-2 border-amber-400/55 bg-amber-950/45 px-4 py-3">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-amber-300">Step 3 · The major</p>
-          <p className="mt-1 text-sm text-slate-200">
-            Upper-division Economics after you are in the major.
-          </p>
-        </div>
-      </div>
+      {isStandalone && (
+        <p className="text-sm leading-6 text-slate-400">
+          {ECON_MAJOR_SHEET_LABEL} Economics B.A. — blue/teal = pre-major path; gold = upper division. Zoom
+          with <strong className="font-semibold text-slate-200">− / +</strong>, then scroll the map.
+        </p>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-silver/30 bg-slate-950/40 px-3 py-2">
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
@@ -313,7 +299,11 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
         </div>
       </div>
 
-      <div className="overflow-auto rounded-2xl border border-silver/30 bg-slate-950/40 p-5 pt-7 shadow-inner max-h-[min(72vh,620px)]">
+      <div
+        className={`overflow-auto rounded-2xl border border-silver/30 bg-slate-950/40 p-6 shadow-inner ${
+          isStandalone ? 'max-h-[min(88vh,920px)] min-h-[420px]' : 'max-h-[min(72vh,620px)]'
+        }`}
+      >
         <svg
           role="img"
           aria-label="Economics prerequisite flowchart"
@@ -343,40 +333,38 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
           {zones.map(renderZone)}
 
           <line
-            x1={20}
-            y1={210}
-            x2={628}
-            y2={210}
+            x1={24}
+            y1={stepDividerY}
+            x2={616}
+            y2={stepDividerY}
             stroke="#2dd4bf"
-            strokeWidth={2}
-            strokeDasharray="10 6"
-            strokeOpacity={0.55}
+            strokeWidth={1.5}
+            strokeDasharray="8 5"
+            strokeOpacity={0.45}
           />
-          <text x={24} y={206} className="fill-teal-200/90 text-[10px] font-semibold uppercase tracking-[0.1em]">
-            Then preparation →
-          </text>
 
           <line
-            x1={MAJOR_DIVIDER_X}
-            y1={8}
-            x2={MAJOR_DIVIDER_X}
-            y2={height - 8}
-            stroke="rgba(251, 191, 36, 0.25)"
-            strokeWidth={14}
+            x1={dividerX}
+            y1={24}
+            x2={dividerX}
+            y2={height - 24}
+            stroke="rgba(251, 191, 36, 0.2)"
+            strokeWidth={10}
           />
           <line
-            x1={MAJOR_DIVIDER_X}
-            y1={8}
-            x2={MAJOR_DIVIDER_X}
-            y2={height - 8}
+            x1={dividerX}
+            y1={24}
+            x2={dividerX}
+            y2={height - 24}
             stroke="#fbbf24"
-            strokeWidth={4}
+            strokeWidth={2.5}
+            strokeOpacity={0.85}
           />
           <text
-            x={MAJOR_DIVIDER_X + 10}
+            x={dividerX + 12}
             y={height / 2}
-            className="fill-amber-200 text-[11px] font-bold uppercase tracking-[0.12em]"
-            transform={`rotate(-90 ${MAJOR_DIVIDER_X + 10} ${height / 2})`}
+            className="fill-amber-200/90 text-[10px] font-bold uppercase tracking-[0.1em]"
+            transform={`rotate(-90 ${dividerX + 12} ${height / 2})`}
           >
             Declare major →
           </text>
@@ -391,7 +379,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
             const stroke = edge.stroke || '#94a3b8'
             const markerIdx = uniqueEdgeStrokes.indexOf(stroke)
             const headDone = toNode.kind === 'course' && done.has(edge.to)
-            const opacity = headDone ? 0.95 : 0.85
+            const opacity = headDone ? 0.9 : 0.55
             return (
               <path
                 key={`${edge.from}-${edge.to}`}
@@ -399,7 +387,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
                 fill="none"
                 stroke={stroke}
                 strokeOpacity={opacity}
-                strokeWidth="2.25"
+                strokeWidth="1.5"
                 markerEnd={`url(#flow-arrow-${markerIdx >= 0 ? markerIdx : 0})`}
               />
             )
@@ -420,7 +408,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
                     x={node.x + node.w / 2}
                     y={node.y + node.h / 2 + 4}
                     textAnchor="middle"
-                    className={`text-[12px] font-bold ${isOr ? 'fill-amber-800' : 'fill-slate-700'}`}
+                    className={`text-[10px] font-bold ${isOr ? 'fill-amber-800' : 'fill-slate-700'}`}
                   >
                     {node.label}
                   </text>
@@ -434,8 +422,6 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
             const missing = courseNode ? missingLabels(node) : []
             const interactive = courseNode && (unlocked || complete)
             const { fill, stroke } = courseStroke(node)
-            const track = node.track ?? (node.phase === 'upper' ? 'major' : 'prep')
-            const badge = TRACK_BADGE[track]
             const title = !unlocked && missing.length ? `Locked — needs: ${missing.join(', ')}` : node.label
 
             return (
@@ -450,69 +436,47 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
                   y={node.y}
                   width={node.w}
                   height={node.h}
-                  rx={node.id === 'udElectives' ? 16 : 14}
+                  rx={10}
                   fill={fill}
                   stroke={stroke}
-                  strokeWidth={track === 'major' ? 2.5 : 2}
+                  strokeWidth={1.75}
                 />
-                {badge && (
-                  <>
-                    <rect
-                      x={node.x + node.w - 62}
-                      y={node.y + 8}
-                      width={54}
-                      height={18}
-                      rx={5}
-                      fill={badge.fill}
-                      stroke={badge.stroke}
-                      strokeWidth={1}
-                    />
-                    <text
-                      x={node.x + node.w - 35}
-                      y={node.y + 21}
-                      textAnchor="middle"
-                      className="fill-white text-[9px] font-bold uppercase tracking-[0.08em]"
-                    >
-                      {badge.label}
-                    </text>
-                  </>
-                )}
                 <text
-                  x={node.x + 16}
-                  y={node.y + 32}
-                  className="fill-white text-[15px] font-semibold tracking-tight"
+                  x={node.x + 10}
+                  y={node.y + 22}
+                  className="fill-white text-[12px] font-semibold tracking-tight"
                 >
                   {node.label}
                 </text>
-                <text x={node.x + 16} y={node.y + 54} className="fill-slate-300 text-[12px]">
+                <text x={node.x + 10} y={node.y + 40} className="fill-slate-300 text-[9px]">
                   {node.subtitle}
                 </text>
                 {complete && (
                   <text
-                    x={node.x + node.w - 14}
-                    y={node.y + 32}
+                    x={node.x + node.w - 8}
+                    y={node.y + node.h - 8}
                     textAnchor="end"
-                    className="fill-emerald-300 text-[11px] font-bold uppercase tracking-[0.12em]"
+                    className="fill-emerald-300 text-[8px] font-bold uppercase tracking-[0.1em]"
                   >
                     Done
                   </text>
                 )}
                 {!complete && unlocked && (
                   <text
-                    x={node.x + node.w - 14}
-                    y={node.y + 32}
+                    x={node.x + node.w - 8}
+                    y={node.y + node.h - 8}
                     textAnchor="end"
-                    className="fill-sky-200 text-[11px] font-bold uppercase tracking-[0.12em]"
+                    className="fill-sky-200 text-[8px] font-bold uppercase tracking-[0.1em]"
                   >
                     Tap
                   </text>
                 )}
                 {!unlocked && !complete && (
                   <text
-                    x={node.x + node.w - 14}
-                    y={node.y + 32}
+                    x={node.x + node.w - 8}
+                    y={node.y + node.h - 8}
                     textAnchor="end"
-                    className="fill-slate-500 text-[11px] font-bold uppercase tracking-[0.12em]"
+                    className="fill-slate-500 text-[8px] font-bold uppercase tracking-[0.1em]"
                   >
                     Locked
                   </text>

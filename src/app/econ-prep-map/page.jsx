@@ -20,15 +20,15 @@ export default function EconPrepMapPage() {
               Economics prep flowchart
             </h1>
             <p className="mt-2 max-w-2xl pb-1 text-sm leading-6 text-slate-300">
-              Larger view with color-coded arrows so crossing paths stay readable. Tap courses when unlocked;
-              verify everything in Gaucho GOLD and the UCSB General Catalog.
+              Spaced layout with zoom controls — tap courses when unlocked. Verify everything in Gaucho GOLD
+              and the UCSB General Catalog.
             </p>
           </div>
         </div>
       </header>
 
       <main className="relative z-10 mx-auto max-w-[1600px] px-4 pb-12 pt-10 sm:px-8 sm:pt-12">
-        <EconPrepMapFlowchart showBackLink />
+        <EconPrepMapFlowchart showBackLink variant="standalone" />
       </main>
     </div>
   )
