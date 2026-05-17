@@ -26,6 +26,9 @@ import {
   checkPrerequisitesMet,
   extractCourseCodesFromText,
 } from './lib/econPrerequisites'
+import { getRequirementStatusDisplay, requirementStatusClassName } from './lib/requirementStatus'
+import { GeExplainer } from './components/GeExplainer'
+import { politicalScienceMinorPreview } from './data/politicalScienceMinorPreview'
 
 const quarters = ['Fall', 'Winter', 'Spring']
 const storageKeys = {
@@ -1383,6 +1386,17 @@ function CourseGradesDetailModal({ course, onClose }) {
   )
 }
 
+function RequirementStatusChip({ item }) {
+  const { label, tone } = getRequirementStatusDisplay(item)
+  return (
+    <span
+      className={`rounded-sm border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${requirementStatusClassName(tone)}`}
+    >
+      {label}
+    </span>
+  )
+}
+
 function ChecklistView({
   checklistPercent,
   completedRequirementCount,
@@ -1395,6 +1409,8 @@ function ChecklistView({
   onToggleTransferCredits,
   onToggleRequirement,
 }) {
+  const [showMinorPreview, setShowMinorPreview] = useState(false)
+
   return (
     <div className="space-y-6">
       <section className="grid gap-6 xl:grid-cols-[0.9fr,1.4fr]">
@@ -1456,10 +1472,32 @@ function ChecklistView({
           </button>
 
           {transferCredits && (
-            <div className="mt-4 rounded-sm border border-emerald-400/25 bg-emerald-400/10 p-4 text-sm text-emerald-100">
-              {transferAutoFilled} eligible requirements were auto-filled by the transfer credit toggle.
+            <div className="mt-4 rounded-sm border border-silver/25 bg-silver/8 p-4 text-sm leading-6 text-slate-200">
+              <span className="font-semibold text-silver-bright">Transfer credit applied (demo).</span>{' '}
+              {transferAutoFilled} eligible requirements were marked from your transfer toggle. Confirm
+              every area in Gaucho GOLD — SILVER does not read your transcript.
             </div>
           )}
+
+          <button
+            type="button"
+            onClick={() => setShowMinorPreview((current) => !current)}
+            className={`mt-4 flex w-full items-center justify-between rounded-sm border px-4 py-3 text-left text-sm transition ${
+              showMinorPreview
+                ? 'border-silver/35 bg-silver/10'
+                : 'border-white/10 bg-white/5 hover:border-white/20'
+            }`}
+          >
+            <span>
+              <span className="font-semibold text-white">Considering a minor?</span>
+              <span className="mt-1 block text-slate-400">
+                Preview a sample Political Science minor pathway (read-only).
+              </span>
+            </span>
+            <span className="badge-silver rounded-sm px-2 py-1 text-xs font-semibold">
+              {showMinorPreview ? 'Hide' : 'Show'}
+            </span>
+          </button>
 
           <div className="mt-4 rounded-sm border border-silver/20 bg-silver/5 p-4 text-sm text-slate-300">
             {plannedRequirementCount} additional requirements are already accounted for in the 4-year
@@ -1477,6 +1515,14 @@ function ChecklistView({
         </div>
 
         <div className="grid gap-4">
+          <div className="flex flex-wrap items-center gap-2 border border-white/10 bg-slate-950/40 px-3 py-2 text-[11px]">
+            <span className="uppercase tracking-wide text-slate-500">Status:</span>
+            <RequirementStatusChip item={{ source: 'record', status: 'completed' }} />
+            <RequirementStatusChip item={{ source: 'transfer', status: 'completed' }} />
+            <RequirementStatusChip item={{ source: 'planner', status: 'planned' }} />
+            <RequirementStatusChip item={{ source: 'pending', status: 'pending' }} />
+          </div>
+
           {sections.map((section) => (
             <div
               key={section.id}
@@ -1500,6 +1546,8 @@ function ChecklistView({
                   {section.plannedCount > 0 && ` • ${section.plannedCount} planned`}
                 </div>
               </div>
+
+              {section.id === 'ge' && <GeExplainer />}
 
               <div className="mt-4 grid gap-3">
                 {section.items.map((item) => (
@@ -1527,36 +1575,10 @@ function ChecklistView({
                     <span className="min-w-0 flex-1">
                       <span className="flex flex-wrap items-center gap-2">
                         <span className="font-semibold">{item.label}</span>
-                        {item.autoFilled && (
-                          <span className="badge-silver rounded-sm px-2 py-1 text-[11px] font-semibold">
-                            Transfer
-                          </span>
-                        )}
-                        {item.source === 'planner' && (
-                          <span className="rounded-sm bg-sky-400/20 px-2 py-1 text-[11px] font-semibold text-sky-100">
-                            Planned
-                          </span>
-                        )}
-                        {item.source === 'manual' && (
-                          <span className="rounded-sm bg-emerald-400/20 px-2 py-1 text-[11px] font-semibold text-emerald-100">
-                            Manual
-                          </span>
-                        )}
-                        {item.source === 'record' && (
-                          <span className="rounded-sm bg-white/10 px-2 py-1 text-[11px] font-semibold text-slate-200">
-                            On record
-                          </span>
-                        )}
+                        <RequirementStatusChip item={item} />
                       </span>
                       <span className="mt-1 block text-sm leading-6 text-slate-400">{item.detail}</span>
                       <div className="mt-3 flex flex-wrap items-center gap-3">
-                        <span className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                          {item.status === 'completed'
-                            ? 'Completed'
-                            : item.status === 'planned'
-                              ? 'Planned in roadmap'
-                              : 'Pending'}
-                        </span>
                         <button
                           type="button"
                           onClick={() => onToggleRequirement(item)}
@@ -1576,6 +1598,34 @@ function ChecklistView({
               </div>
             </div>
           ))}
+
+          {showMinorPreview && (
+            <div className="panel border border-dashed border-silver/30 bg-slate-950/50 p-5">
+              <p className="text-label-caps">Minor preview</p>
+              <h3 className="mt-2 text-lg font-semibold tracking-tight">
+                {politicalScienceMinorPreview.title}
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {politicalScienceMinorPreview.description}
+              </p>
+              <ul className="mt-4 space-y-2">
+                {politicalScienceMinorPreview.items.map((minorItem) => (
+                  <li
+                    key={minorItem.id}
+                    className="flex items-start justify-between gap-3 rounded-sm border border-white/10 bg-white/5 px-3 py-2 text-sm"
+                  >
+                    <div>
+                      <div className="font-medium text-white">{minorItem.label}</div>
+                      <div className="text-slate-400">{minorItem.detail}</div>
+                    </div>
+                    <span className="shrink-0 rounded-sm border border-white/15 bg-white/5 px-2 py-0.5 text-[11px] font-semibold text-slate-300">
+                      {minorItem.statusLabel}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </section>
     </div>
