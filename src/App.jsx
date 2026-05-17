@@ -20,6 +20,7 @@ import {
   winterDates,
 } from './mockData'
 import { useCourseGradeSummaries } from './lib/useCourseGradeSummaries'
+import { buildGraduationSummary } from './lib/graduationProgress'
 
 const quarters = ['Fall', 'Winter', 'Spring']
 const storageKeys = {
@@ -419,7 +420,7 @@ function App() {
   const activeContent = {
     dashboard: (
       <DashboardView
-        checklistPercent={checklistPercent}
+        checklistSections={checklistSections}
         onNavigate={setActiveView}
         planner={planner}
       />
@@ -488,58 +489,119 @@ function App() {
   )
 }
 
-function DashboardView({ checklistPercent, onNavigate, planner }) {
+function DashboardView({ checklistSections, onNavigate, planner }) {
   const totalPlannedUnits = planner
     .flatMap((yearPlan) => quarters.flatMap((quarter) => yearPlan.quarters[quarter]))
     .reduce((sum, course) => sum + course.units, 0)
 
+  const graduation = buildGraduationSummary({ studentProfile, checklistSections })
+
   return (
     <div className="space-y-6">
-      <section className="grid gap-6 xl:grid-cols-[1.6fr,1fr]">
-        <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-[#003660] via-[#0b2442] to-slate-950 p-6 shadow-[0_20px_90px_rgba(2,8,23,0.35)]">
-          <div className="flex flex-col justify-between gap-6 lg:flex-row">
-            <div className="max-w-2xl">
-              <div className="badge-silver inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em]">
-                Welcome back
-              </div>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight">
-                {studentProfile.firstName}, you are on pace for a strong Spring registration.
+      <section className="panel border border-white/10 bg-gradient-to-br from-ucsb-navy via-[#0b2442] to-slate-950 p-6 shadow-[0_12px_48px_rgba(2,8,23,0.35)]">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+            <ProgressRing percent={graduation.checklistPercent} />
+            <div>
+              <p className="text-label-caps">Graduation progress</p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+                {graduation.onTrack ? 'On track' : 'Needs attention'} for {graduation.expectedGraduation}
               </h2>
-              <p className="mt-4 max-w-xl text-base leading-7 text-slate-300">
-                Your planner and checklist are aligned, you have no active holds, and the next
-                best move is to build a balanced Spring quarter around your Economics pathway.
+              <p className="mt-2 text-sm text-slate-400">
+                Demo record for {studentProfile.firstName} · verify in Gaucho GOLD before enrolling
               </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2 lg:w-[320px] lg:grid-cols-1">
-              <StatHighlight label="Degree progress" value={`${checklistPercent}%`} tone="silver" />
-              <StatHighlight label="Total planned units" value={String(totalPlannedUnits)} tone="sky" />
-              <StatHighlight label="Major declaration" value="Window open Jan 12" tone="emerald" />
+              <div className="mt-4 flex flex-wrap gap-4 text-sm">
+                <div>
+                  <span className="text-slate-400">Units completed</span>
+                  <div className="font-semibold text-white">
+                    {graduation.unitsCompleted} / {graduation.unitsTarget}
+                  </div>
+                </div>
+                <div>
+                  <span className="text-slate-400">Units remaining</span>
+                  <div className="font-semibold text-white">{graduation.unitsRemaining}</div>
+                </div>
+                <div>
+                  <span className="text-slate-400">Planned in roadmap</span>
+                  <div className="font-semibold text-white">{totalPlannedUnits} units</div>
+                </div>
+              </div>
             </div>
           </div>
+
+          {graduation.riskFlags.length > 0 && (
+            <div className="w-full max-w-md space-y-2 lg:max-w-sm">
+              {graduation.riskFlags.map((flag) => (
+                <div
+                  key={flag.message}
+                  className={`rounded-sm border px-3 py-2 text-sm leading-6 ${
+                    flag.severity === 'warn'
+                      ? 'border-amber-400/30 bg-amber-400/10 text-amber-100'
+                      : 'border-silver/25 bg-silver/8 text-slate-200'
+                  }`}
+                >
+                  {flag.message}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-[1.2fr,1fr]">
+        <div className="panel border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
+          <p className="text-label-caps">What&apos;s left</p>
+          <h3 className="mt-2 text-xl font-semibold tracking-tight">Requirements still open</h3>
+          <p className="mt-1 text-sm text-slate-400">
+            {graduation.checklistPercent}% of checklist items satisfied in this demo path.
+          </p>
+          <ul className="mt-4 divide-y divide-white/10">
+            {graduation.whatsLeft.map((item) => (
+              <li key={item.id} className="flex items-start justify-between gap-3 py-3 text-sm">
+                <div>
+                  <div className="font-medium text-white">{item.label}</div>
+                  <div className="text-slate-400">{item.detail}</div>
+                </div>
+                <span
+                  className={`shrink-0 rounded-sm px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${
+                    item.isPlanned ? 'badge-silver' : 'border border-white/15 bg-white/5 text-slate-400'
+                  }`}
+                >
+                  {item.isPlanned ? 'In planner' : 'Open'}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={() => onNavigate('checklist')}
+            className="mt-4 text-sm font-medium text-silver hover:text-silver-bright"
+          >
+            Open degree checklist →
+          </button>
         </div>
 
-        <div className="rounded-[32px] border border-white/10 bg-white/6 p-6 shadow-[0_20px_90px_rgba(2,8,23,0.3)] backdrop-blur-xl">
+        <div className="panel border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-label-caps">Upcoming deadlines</p>
-              <h3 className="mt-3 text-2xl font-semibold tracking-tight">Winter 2026 checklist</h3>
+              <h3 className="mt-2 text-xl font-semibold tracking-tight">Winter 2026</h3>
             </div>
             <AppIcon name="calendar" className="h-6 w-6 text-silver" />
           </div>
 
-          <div className="mt-6 space-y-4">
-            {upcomingDeadlines.map((deadline) => (
+          <div className="mt-4 space-y-3">
+            {upcomingDeadlines.slice(0, 3).map((deadline) => (
               <div
                 key={deadline.title}
-                className="rounded-2xl border border-white/10 bg-slate-950/45 p-4"
+                className="rounded-sm border border-white/10 bg-slate-950/45 p-3"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="rounded-full bg-white/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200">
+                  <span className="rounded-sm bg-white/8 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-200">
                     {deadline.date}
                   </span>
                   <span
-                    className={`rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${
+                    className={`rounded-sm px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${
                       deadline.priority === 'urgent'
                         ? 'bg-rose-500/18 text-rose-200'
                         : deadline.priority === 'upcoming'
@@ -550,40 +612,46 @@ function DashboardView({ checklistPercent, onNavigate, planner }) {
                     {deadline.priority}
                   </span>
                 </div>
-                <h4 className="mt-3 text-base font-semibold">{deadline.title}</h4>
-                <p className="mt-1 text-sm leading-6 text-slate-400">{deadline.description}</p>
+                <h4 className="mt-2 text-sm font-semibold">{deadline.title}</h4>
+                <p className="mt-1 text-xs leading-5 text-slate-400">{deadline.description}</p>
               </div>
             ))}
           </div>
+          <button
+            type="button"
+            onClick={() => onNavigate('dates')}
+            className="mt-4 text-sm font-medium text-silver hover:text-silver-bright"
+          >
+            Full calendar →
+          </button>
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-4">
+      <section className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
         {dashboardMetrics.map((metric) => (
           <MetricCard key={metric.label} metric={metric} />
         ))}
       </section>
 
-      <section className="space-y-4">
+      <section className="space-y-3">
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-label-caps">Quick access</p>
-            <h3 className="mt-2 text-2xl font-semibold tracking-tight">Jump into the tools you need</h3>
+            <h3 className="mt-1 text-xl font-semibold tracking-tight">Tools</h3>
           </div>
-          <div className="hidden text-sm text-slate-400 lg:block">All screens are interactive in this prototype.</div>
         </div>
 
-        <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-4">
+        <div className="grid gap-3 xl:grid-cols-2 2xl:grid-cols-4">
           {quickAccessCards.map((card) => {
-            const shellClass = `group rounded-[28px] border border-white/10 bg-gradient-to-br ${card.accent} from-10% to-90% p-[1px] text-left transition hover:-translate-y-0.5`
+            const shellClass = `group panel border border-white/10 bg-gradient-to-br ${card.accent} from-10% to-90% p-[1px] text-left transition hover:-translate-y-0.5`
             const inner = (
-              <div className="h-full rounded-[27px] bg-slate-950/85 p-5">
+              <div className="h-full bg-slate-950/85 p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h4 className="text-lg font-semibold tracking-tight">{card.title}</h4>
-                    <p className="mt-3 text-sm leading-6 text-slate-400">{card.description}</p>
+                    <h4 className="text-base font-semibold tracking-tight">{card.title}</h4>
+                    <p className="mt-2 text-sm leading-6 text-slate-400">{card.description}</p>
                   </div>
-                  <span className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition group-hover:border-silver/25 group-hover:text-silver">
+                  <span className="rounded-sm border border-white/10 bg-white/5 p-2 text-slate-200 transition group-hover:border-silver/25 group-hover:text-silver">
                     <AppIcon name="arrow-up-right" className="h-4 w-4" />
                   </span>
                 </div>
@@ -607,6 +675,7 @@ function DashboardView({ checklistPercent, onNavigate, planner }) {
     </div>
   )
 }
+
 
 function PlannerView({
   planner,
