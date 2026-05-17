@@ -35,6 +35,13 @@ import {
   extractCourseCodesFromText,
 } from './lib/econPrerequisites'
 import { getRequirementStatusDisplay, requirementStatusClassName } from './lib/requirementStatus'
+import {
+  getOfferedLabel,
+  getQuarterLoadStatus,
+  getQuarterUnits,
+  isOfferedInQuarter,
+  parseQuarterKey,
+} from './lib/plannerLoad'
 import { GeExplainer } from './components/GeExplainer'
 import { politicalScienceMinorPreview } from './data/politicalScienceMinorPreview'
 
@@ -739,6 +746,22 @@ function DashboardView({ checklistSections, onNavigate, planner }) {
 }
 
 
+function QuarterLoadBanner({ load, compact = false, className = '' }) {
+  if (!load) {
+    return null
+  }
+
+  return (
+    <div
+      className={`rounded-2xl border px-3 py-2 text-xs leading-5 ${load.className} ${compact ? 'mt-3' : ''} ${className}`.trim()}
+    >
+      <div className="font-semibold uppercase tracking-wide">{load.label}</div>
+      {!compact && <p className="mt-1">{load.message}</p>}
+      {compact && load.level !== 'balanced' && <p className="mt-1">{load.message}</p>}
+    </div>
+  )
+}
+
 function PlannerView({
   planner,
   selectedQuarterKey,
@@ -757,6 +780,11 @@ function PlannerView({
   )
   const { error: gradesError, isLoading: isLoadingGrades, summaries: gradeSummaries } =
     useCourseGradeSummaries([...plannerCourseCodes, ...plannerSuggestions.map((course) => course.code)])
+
+  const { quarter: selectedQuarterName } = parseQuarterKey(selectedQuarterKey)
+  const selectedYearPlan = planner.find((yearPlan) => yearPlan.year === parseQuarterKey(selectedQuarterKey).year)
+  const selectedQuarterUnits = selectedYearPlan ? getQuarterUnits(selectedYearPlan, selectedQuarterName) : 0
+  const selectedQuarterLoad = getQuarterLoadStatus(selectedQuarterUnits)
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1.6fr,0.9fr]">
@@ -813,6 +841,7 @@ function PlannerView({
                   const isSelected = quarterKey === selectedQuarterKey
                   const courses = yearPlan.quarters[quarter]
                   const quarterUnits = courses.reduce((sum, course) => sum + course.units, 0)
+                  const quarterLoad = getQuarterLoadStatus(quarterUnits)
 
                   return (
                     <div
@@ -843,6 +872,8 @@ function PlannerView({
                           </span>
                         )}
                       </div>
+
+                      <QuarterLoadBanner load={quarterLoad} compact />
 
                       <div className="mt-4 space-y-3">
                         {courses.map((course, index) => (
@@ -889,6 +920,7 @@ function PlannerView({
           <p className="mt-3 text-sm leading-6 text-slate-300">
             Add one of the recommended courses below to simulate course planning without reloading the page.
           </p>
+          <QuarterLoadBanner load={selectedQuarterLoad} className="mt-4" />
         </div>
 
         <div className="panel border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
@@ -905,6 +937,8 @@ function PlannerView({
               const isAdded = plannedCourseCodes.has(course.code)
               const prereqCheck = checkPrerequisitesMet(course.code, satisfiedCourseCodes)
               const canAdd = !isAdded && prereqCheck.ok
+              const offeredInTarget = isOfferedInQuarter(course, selectedQuarterName)
+              const offeredLabel = getOfferedLabel(course, selectedQuarterName)
               return (
                 <div
                   key={course.code}
@@ -920,12 +954,31 @@ function PlannerView({
                       }}
                       className="min-w-0 flex-1 text-left"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="text-base font-semibold">{course.code}</span>
-                        <span className={`rounded-2xl px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
+                        <span className={`rounded-full px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
                           {plannerLegend[course.type].label}
                         </span>
+                        <span
+                          className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                            offeredInTarget ? 'badge-gold' : 'border border-white/15 bg-white/5 text-slate-400'
+                          }`}
+                        >
+                          {offeredLabel}
+                        </span>
                       </div>
+                      {course.reasonTags?.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {course.reasonTags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-full border border-silver/25 bg-silver/10 px-2.5 py-0.5 text-[11px] font-semibold text-silver-bright"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                       <p className="mt-2 text-sm text-slate-300">{course.title}</p>
                       <p className="mt-2 text-sm leading-6 text-slate-400">{course.note}</p>
                       {!prereqCheck.ok && (

@@ -191,6 +191,9 @@ export const plannerSuggestions = [
     units: 4,
     type: 'major',
     note: 'Common next step after ECON 10A and PSTAT 109; confirm sequencing with the catalog and L&S advising.',
+    offeredQuarters: ['Winter', 'Fall'],
+    offeredNote: 'Usually Winter & Fall',
+    reasonTags: ['Major sequence', 'Prereqs met', 'Fills theory gap'],
   },
   {
     code: 'ECON 134A',
@@ -198,6 +201,9 @@ export const plannerSuggestions = [
     units: 4,
     type: 'major',
     note: 'Pairs with the core theory sequence; verify prerequisites in GOLD before enrolling.',
+    offeredQuarters: ['Winter'],
+    offeredNote: 'Winter offering in demo schedule',
+    reasonTags: ['Upper-div core', 'Pairs with ECON 10B'],
   },
   {
     code: 'ECON 140A',
@@ -205,6 +211,9 @@ export const plannerSuggestions = [
     units: 4,
     type: 'major',
     note: 'Upper-division core course; check department guidance if you are considering a double major.',
+    offeredQuarters: ['Spring'],
+    offeredNote: 'Spring offering — plan ahead',
+    reasonTags: ['Major requirement', 'Not offered Winter'],
   },
   {
     code: 'GE E',
@@ -212,6 +221,9 @@ export const plannerSuggestions = [
     units: 4,
     type: 'ge',
     note: 'Completes another GE letter while keeping unit load near 12 to 14.',
+    offeredQuarters: ['Winter', 'Spring', 'Fall'],
+    offeredNote: 'Multiple quarters',
+    reasonTags: ['GE progress', 'Balances unit load'],
   },
   {
     code: 'ENGL 10',
@@ -219,6 +231,9 @@ export const plannerSuggestions = [
     units: 4,
     type: 'elective',
     note: 'Breadth elective option if you want reading and writing outside economics this quarter.',
+    offeredQuarters: ['Winter'],
+    offeredNote: 'Winter elective option',
+    reasonTags: ['Breadth elective', 'Writing intensive option'],
   },
 ]
 
