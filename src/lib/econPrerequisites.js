@@ -13,6 +13,7 @@ const COURSE_PREREQUISITES = Object.fromEntries(
 
 // Upper-division courses in the planner that extend the prep flowchart.
 Object.assign(COURSE_PREREQUISITES, {
+  'PSTAT 120A': ['MATH 3A'],
   'ECON 100B': ['ECON 2', 'ECON 10A'],
   'ECON 101': ['ECON 10A', 'MATH 3B'],
   'ECON 134A': ['ECON 10A', 'ECON 101'],
@@ -21,6 +22,9 @@ Object.assign(COURSE_PREREQUISITES, {
   'ECON 171': ['ECON 101'],
   'ECON 115': ['ECON 10A', 'ECON 101'],
   'ECON 134B': ['ECON 134A'],
+  'ECON 127': ['ECON 101'],
+  'ECON 130': ['ECON 10A', 'ECON 101'],
+  'ECON 199': ['ECON 101'],
 })
 
 export function getPrerequisiteCodes(courseCode) {

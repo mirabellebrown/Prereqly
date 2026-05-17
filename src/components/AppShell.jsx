@@ -38,7 +38,13 @@ export function AppShell({
       <header className="fixed inset-x-0 top-0 z-50 border-b border-silver/30 bg-logo-navy shadow-[0_8px_32px_rgba(3,30,59,0.55)]">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-3 sm:gap-4">
-            <SilverLogo height={36} priority className="sm:!max-h-10" />
+            <SilverLogo
+              height={36}
+              priority
+              className="sm:!max-h-10"
+              href={null}
+              onClick={() => onNavigate('dashboard')}
+            />
             <p className="hidden text-sm text-slate-300 sm:block">One stop shop when GOLD won&apos;t cut it</p>
           </div>
 

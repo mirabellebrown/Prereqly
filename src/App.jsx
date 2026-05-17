@@ -366,8 +366,8 @@ function App() {
           <p className="text-label-caps-gold">Economics pathway</p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight">Prep flowchart</h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
-            Tap courses when you have completed prerequisites. Progress saves in this browser only—verify
-            every rule in Gaucho GOLD and the UCSB General Catalog.
+            2025–26 sheet: pre-major ECON 1, 2, and 10A; prep ECON 5 or PSTAT 120A plus calculus; UD core 100B,
+            101, and 140A; then seven UD electives. Tap courses when prerequisites are met—verify in GOLD.
           </p>
         </section>
         <EconPrepMapFlowchart showBackLink={false} />
@@ -412,9 +412,9 @@ function App() {
 
   const navDescriptions = {
     dashboard: 'Your profile and shortcuts to every SILVER area',
-    planner: 'Click-to-add roadmap across four years',
+    planner: '2025–26 Economics B.A. sample path across four years',
     checklist: 'Track requirements and transfer credit',
-    flowchart: 'Interactive ECON prerequisite map for this demo',
+    flowchart: '2025–26 Economics B.A. prep map (tap to track)',
     resources: 'FAQ, useful links, and policy snippets',
     chat: 'General UCSB questions with official source links',
     dates: 'Winter 2026 deadlines and official links',

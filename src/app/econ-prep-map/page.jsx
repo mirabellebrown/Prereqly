@@ -4,7 +4,7 @@ import { SilverLogo } from '../../components/SilverLogo'
 export const metadata = {
   title: 'Economics prep flowchart | UCSB SILVER',
   description:
-    'Full-page demo flowchart of L&S Economics pre-major and prep prerequisites unlocking upper-division coursework.',
+    '2025–26 Economics B.A. prep flowchart: pre-major, ECON 5 or PSTAT 120A, UD core courses, and electives.',
 }
 
 export default function EconPrepMapPage() {

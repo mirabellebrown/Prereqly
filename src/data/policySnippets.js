@@ -54,7 +54,7 @@ export const policySnippets = [
     category: 'major',
     title: 'Economics major requirements',
     excerpt:
-      'Economics B.A. preparation and upper-division requirements are listed in the catalog and on the department site. Substitutions, overlapping courses, and double-major plans need department or L&S approval—do not infer them from a sample roadmap.',
+      '2025–26 Economics B.A.: pre-major ECON 1, 2, 10A (2.85 GPA); prep ECON 5 or PSTAT 120A plus calculus; 40 UD units including 100B, 101, 140A, and seven electives. Max 4 units of ECON 199; 199RA does not count. Confirm in GOLD and with the department.',
     keywords: ['economics', 'econ', 'major', 'declaration', 'prep', 'upper division', 'b.a.'],
     sourceLabel: 'Economics undergraduate program',
     sourceUrl: 'https://www.econ.ucsb.edu/undergraduate',

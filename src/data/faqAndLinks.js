@@ -69,9 +69,18 @@ export const frequentlyAskedQuestions = [
     category: 'ge-major',
     question: 'Can I take ECON 101 or other upper-div courses next quarter?',
     answer:
-      'Prerequisites are in the catalog and enforced in GOLD. Ask Campus Q&A with a specific course code (for example “Can I take ECON 101?”) for a demo check against your plan, or open the Economics prep flowchart. Department and L&S advising confirm edge cases.',
+      'Prerequisites are in the catalog and enforced in GOLD. The 2025–26 Economics B.A. sheet requires ECON 100B, 101, and 140A plus seven UD electives (max 4 units of ECON 199; 199RA does not count). Ask Campus Q&A with a course code for a demo prereq check, or open the prep flowchart.',
     links: [OFFICIAL_SOURCE.catalog, OFFICIAL_SOURCE.econAdvising],
     chatPrompt: 'Can I take ECON 101 next quarter?',
+  },
+  {
+    id: 'faq-econ-premajor',
+    category: 'ge-major',
+    question: 'What do I need to get into the Economics major?',
+    answer:
+      'On the 2025–26 sheet: complete ECON 1, 2, and 10A with a 2.85 UC GPA and no grade below C; complete ECON 5 or PSTAT 120A and MATH 2A–B, 3A–B, or 34A–B with C or higher. ECON 5 and ECON 10A must be taken at UCSB. Confirm your status in GOLD and with Economics advising.',
+    links: [OFFICIAL_SOURCE.catalog, OFFICIAL_SOURCE.econAdvising],
+    chatPrompt: 'What are the Economics pre-major requirements?',
   },
   {
     id: 'faq-declare',

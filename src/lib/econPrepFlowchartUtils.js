@@ -4,6 +4,23 @@ export const econPrepMapById = Object.fromEntries(econPrepMapNodes.map((node) =>
 
 export const flowById = Object.fromEntries(econPrepFlowchart.nodes.map((node) => [node.id, node]))
 
+/** @param {{ requires?: string[], requiresAny?: string[] }} node */
+export function nodeRequirementsMet(node, completedIds) {
+  const done = completedIds instanceof Set ? completedIds : new Set(completedIds)
+  const required = node.requires ?? []
+  const requiredAny = node.requiresAny ?? []
+
+  if (!required.every((id) => done.has(id))) {
+    return false
+  }
+
+  if (requiredAny.length > 0 && !requiredAny.some((id) => done.has(id))) {
+    return false
+  }
+
+  return true
+}
+
 export function flowAnchor(node, side) {
   const cx = node.x + node.w / 2
   const cy = node.y + node.h / 2
@@ -52,8 +69,7 @@ export function stripInvalidMapCompletions(ids) {
         changed = true
         continue
       }
-      const reqs = node.requires ?? []
-      if (!reqs.every((r) => set.has(r))) {
+      if (!nodeRequirementsMet(node, set)) {
         set.delete(id)
         changed = true
       }

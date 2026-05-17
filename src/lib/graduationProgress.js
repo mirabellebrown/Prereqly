@@ -57,12 +57,18 @@ export function buildGraduationSummary({ studentProfile, checklistSections }) {
     (item) =>
       item.sectionId === 'major' &&
       !item.isSatisfied &&
-      ['req-econ134a', 'req-econ140a', 'req-econ140b', 'req-econ171', 'req-econud'].includes(item.id),
+      [
+        'req-econ100b',
+        'req-econ101',
+        'req-econ140a',
+        'req-ud-electives',
+        'req-econ5',
+      ].includes(item.id),
   )
   if (udIncomplete.length >= 3) {
     riskFlags.push({
       severity: 'info',
-      message: `${udIncomplete.length} upper-division economics requirements still ahead — pace your theory and stats sequence`,
+      message: `${udIncomplete.length} Economics major items still open — pace UD core (100B, 101, 140A) and electives`,
     })
   }
 
