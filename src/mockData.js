@@ -62,6 +62,12 @@ export const quickAccessCards = [
 
 export const upcomingDeadlines = [
   {
+    date: 'Jan 8',
+    title: 'Winter pass time — Priority 2',
+    description: 'Your assigned registration window opens. Plan in SILVER, then add courses in Gaucho GOLD.',
+    priority: 'urgent',
+  },
+  {
     date: 'Jan 16',
     title: 'Last day to add Winter 2026 classes',
     description: 'Use GOLD to add courses or adjust grading options before the registrar deadline.',
@@ -332,6 +338,16 @@ export const winterDates = [
     category: 'academic',
   },
   {
+    date: '2026-01-08',
+    month: 'Jan',
+    day: '08',
+    title: 'Winter pass time — Priority 2',
+    detail:
+      'Registration window for your assigned pass time. Finalize your planned schedule here, then add courses in Gaucho GOLD when your window opens.',
+    category: 'registration',
+    priority: 'urgent',
+  },
+  {
     date: '2026-01-12',
     month: 'Jan',
     day: '12',
@@ -354,6 +370,15 @@ export const winterDates = [
     title: 'Drop deadline',
     detail: 'Last day to drop most classes without a petition.',
     category: 'academic',
+  },
+  {
+    date: '2026-02-10',
+    month: 'Feb',
+    day: '10',
+    title: 'Spring pass time — Priority 2',
+    detail: 'Next-quarter enrollment by pass time. Check holds, prerequisites, and unit load before GOLD opens for your window.',
+    category: 'registration',
+    priority: 'upcoming',
   },
   {
     date: '2026-02-13',
