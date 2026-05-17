@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { GoldLink } from './GoldLink'
 import { useEffect, useMemo, useState } from 'react'
 import { econPrepFlowchart } from '../mockData'
 import {
@@ -102,7 +103,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-[#FEBC11]/35 hover:text-[#FEBC11]"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-silver/35 hover:text-silver"
           >
             ← Back to UCSB SILVER
           </Link>
@@ -110,7 +111,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-[24px] border border-white/10 bg-[#0c1522] p-6 shadow-inner">
+      <div className="overflow-x-auto rounded-[24px] border border-silver/20 bg-[#0c1522] p-6 shadow-inner">
         <svg
           role="img"
           aria-label="Economics prerequisite flowchart"
@@ -259,16 +260,20 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
       </div>
 
       <p className="text-xs leading-5 text-slate-500">
-        Verify prerequisites in the{' '}
+        Check prerequisites in{' '}
+        <GoldLink href="https://my.sa.ucsb.edu/gold/" className="!border-0 !bg-transparent !px-0 !py-0 font-semibold underline underline-offset-2">
+          Gaucho GOLD
+        </GoldLink>
+        , the{' '}
         <a
-          className="font-semibold text-[#FEBC11] underline-offset-2 hover:underline"
+          className="font-semibold text-slate-300 underline-offset-2 hover:text-silver hover:underline"
           href="https://catalog.ucsb.edu/"
           target="_blank"
           rel="noreferrer"
         >
           UCSB General Catalog
-        </a>{' '}
-        and with L&S and Economics advising.
+        </a>
+        , and with L&S and Economics advising.
       </p>
     </div>
   )
