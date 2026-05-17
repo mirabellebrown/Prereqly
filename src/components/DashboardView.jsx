@@ -95,7 +95,7 @@ export function DashboardView({ checklistSections, onNavigate, planner }) {
 
   return (
     <div className="dashboard-landing space-y-8">
-      <section className="panel-hero min-h-[min(42vh,420px)] border border-silver/35 bg-gradient-to-br from-gold/10 via-ucsb-navy via-[#052847] to-app-bg p-6 shadow-[0_20px_90px_rgba(3,30,59,0.5)] sm:p-8">
+      <section className="panel-hero min-h-[min(42vh,420px)] border border-silver/35 bg-gradient-to-br from-gold/8 via-[#041018] to-app-bg p-6 shadow-[0_20px_90px_rgba(1,8,16,0.65)] sm:p-8">
         <div className="flex h-full flex-col justify-between gap-8">
           <div className="flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
             <div className="flex min-w-0 flex-1 flex-col gap-5 sm:flex-row sm:items-start">

@@ -10,7 +10,8 @@
   --color-ucsb-navy: #003660;
   --color-logo-navy: #143474;
   --color-logo-white: #eff4fc;
-  --color-app-bg: #031e3b;
+  --color-app-bg: #010810;
+  --color-app-bg-elevated: #041018;
 }
 
 :root {
@@ -25,8 +26,8 @@
   -moz-osx-font-smoothing: grayscale;
 
   --surface-base: var(--color-app-bg);
-  --surface-elevated: rgba(255, 255, 255, 0.05);
-  --surface-box: rgba(255, 255, 255, 0.05);
+  --surface-elevated: rgba(255, 255, 255, 0.04);
+  --surface-box: rgba(255, 255, 255, 0.035);
   --border-subtle: rgba(203, 213, 225, 0.32);
   --border-box: rgba(241, 245, 249, 0.28);
   --silver-glow: rgba(203, 213, 225, 0.35);
@@ -68,9 +69,9 @@ input {
 
 .app-page-overlay {
   background:
-    radial-gradient(circle at 18% 8%, rgba(203, 213, 225, 0.1), transparent 42%),
-    radial-gradient(circle at 88% 4%, rgba(254, 188, 17, 0.06), transparent 28%),
-    radial-gradient(circle at 50% 100%, rgba(20, 52, 116, 0.45), transparent 55%);
+    radial-gradient(circle at 18% 8%, rgba(203, 213, 225, 0.04), transparent 42%),
+    radial-gradient(circle at 88% 4%, rgba(254, 188, 17, 0.03), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgba(20, 52, 116, 0.12), transparent 55%);
 }
 
 .box-panel {
@@ -173,9 +174,9 @@ input {
   border: 1px solid var(--border-box);
   background: linear-gradient(
     135deg,
-    var(--color-ucsb-navy) 0%,
-    #0b2d52 55%,
-    #020617 100%
+    #041018 0%,
+    #020a12 55%,
+    var(--color-app-bg) 100%
   );
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--color-silver) 12%, transparent),

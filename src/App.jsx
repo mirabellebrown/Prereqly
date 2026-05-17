@@ -1108,7 +1108,7 @@ function CourseGradesDetailModal({ course, onClose }) {
       onClick={handleClose}
     >
       <div
-        className="max-h-[90vh] w-full max-w-4xl overflow-y-auto panel border border-silver/30 bg-[#07192f] p-6 shadow-[0_30px_120px_rgba(2,8,23,0.7)]"
+        className="max-h-[90vh] w-full max-w-4xl overflow-y-auto panel border border-silver/30 bg-app-bg-elevated p-6 shadow-[0_30px_120px_rgba(0,0,0,0.75)]"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4 border-b border-silver/30 pb-5">
@@ -1638,7 +1638,7 @@ function ChatView({
       </section>
 
       <aside className="space-y-6">
-        <div className="panel border border-silver/30 bg-gradient-to-br from-ucsb-navy via-[#17395f] to-app-bg p-6">
+        <div className="panel border border-silver/30 bg-gradient-to-br from-[#041018] via-[#020a12] to-app-bg p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gold">Gaucho GOLD</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">Courses to explore in GOLD</h3>
           <div className="mt-4 space-y-3">

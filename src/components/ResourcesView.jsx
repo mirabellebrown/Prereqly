@@ -33,7 +33,7 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet, onAskInChat }) {
 
   return (
     <div className="space-y-6">
-      <section className="panel-hero border border-silver/30 bg-gradient-to-br from-ucsb-navy via-[#0b2442] to-app-bg p-6 shadow-[0_20px_90px_rgba(2,8,23,0.35)]">
+      <section className="panel-hero border border-silver/30 bg-gradient-to-br from-[#041018] via-[#020a12] to-app-bg p-6 shadow-[0_20px_90px_rgba(1,8,16,0.5)]">
         <p className="text-label-caps-gold">Resource Hub</p>
         <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
           FAQ, useful links & official resources
