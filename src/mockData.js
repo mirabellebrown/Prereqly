@@ -49,8 +49,8 @@ export const quickAccessCards = [
   },
   {
     id: 'resources',
-    title: 'Resource Hub',
-    description: 'Official UCSB links, policy snippets, and demo tools in one place.',
+    title: 'FAQ & useful links',
+    description: 'Common questions, bookmarked UCSB pages, and official resources.',
     accent: 'from-gold/20 to-gold/0',
   },
   {

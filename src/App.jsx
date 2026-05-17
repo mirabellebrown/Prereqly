@@ -327,14 +327,17 @@ function App() {
     setDraftMessage('')
   }
 
-  function handleAskAboutSnippet(snippet) {
+  function handleAskInChat(prompt) {
     setActiveView('chat')
-    setDraftMessage(`What should I know about: ${snippet.title}?`)
+    setDraftMessage(prompt)
+  }
+
+  function handleAskAboutSnippet(snippet) {
+    handleAskInChat(`What should I know about: ${snippet.title}?`)
   }
 
   function handleChatPrompt(prompt) {
-    setDraftMessage(prompt)
-    setActiveView('chat')
+    handleAskInChat(prompt)
   }
 
   function handleOpenCourseGrades(course, summary) {
@@ -378,7 +381,11 @@ function App() {
       />
     ),
     resources: (
-      <ResourcesView onNavigate={setActiveView} onAskAboutSnippet={handleAskAboutSnippet} />
+      <ResourcesView
+        onNavigate={setActiveView}
+        onAskAboutSnippet={handleAskAboutSnippet}
+        onAskInChat={handleAskInChat}
+      />
     ),
     chat: (
       <ChatView
@@ -399,7 +406,7 @@ function App() {
     dashboard: 'Overview, progress, and action cards',
     planner: 'Click-to-add roadmap across four years',
     checklist: 'Track requirements and transfer credit',
-    resources: 'Official links and policy snippet library',
+    resources: 'FAQ, useful links, and policy snippets',
     chat: 'General UCSB questions with official source links',
     dates: 'Winter 2026 deadlines and calendar',
   }

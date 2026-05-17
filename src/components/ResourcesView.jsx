@@ -9,6 +9,8 @@ import {
 } from '../data/policySnippets'
 import { GoldLink, GoldSourceChip } from './GoldLink'
 import { AppIcon } from './AppIcon'
+import { FaqSection } from './FaqSection'
+import { UsefulLinksSection } from './UsefulLinksSection'
 
 function ResourceLink({ link }) {
   const isInternal = link.url.startsWith('/')
@@ -22,7 +24,7 @@ function ResourceLink({ link }) {
   return <GoldSourceChip href={link.url} label={link.label} />
 }
 
-export function ResourcesView({ onNavigate, onAskAboutSnippet }) {
+export function ResourcesView({ onNavigate, onAskAboutSnippet, onAskInChat }) {
   const [policyCategory, setPolicyCategory] = useState('all')
   const filteredSnippets = useMemo(
     () => filterPolicySnippets(policyCategory),
@@ -34,11 +36,11 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet }) {
       <section className="panel-hero border border-gold/20 bg-gradient-to-br from-ucsb-navy via-[#0b2442] to-slate-950 p-6 shadow-[0_20px_90px_rgba(2,8,23,0.35)]">
         <p className="text-label-caps-gold">Resource Hub</p>
         <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-          Official UCSB links & policy snippets
+          FAQ, useful links & official resources
         </h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">
-          Curated starting points for L&S Economics planning. Every link goes to a live UCSB page or a
-          SILVER demo tool—verify policies on the source site before you act.
+          Frequently asked questions, bookmarked UCSB pages, and policy snippets for L&S Economics planning.
+          Verify every detail on the live source site before you enroll or petition.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <button
@@ -52,8 +54,14 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet }) {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {campusResourceHub.map((group) => (
+      <FaqSection onAskInChat={onAskInChat} />
+
+      <UsefulLinksSection />
+
+      <section>
+        <p className="text-label-caps mb-4">Browse by topic</p>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {campusResourceHub.map((group) => (
           <div
             key={group.id}
             className={`panel border border-white/10 bg-gradient-to-br ${group.accent} p-[1px]`}
@@ -68,7 +76,8 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet }) {
               </div>
             </div>
           </div>
-        ))}
+          ))}
+        </div>
       </section>
 
       <section className="panel border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
