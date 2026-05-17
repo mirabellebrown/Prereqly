@@ -249,7 +249,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 pt-1">
       {showBackLink && (
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Link
