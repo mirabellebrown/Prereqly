@@ -545,7 +545,7 @@ function DashboardView({ checklistSections, onNavigate, planner }) {
 
   return (
     <div className="space-y-6">
-      <section className="panel border border-white/10 bg-gradient-to-br from-ucsb-navy via-[#0b2442] to-slate-950 p-6 shadow-[0_12px_48px_rgba(2,8,23,0.35)]">
+      <section className="panel-hero border border-gold/20 bg-gradient-to-br from-ucsb-navy via-[#0b2442] to-slate-950 p-6 shadow-[0_20px_90px_rgba(2,8,23,0.35)]">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
             <ProgressRing percent={graduation.checklistPercent} />
@@ -581,7 +581,7 @@ function DashboardView({ checklistSections, onNavigate, planner }) {
               {graduation.riskFlags.map((flag) => (
                 <div
                   key={flag.message}
-                  className={`rounded-sm border px-3 py-2 text-sm leading-6 ${
+                  className={`rounded-2xl border px-3 py-2 text-sm leading-6 ${
                     flag.severity === 'warn'
                       ? 'border-amber-400/30 bg-amber-400/10 text-amber-100'
                       : 'border-silver/25 bg-silver/8 text-slate-200'
@@ -610,7 +610,7 @@ function DashboardView({ checklistSections, onNavigate, planner }) {
                   <div className="text-slate-400">{item.detail}</div>
                 </div>
                 <span
-                  className={`shrink-0 rounded-sm px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${
+                  className={`shrink-0 rounded-2xl px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${
                     item.isPlanned ? 'badge-silver' : 'border border-white/15 bg-white/5 text-slate-400'
                   }`}
                 >
@@ -644,10 +644,10 @@ function DashboardView({ checklistSections, onNavigate, planner }) {
               return (
                 <div
                   key={event.date + event.title}
-                  className="rounded-sm border border-white/10 bg-slate-950/45 p-3"
+                  className="rounded-2xl border border-white/10 bg-slate-950/45 p-3"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <span className="rounded-sm bg-white/8 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-200">
+                    <span className="rounded-2xl bg-white/8 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-200">
                       {formatEventShortDate(event)}
                       {until >= 0 && (
                         <span className="text-slate-500">
@@ -657,7 +657,7 @@ function DashboardView({ checklistSections, onNavigate, planner }) {
                       )}
                     </span>
                     <span
-                      className={`rounded-sm px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${
+                      className={`rounded-2xl px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${
                         priority === 'urgent'
                           ? 'bg-rose-500/18 text-rose-200'
                           : priority === 'upcoming'
@@ -713,7 +713,7 @@ function DashboardView({ checklistSections, onNavigate, planner }) {
                     <h4 className="text-base font-semibold tracking-tight">{card.title}</h4>
                     <p className="mt-2 text-sm leading-6 text-slate-400">{card.description}</p>
                   </div>
-                  <span className="rounded-sm border border-white/10 bg-white/5 p-2 text-slate-200 transition group-hover:border-silver/25 group-hover:text-silver">
+                  <span className="rounded-2xl border border-white/10 bg-white/5 p-2 text-slate-200 transition group-hover:border-silver/25 group-hover:text-silver">
                     <AppIcon name="arrow-up-right" className="h-4 w-4" />
                   </span>
                 </div>
@@ -776,7 +776,7 @@ function PlannerView({
               {Object.entries(plannerLegend).map(([key, value]) => (
                 <span
                   key={key}
-                  className={`rounded-sm border px-3 py-1 text-xs font-semibold ${value.badgeClass}`}
+                  className={`rounded-2xl border px-3 py-1 text-xs font-semibold ${value.badgeClass}`}
                 >
                   {value.label}
                 </span>
@@ -796,7 +796,7 @@ function PlannerView({
                   <h3 className="text-xl font-semibold tracking-tight">{yearPlan.year}</h3>
                   <p className="text-sm text-slate-400">Fall, Winter, and Spring planning block</p>
                 </div>
-                <span className="rounded-sm border border-white/10 bg-white/6 px-3 py-1 text-xs text-slate-300">
+                <span className="rounded-2xl border border-white/10 bg-white/6 px-3 py-1 text-xs text-slate-300">
                   {quarters.reduce(
                     (sum, quarter) =>
                       sum +
@@ -826,7 +826,7 @@ function PlannerView({
                       }}
                       role="button"
                       tabIndex={0}
-                      className={`rounded-sm border p-4 text-left transition ${
+                      className={`rounded-2xl border p-4 text-left transition ${
                         isSelected
                           ? 'border-silver/40 bg-silver/10 shadow-[0_0_0_1px_rgba(203,213,225,0.14)]'
                           : 'border-white/10 bg-slate-950/45 hover:border-white/20 hover:bg-slate-900/70'
@@ -838,7 +838,7 @@ function PlannerView({
                           <div className="mt-1 text-lg font-semibold">{quarterUnits} units</div>
                         </div>
                         {isSelected && (
-                          <span className="rounded-sm bg-silver px-3 py-1 text-xs font-bold text-ucsb-navy">
+                          <span className="rounded-2xl bg-silver px-3 py-1 text-xs font-bold text-ucsb-navy">
                             Selected
                           </span>
                         )}
@@ -855,11 +855,11 @@ function PlannerView({
                                 onOpenCourseGrades(course, gradeSummaries[course.code] ?? null)
                               }
                             }}
-                            className={`w-full rounded-sm border p-3 text-left transition hover:border-white/30 ${plannerLegend[course.type].badgeClass}`}
+                            className={`w-full rounded-2xl border p-3 text-left transition hover:border-white/30 ${plannerLegend[course.type].badgeClass}`}
                           >
                             <div className="flex items-center justify-between gap-3">
                               <div className="font-semibold">{course.code}</div>
-                              <span className={`rounded-sm px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
+                              <span className={`rounded-2xl px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
                                 {course.units} units
                               </span>
                             </div>
@@ -881,8 +881,8 @@ function PlannerView({
       </section>
 
       <aside className="space-y-6 xl:sticky xl:top-24 xl:self-start">
-        <div className="panel border border-silver/25 bg-gradient-to-br from-silver/16 via-ucsb-navy to-slate-950 p-6">
-          <p className="text-label-caps">Selected quarter</p>
+        <div className="panel border border-gold/30 bg-gradient-to-br from-gold/14 via-silver/12 via-ucsb-navy to-slate-950 p-6">
+          <p className="text-label-caps-gold">Selected quarter</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             {selectedQuarterKey.replace('|', ' · ')}
           </h3>
@@ -908,7 +908,7 @@ function PlannerView({
               return (
                 <div
                   key={course.code}
-                  className="rounded-sm border border-white/10 bg-slate-950/45 p-4"
+                  className="rounded-2xl border border-white/10 bg-slate-950/45 p-4"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <button
@@ -922,7 +922,7 @@ function PlannerView({
                     >
                       <div className="flex items-center gap-2">
                         <span className="text-base font-semibold">{course.code}</span>
-                        <span className={`rounded-sm px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
+                        <span className={`rounded-2xl px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
                           {plannerLegend[course.type].label}
                         </span>
                       </div>
@@ -945,7 +945,7 @@ function PlannerView({
                       type="button"
                       disabled={!canAdd}
                       onClick={() => onAddSuggestedCourse(course)}
-                      className={`rounded-sm px-4 py-2 text-sm font-semibold transition ${
+                      className={`rounded-2xl px-4 py-2 text-sm font-semibold transition ${
                         isAdded
                           ? 'cursor-not-allowed border border-white/10 bg-white/5 text-slate-500'
                           : !canAdd
@@ -966,7 +966,7 @@ function PlannerView({
           </div>
 
           {gradesError && (
-            <div className="mt-4 rounded-sm border border-rose-400/25 bg-rose-500/10 p-4 text-sm text-rose-100">
+            <div className="mt-4 rounded-2xl border border-rose-400/25 bg-rose-500/10 p-4 text-sm text-rose-100">
               Daily Nexus grade data is temporarily unavailable. Planner cards will keep working
               without it.
             </div>
@@ -984,7 +984,7 @@ function PlannerView({
 function CourseGradesSummary({ summary, isLoading }) {
   if (isLoading) {
     return (
-      <div className="mt-3 rounded-sm border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-300">
+      <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-300">
         Loading Daily Nexus grades...
       </div>
     )
@@ -992,7 +992,7 @@ function CourseGradesSummary({ summary, isLoading }) {
 
   if (!summary) {
     return (
-      <div className="mt-3 flex flex-wrap items-center gap-2 rounded-sm border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-400">
+      <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-400">
         <span>Daily Nexus grades unavailable for this course.</span>
         <span className="text-slate-500">Click for details</span>
       </div>
@@ -1001,10 +1001,10 @@ function CourseGradesSummary({ summary, isLoading }) {
 
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-      <span className="rounded-sm border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-semibold text-emerald-100">
+      <span className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-semibold text-emerald-100">
         Avg A range {summary.aRangeRate != null ? `${summary.aRangeRate}%` : 'N/A'}
       </span>
-      <span className="rounded-sm border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 font-semibold text-sky-100">
+      <span className="rounded-2xl border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 font-semibold text-sky-100">
         Usually {summary.usualOfferedLabel}
       </span>
       <span className="text-slate-400">Click for grade breakdown</span>
@@ -1014,7 +1014,7 @@ function CourseGradesSummary({ summary, isLoading }) {
 
 function GradeStat({ label, value }) {
   return (
-    <div className="rounded-sm border border-white/10 bg-white/5 px-3 py-2">
+    <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
       <div className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{label}</div>
       <div className="mt-1 text-sm font-semibold text-white">{value}</div>
     </div>
@@ -1113,7 +1113,7 @@ function OfferingDistributionChart({ offering }) {
                   <div>{entry.rate != null ? `${entry.rate}%` : 'N/A'}</div>
                 </div>
                 <div
-                  className={`w-full min-w-4 rounded-t-sm shadow-[0_6px_18px_rgba(15,23,42,0.35)] ${getGradeBarClass(entry.grade)}`}
+                  className={`w-full min-w-4 rounded-t-xl shadow-[0_6px_18px_rgba(15,23,42,0.35)] ${getGradeBarClass(entry.grade)}`}
                   style={{
                     height: `${Math.max((entry.count / maxCount) * 144, entry.count > 0 ? 6 : 0)}px`,
                   }}
@@ -1174,7 +1174,7 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
             href={professorReview.profileUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-sm border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-silver/35 hover:text-silver"
+            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-silver/35 hover:text-silver"
           >
             View on Rate My Professors
           </a>
@@ -1206,7 +1206,7 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
         {professorReview.reviews.map((review) => (
           <div
             key={review.id}
-            className="rounded-sm border border-white/10 bg-slate-950/45 p-4 text-sm"
+            className="rounded-2xl border border-white/10 bg-slate-950/45 p-4 text-sm"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="font-semibold text-white">{review.class || 'Course not listed'}</div>
@@ -1215,21 +1215,21 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
 
             <div className="mt-3 flex flex-wrap gap-2 text-xs">
               {review.grade && (
-                <span className="rounded-sm border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-semibold text-emerald-100">
+                <span className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 font-semibold text-emerald-100">
                   Grade {review.grade}
                 </span>
               )}
-              <span className="rounded-sm border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
+              <span className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
                 Helpfulness {review.helpfulRating ?? 'N/A'}/5
               </span>
-              <span className="rounded-sm border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
+              <span className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
                 Clarity {review.clarityRating ?? 'N/A'}/5
               </span>
-              <span className="rounded-sm border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
+              <span className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 font-semibold text-slate-200">
                 Difficulty {review.difficultyRating ?? 'N/A'}/5
               </span>
               {review.isForOnlineClass && (
-                <span className="rounded-sm border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 font-semibold text-sky-100">
+                <span className="rounded-2xl border border-sky-400/20 bg-sky-400/10 px-3 py-1.5 font-semibold text-sky-100">
                   Online class
                 </span>
               )}
@@ -1242,7 +1242,7 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
                 {review.ratingTags.map((tag) => (
                   <span
                     key={`${review.id}-${tag}`}
-                    className="badge-silver rounded-sm px-3 py-1 text-xs font-semibold"
+                    className="badge-silver rounded-2xl px-3 py-1 text-xs font-semibold"
                   >
                     {tag}
                   </span>
@@ -1266,7 +1266,7 @@ function HistoricalInstructorsList({ instructors }) {
       {instructors.map((instructor) => (
         <span
           key={instructor}
-          className="rounded-sm border border-white/10 bg-white/6 px-3 py-1.5 text-sm text-slate-100"
+          className="rounded-2xl border border-white/10 bg-white/6 px-3 py-1.5 text-sm text-slate-100"
         >
           {instructor}
         </span>
@@ -1316,14 +1316,14 @@ function CourseGradesDetailModal({ course, onClose }) {
           <button
             type="button"
             onClick={handleClose}
-            className="rounded-sm border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-semibold text-slate-200 transition hover:border-white/20"
+            className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-semibold text-slate-200 transition hover:border-white/20"
           >
             Close
           </button>
         </div>
 
         {!summary ? (
-          <div className="mt-6 rounded-sm border border-white/10 bg-white/5 p-5 text-sm leading-6 text-slate-300">
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm leading-6 text-slate-300">
             Daily Nexus grade history is not available for this course yet.
           </div>
         ) : (
@@ -1358,7 +1358,7 @@ function CourseGradesDetailModal({ course, onClose }) {
                   onClick={() =>
                     setExpandedCourseCode((current) => (current === course.code ? '' : course.code))
                   }
-                  className="mt-4 rounded-sm border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-white/20 hover:bg-white/8"
+                  className="mt-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-white/20 hover:bg-white/8"
                 >
                   {showAllHistory ? 'Show only last three years' : 'View all data'}
                 </button>
@@ -1366,11 +1366,11 @@ function CourseGradesDetailModal({ course, onClose }) {
             </div>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <div className="rounded-sm border border-white/10 bg-white/5 p-4">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Historically taught by</div>
                 <HistoricalInstructorsList instructors={summary.historicalInstructors} />
               </div>
-              <div className="rounded-sm border border-white/10 bg-white/5 p-4">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Best planning signal</div>
                 <div className="mt-2 text-sm leading-6 text-slate-300">
                   This course is most commonly offered in {summary.usualOfferedLabel.toLowerCase()}, so
@@ -1413,7 +1413,7 @@ function RequirementStatusChip({ item }) {
   const { label, tone } = getRequirementStatusDisplay(item)
   return (
     <span
-      className={`rounded-sm border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${requirementStatusClassName(tone)}`}
+      className={`rounded-2xl border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${requirementStatusClassName(tone)}`}
     >
       {label}
     </span>
@@ -1456,11 +1456,11 @@ function ChecklistView({
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-sm border border-white/10 bg-white/5 p-4">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
               <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Completed now</div>
               <div className="mt-2 text-2xl font-semibold">{completedRequirementCount}</div>
             </div>
-            <div className="rounded-sm border border-sky-400/20 bg-sky-400/10 p-4">
+            <div className="rounded-2xl border border-sky-400/20 bg-sky-400/10 p-4">
               <div className="text-xs uppercase tracking-[0.18em] text-sky-200">Covered if planned</div>
               <div className="mt-2 text-2xl font-semibold text-white">{plannedCoveragePercent}%</div>
             </div>
@@ -1469,7 +1469,7 @@ function ChecklistView({
           <button
             type="button"
             onClick={onToggleTransferCredits}
-            className={`mt-6 flex w-full items-center justify-between rounded-sm border px-4 py-4 text-left transition ${
+            className={`mt-6 flex w-full items-center justify-between rounded-2xl border px-4 py-4 text-left transition ${
               transferCredits
                 ? 'border-emerald-400/30 bg-emerald-400/10'
                 : 'border-white/10 bg-white/5 hover:border-white/20'
@@ -1495,7 +1495,7 @@ function ChecklistView({
           </button>
 
           {transferCredits && (
-            <div className="mt-4 rounded-sm border border-silver/25 bg-silver/8 p-4 text-sm leading-6 text-slate-200">
+            <div className="mt-4 rounded-2xl border border-silver/25 bg-silver/8 p-4 text-sm leading-6 text-slate-200">
               <span className="font-semibold text-silver-bright">Transfer credit applied (demo).</span>{' '}
               {transferAutoFilled} eligible requirements were marked from your transfer toggle. Confirm
               every area in Gaucho GOLD — SILVER does not read your transcript.
@@ -1505,7 +1505,7 @@ function ChecklistView({
           <button
             type="button"
             onClick={() => setShowMinorPreview((current) => !current)}
-            className={`mt-4 flex w-full items-center justify-between rounded-sm border px-4 py-3 text-left text-sm transition ${
+            className={`mt-4 flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left text-sm transition ${
               showMinorPreview
                 ? 'border-silver/35 bg-silver/10'
                 : 'border-white/10 bg-white/5 hover:border-white/20'
@@ -1517,12 +1517,12 @@ function ChecklistView({
                 Preview a sample Political Science minor pathway (read-only).
               </span>
             </span>
-            <span className="badge-silver rounded-sm px-2 py-1 text-xs font-semibold">
+            <span className="badge-silver rounded-2xl px-2 py-1 text-xs font-semibold">
               {showMinorPreview ? 'Hide' : 'Show'}
             </span>
           </button>
 
-          <div className="mt-4 rounded-sm border border-silver/20 bg-silver/5 p-4 text-sm text-slate-300">
+          <div className="mt-4 rounded-2xl border border-silver/20 bg-silver/5 p-4 text-sm text-slate-300">
             {plannedRequirementCount} additional requirements are already accounted for in the 4-year
             planner.
             {hasLoadedSavedState && (
@@ -1564,7 +1564,7 @@ function ChecklistView({
                     </Link>
                   )}
                 </div>
-                <div className="rounded-sm border border-white/10 bg-white/5 px-3 py-1 text-sm text-slate-300">
+                <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-1 text-sm text-slate-300">
                   {section.completedCount} complete
                   {section.plannedCount > 0 && ` • ${section.plannedCount} planned`}
                 </div>
@@ -1576,7 +1576,7 @@ function ChecklistView({
                 {section.items.map((item) => (
                   <div
                     key={item.id}
-                    className={`flex items-start gap-4 rounded-sm border p-4 text-left transition ${
+                    className={`flex items-start gap-4 rounded-2xl border p-4 text-left transition ${
                       item.status === 'completed'
                         ? 'border-emerald-400/25 bg-emerald-400/10'
                         : item.status === 'planned'
@@ -1585,7 +1585,7 @@ function ChecklistView({
                     }`}
                   >
                     <span
-                      className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border ${
+                      className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-2xl border ${
                         item.status === 'completed'
                           ? 'border-emerald-300 bg-emerald-400/90 text-slate-950'
                           : item.status === 'planned'
@@ -1606,7 +1606,7 @@ function ChecklistView({
                           type="button"
                           onClick={() => onToggleRequirement(item)}
                           disabled={!item.isInteractive}
-                          className={`rounded-sm px-3 py-1.5 text-xs font-semibold transition ${
+                          className={`rounded-2xl px-3 py-1.5 text-xs font-semibold transition ${
                             item.isInteractive
                               ? 'border border-white/10 bg-white/5 text-slate-100 hover:border-white/20 hover:bg-white/8'
                               : 'cursor-not-allowed border border-white/10 bg-white/5 text-slate-500'
@@ -1635,13 +1635,13 @@ function ChecklistView({
                 {politicalScienceMinorPreview.items.map((minorItem) => (
                   <li
                     key={minorItem.id}
-                    className="flex items-start justify-between gap-3 rounded-sm border border-white/10 bg-white/5 px-3 py-2 text-sm"
+                    className="flex items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm"
                   >
                     <div>
                       <div className="font-medium text-white">{minorItem.label}</div>
                       <div className="text-slate-400">{minorItem.detail}</div>
                     </div>
-                    <span className="shrink-0 rounded-sm border border-white/15 bg-white/5 px-2 py-0.5 text-[11px] font-semibold text-slate-300">
+                    <span className="shrink-0 rounded-2xl border border-white/15 bg-white/5 px-2 py-0.5 text-[11px] font-semibold text-slate-300">
                       {minorItem.statusLabel}
                     </span>
                   </li>
@@ -1667,7 +1667,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
             <p className="text-label-caps">L&S Campus Q&A</p>
             <h2 className="mt-2 text-3xl font-semibold tracking-tight">General questions, official sources</h2>
           </div>
-          <div className="badge-silver rounded-sm px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]">
+          <div className="badge-silver rounded-2xl px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]">
             Demo mode
           </div>
         </div>
@@ -1679,7 +1679,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
               className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-3xl rounded-sm border p-4 ${
+                className={`max-w-3xl rounded-2xl border p-4 ${
                   message.sender === 'user'
                     ? 'border-silver/30 bg-silver/14 text-white'
                     : 'border-white/10 bg-slate-950/55'
@@ -1694,7 +1694,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
                   <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
                     {message.bullets.map((bullet, index) => (
                       <li key={`${message.id}-b-${index}`} className="flex gap-2">
-                        <span className="mt-2 h-1.5 w-1.5 rounded-sm bg-silver" />
+                        <span className="mt-2 h-1.5 w-1.5 rounded-2xl bg-silver" />
                         <span>{bullet}</span>
                       </li>
                     ))}
@@ -1741,12 +1741,12 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
                 }
               }}
               placeholder="Try deadlines, GE, prerequisites, or billing — then read the linked sources…"
-              className="flex-1 rounded-sm border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus-silver focus:border-silver/40"
+              className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus-silver focus:border-silver/40"
             />
             <button
               type="button"
               onClick={onSendMessage}
-              className="btn-silver rounded-sm px-5 py-3"
+              className="btn-silver rounded-2xl px-5 py-3"
             >
               Send
             </button>
@@ -1768,11 +1768,11 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
                     onOpenCourseGrades(course, gradeSummaries[course.code] ?? null)
                   }
                 }}
-                className="w-full rounded-sm border border-white/10 bg-white/6 px-4 py-3 text-left transition hover:border-white/20"
+                className="w-full rounded-2xl border border-white/10 bg-white/6 px-4 py-3 text-left transition hover:border-white/20"
               >
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">{course.code}</span>
-                  <span className={`rounded-sm px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
+                  <span className={`rounded-2xl px-2 py-1 text-[11px] font-semibold ${plannerLegend[course.type].pillClass}`}>
                     {plannerLegend[course.type].label}
                   </span>
                 </div>
@@ -1787,7 +1787,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
           </div>
 
           {gradesError && (
-            <div className="mt-4 rounded-sm border border-rose-400/25 bg-rose-500/10 p-4 text-sm text-rose-100">
+            <div className="mt-4 rounded-2xl border border-rose-400/25 bg-rose-500/10 p-4 text-sm text-rose-100">
               Course grade summaries are temporarily unavailable; use L&S and department advising plus GOLD for enrollment decisions.
             </div>
           )}
@@ -1796,14 +1796,14 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
         <div className="panel border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
           <p className="text-label-caps">How this panel works</p>
           <div className="mt-4 space-y-4 text-sm leading-6 text-slate-300">
-            <div className="rounded-sm border border-white/10 bg-slate-950/45 p-4">
+            <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
               Every bot reply includes at least one official UCSB link so you can verify information yourself.
             </div>
-            <div className="rounded-sm border border-white/10 bg-slate-950/45 p-4">
+            <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
               Questions about petitions, standing, exceptions, or your specific transcript are routed to L&S General
               Academic Advising rather than answered in detail here.
             </div>
-            <div className="rounded-sm border border-white/10 bg-slate-950/45 p-4">
+            <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
               The course tiles are only sample ideas for this Economics demo; GOLD and your advisors decide what you
               may actually enroll in.
             </div>
@@ -1846,7 +1846,7 @@ function DatesView() {
                 key={filter.id}
                 type="button"
                 onClick={() => setCategoryFilter(filter.id)}
-                className={`rounded-sm border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition ${
+                className={`rounded-2xl border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition ${
                   isActive
                     ? 'border-silver/35 bg-silver/15 text-silver-bright'
                     : 'border-white/10 bg-white/5 text-slate-400 hover:border-white/20 hover:text-white'
@@ -1860,11 +1860,11 @@ function DatesView() {
 
         <div className="mt-6 space-y-4">
           {filteredEvents.map((event) => (
-            <div key={event.date} className="relative rounded-sm border border-white/10 bg-slate-950/45 p-5">
+            <div key={event.date} className="relative rounded-2xl border border-white/10 bg-slate-950/45 p-5">
               <div className="absolute left-6 top-5 h-[calc(100%-2.5rem)] w-px bg-white/10" />
               <div className="relative z-10 flex gap-4">
                 <div
-                  className={`flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-sm text-center shadow-[0_10px_30px_rgba(0,54,96,0.35)] ${
+                  className={`flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl text-center shadow-[0_10px_30px_rgba(0,54,96,0.35)] ${
                     event.category === 'registration'
                       ? 'border border-gold/35 bg-gold/15'
                       : 'bg-[#003660]'
@@ -1883,7 +1883,7 @@ function DatesView() {
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="text-lg font-semibold tracking-tight">{event.title}</h3>
                     <span
-                      className={`rounded-sm px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${getCategoryChipClass(event.category)}`}
+                      className={`rounded-2xl px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${getCategoryChipClass(event.category)}`}
                     >
                       {event.category}
                     </span>
@@ -1946,7 +1946,7 @@ function MonthCard({ label, monthIndex, highlightedDays }) {
           return (
             <div
               key={`${label}-${index}`}
-              className={`flex aspect-square items-center justify-center rounded-sm text-sm ${
+              className={`flex aspect-square items-center justify-center rounded-2xl text-sm ${
                 day
                   ? isHighlighted
                     ? 'bg-silver font-semibold text-ucsb-navy'
@@ -1966,12 +1966,12 @@ function MonthCard({ label, monthIndex, highlightedDays }) {
 function ProgressRing({ percent }) {
   return (
     <div
-      className="relative flex h-36 w-36 items-center justify-center rounded-sm"
+      className="relative flex h-36 w-36 items-center justify-center rounded-full"
       style={{
-        background: `conic-gradient(var(--color-silver) 0deg ${percent * 3.6}deg, rgba(255,255,255,0.08) ${percent * 3.6}deg 360deg)`,
+        background: `conic-gradient(var(--color-gold) 0deg ${percent * 0.72}deg, var(--color-silver) ${percent * 0.72}deg ${percent * 3.6}deg, rgba(255,255,255,0.08) ${percent * 3.6}deg 360deg)`,
       }}
     >
-      <div className="flex h-28 w-28 items-center justify-center rounded-sm bg-slate-950 text-3xl font-semibold">
+      <div className="flex h-28 w-28 items-center justify-center rounded-full bg-slate-950 text-3xl font-semibold">
         {percent}%
       </div>
     </div>
@@ -2004,7 +2004,7 @@ function StatHighlight({ label, value, tone }) {
   }
 
   return (
-    <div className={`rounded-sm border px-4 py-4 ${toneClasses[tone]}`}>
+    <div className={`rounded-2xl border px-4 py-4 ${toneClasses[tone]}`}>
       <div className="text-xs uppercase tracking-[0.18em]">{label}</div>
       <div className="mt-2 text-2xl font-semibold tracking-tight text-white">{value}</div>
     </div>
@@ -2013,7 +2013,7 @@ function StatHighlight({ label, value, tone }) {
 
 function InfoTile({ label, value }) {
   return (
-    <div className="rounded-sm border border-white/10 bg-white/6 p-3">
+    <div className="rounded-2xl border border-white/10 bg-white/6 p-3">
       <div className="text-xs uppercase tracking-[0.16em] text-slate-400">{label}</div>
       <div className="mt-2 font-medium text-white">{value}</div>
     </div>

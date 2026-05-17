@@ -103,7 +103,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
  <div className="flex flex-wrap items-center justify-between gap-3">
  <Link
  href="/"
- className="inline-flex items-center gap-2 rounded-sm border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-silver/35 hover:text-silver"
+ className="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-silver/35 hover:text-silver"
  >
  ← Back to UCSB SILVER
  </Link>
@@ -111,7 +111,7 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
  </div>
  )}
 
- <div className="overflow-x-auto rounded-sm border border-silver/20 bg-[#0c1522] p-6 shadow-inner">
+ <div className="overflow-x-auto rounded-2xl border border-silver/20 bg-[#0c1522] p-6 shadow-inner">
  <svg
  role="img"
  aria-label="Economics prerequisite flowchart"
@@ -251,10 +251,10 @@ export function EconPrepMapFlowchart({ showBackLink = true }) {
  </div>
 
  <div className="flex flex-wrap gap-3 text-xs text-slate-500">
- <span className="rounded-sm border border-white/10 bg-slate-950/50 px-3 py-1">
+ <span className="rounded-2xl border border-white/10 bg-slate-950/50 px-3 py-1">
  Each arrow color matches one branch so you can follow paths when lines cross.
  </span>
- <span className="rounded-sm border border-white/10 bg-slate-950/50 px-3 py-1">
+ <span className="rounded-2xl border border-white/10 bg-slate-950/50 px-3 py-1">
  <span className="font-semibold text-slate-300">All</span> = every incoming branch must be complete.
  </span>
  </div>

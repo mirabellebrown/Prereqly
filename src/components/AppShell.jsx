@@ -8,7 +8,7 @@ import { countUpcomingEvents, getTimelineEvents } from '../lib/academicDates'
 
 function InfoTile({ label, value }) {
   return (
-    <div className="rounded-sm border border-white/10 bg-white/6 p-3">
+    <div className="rounded-2xl border border-white/10 bg-white/6 p-3">
       <div className="text-xs uppercase tracking-[0.16em] text-slate-400">{label}</div>
       <div className="mt-2 font-medium text-white">{value}</div>
     </div>
@@ -34,7 +34,7 @@ export function AppShell({
       <header className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
-            <div className="flex h-11 w-11 items-center justify-center rounded-sm bg-gradient-to-br from-slate-200 to-slate-50 text-lg font-black text-ucsb-navy shadow-[0_0_30px_var(--silver-glow)]">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-200 to-slate-50 text-lg font-black text-ucsb-navy shadow-[0_0_30px_var(--silver-glow)]">
               Ag
             </div>
             <div>
@@ -44,7 +44,7 @@ export function AppShell({
           </div>
 
           <div className="hidden items-center gap-3 lg:flex">
-            <div className="rounded-sm border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
               Winter 2026 planning snapshot for {studentProfile.firstName}
             </div>
             <GoldLink variant="pill">Open Gaucho GOLD</GoldLink>
@@ -64,7 +64,7 @@ export function AppShell({
                 </span>
               )}
             </button>
-            <div className="flex items-center gap-3 rounded-sm border border-white/10 bg-white/5 px-2 py-2">
+            <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-2 py-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-ucsb-navy text-sm font-semibold text-silver">
                 {studentProfile.initials}
               </div>
@@ -95,7 +95,7 @@ export function AppShell({
                   <h1 className="mt-3 text-2xl font-semibold tracking-tight">{studentProfile.name}</h1>
                   <p className="mt-1 text-sm text-slate-300">{studentProfile.major}</p>
                 </div>
-                <div className="badge-silver rounded-sm px-3 py-1 text-xs font-semibold">
+                <div className="badge-silver rounded-2xl px-3 py-1 text-xs font-semibold">
                   {studentProfile.year}
                 </div>
               </div>
@@ -107,7 +107,7 @@ export function AppShell({
                 </div>
                 <div className="h-3 overflow-hidden rounded-full bg-slate-800/80">
                   <div
-                    className="progress-silver h-full rounded-sm"
+                    className="progress-silver h-full rounded-2xl"
                     style={{ width: `${studentProfile.completedPercent}%` }}
                   />
                 </div>
@@ -127,14 +127,14 @@ export function AppShell({
                     key={item.id}
                     type="button"
                     onClick={() => onNavigate(item.id)}
-                    className={`flex items-center gap-3 rounded-sm border px-4 py-3 text-left transition ${
+                    className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
                       isActive
                         ? 'nav-active'
                         : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/8 hover:text-white'
                     }`}
                   >
                     <span
-                      className={`flex h-10 w-10 items-center justify-center rounded-sm ${
+                      className={`flex h-10 w-10 items-center justify-center rounded-2xl ${
                         isActive ? 'nav-active-icon' : 'bg-slate-900/80 text-slate-300'
                       }`}
                     >

@@ -68,7 +68,7 @@ export function ReminderPanel({ events, onClose, onOpenDates }) {
           <button
             type="button"
             onClick={onClose}
-            className="rounded-sm border border-white/10 px-3 py-1.5 text-sm text-slate-300 hover:border-white/20 hover:text-white"
+            className="rounded-2xl border border-white/10 px-3 py-1.5 text-sm text-slate-300 hover:border-white/20 hover:text-white"
           >
             Close
           </button>
@@ -76,7 +76,7 @@ export function ReminderPanel({ events, onClose, onOpenDates }) {
 
         <div className="border-b border-white/10 px-5 py-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Notification preferences</p>
-          <label className="mt-3 flex cursor-pointer items-center justify-between gap-3 rounded-sm border border-white/10 bg-white/5 px-3 py-3">
+          <label className="mt-3 flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-3">
             <span className="text-sm text-slate-200">Email reminders (demo)</span>
             <input
               type="checkbox"
@@ -85,7 +85,7 @@ export function ReminderPanel({ events, onClose, onOpenDates }) {
               className="h-4 w-4 accent-silver"
             />
           </label>
-          <label className="mt-2 flex cursor-not-allowed items-center justify-between gap-3 rounded-sm border border-white/10 bg-white/5 px-3 py-3 opacity-60">
+          <label className="mt-2 flex cursor-not-allowed items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-3 opacity-60">
             <span className="text-sm text-slate-400">
               Push notifications <span className="text-slate-500">(coming soon)</span>
             </span>
@@ -105,7 +105,7 @@ export function ReminderPanel({ events, onClose, onOpenDates }) {
               return (
                 <li
                   key={event.date + event.title}
-                  className="rounded-sm border border-white/10 bg-slate-900/60 p-3"
+                  className="rounded-2xl border border-white/10 bg-slate-900/60 p-3"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
@@ -118,7 +118,7 @@ export function ReminderPanel({ events, onClose, onOpenDates }) {
                       )}
                     </span>
                     <span
-                      className={`rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${getCategoryChipClass(event.category)}`}
+                      className={`rounded-2xl px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${getCategoryChipClass(event.category)}`}
                     >
                       {event.category}
                     </span>
@@ -148,7 +148,7 @@ export function ReminderPanel({ events, onClose, onOpenDates }) {
               onOpenDates()
               onClose()
             }}
-            className="w-full rounded-sm border border-silver/25 bg-silver/10 px-4 py-2.5 text-sm font-semibold text-silver-bright hover:bg-silver/15"
+            className="w-full rounded-2xl border border-silver/25 bg-silver/10 px-4 py-2.5 text-sm font-semibold text-silver-bright hover:bg-silver/15"
           >
             Open full calendar
           </button>
