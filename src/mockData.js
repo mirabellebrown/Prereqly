@@ -21,7 +21,7 @@ export const studentProfile = {
 
 export const dashboardMetrics = [
   { label: 'Completed units', value: '112 / 180', tone: 'sky' },
-  { label: 'Current GPA', value: '3.72', tone: 'gold' },
+  { label: 'Current GPA', value: '3.72', tone: 'silver' },
   { label: 'Planned next quarter units', value: '14', tone: 'emerald' },
   { label: 'Registration hold status', value: 'No holds', tone: 'indigo' },
 ]

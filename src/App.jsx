@@ -2,6 +2,9 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
+import { AppShell } from './components/AppShell'
+import { AppIcon } from './components/AppIcon'
+import { GoldLink, GoldSourceChip } from './components/GoldLink'
 import {
   advisorSuggestedCourses,
   chatbotSeedMessages,
@@ -457,131 +460,31 @@ function App() {
     dates: <DatesView />,
   }[activeView]
 
+  const navDescriptions = {
+    dashboard: 'Overview, progress, and action cards',
+    planner: 'Click-to-add roadmap across four years',
+    checklist: 'Track requirements and transfer credit',
+    chat: 'General UCSB questions with official source links',
+    dates: 'Winter 2026 deadlines and calendar',
+  }
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(254,188,17,0.14),_transparent_28%),linear-gradient(180deg,_#04101d_0%,_#07192f_42%,_#020816_100%)] text-slate-50">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.14),transparent_18%),radial-gradient(circle_at_80%_0%,rgba(14,165,233,0.08),transparent_20%)]" />
-
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-200 to-slate-50 text-lg font-black text-[#003660] shadow-[0_0_30px_rgba(203,213,225,0.35)]">
-              Ag
-            </div>
-            <div>
-              <div className="text-lg font-semibold tracking-tight">UCSB SILVER</div>
-              <div className="text-sm text-slate-400">Planning alongside Gaucho GOLD</div>
-            </div>
-          </div>
-
-          <div className="hidden rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 lg:flex">
-            Winter 2026 planning snapshot for {studentProfile.firstName}
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              className="relative flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 transition hover:border-[#FEBC11]/40 hover:text-[#FEBC11]"
-            >
-              <AppIcon name="bell" className="h-5 w-5" />
-              <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#FEBC11] px-1 text-[11px] font-bold text-[#003660]">
-                3
-              </span>
-            </button>
-            <div className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-2 py-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#003660] text-sm font-semibold text-[#FEBC11]">
-                {studentProfile.initials}
-              </div>
-              <div className="hidden pr-2 text-left sm:block">
-                <div className="text-sm font-medium">{studentProfile.name}</div>
-                <div className="text-xs text-slate-400">{studentProfile.major}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8">
-        <aside className="w-full shrink-0 lg:sticky lg:top-24 lg:w-80 lg:self-start">
-          <div className="rounded-[28px] border border-white/10 bg-white/6 p-4 shadow-[0_20px_80px_rgba(2,8,23,0.35)] backdrop-blur-xl">
-            <div className="rounded-3xl border border-[#FEBC11]/25 bg-gradient-to-br from-[#003660] via-[#0b2d52] to-slate-950 p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Student snapshot</p>
-                  <h1 className="mt-3 text-2xl font-semibold tracking-tight">{studentProfile.name}</h1>
-                  <p className="mt-1 text-sm text-slate-300">{studentProfile.major}</p>
-                </div>
-                <div className="rounded-full border border-[#FEBC11]/30 bg-[#FEBC11]/10 px-3 py-1 text-xs font-semibold text-[#FEBC11]">
-                  {studentProfile.year}
-                </div>
-              </div>
-
-              <div className="mt-5 space-y-3">
-                <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span>Graduation progress</span>
-                  <span className="font-semibold text-white">{studentProfile.completedPercent}%</span>
-                </div>
-                <div className="h-3 overflow-hidden rounded-full bg-slate-800/80">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#FEBC11] via-[#ffd95f] to-[#fff1bd]"
-                    style={{ width: `${studentProfile.completedPercent}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                <InfoTile label="Expected grad" value={studentProfile.expectedGraduation} />
-                <InfoTile label="Standing" value={studentProfile.standing} />
-              </div>
-            </div>
-
-            <nav className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-1">
-              {navItems.map((item) => {
-                const isActive = activeView === item.id
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setActiveView(item.id)}
-                    className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
-                      isActive
-                        ? 'border-[#FEBC11]/35 bg-[#FEBC11]/12 text-white shadow-[0_0_0_1px_rgba(254,188,17,0.12)]'
-                        : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/8 hover:text-white'
-                    }`}
-                  >
-                    <span
-                      className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                        isActive ? 'bg-[#FEBC11]/18 text-[#FEBC11]' : 'bg-slate-900/80 text-slate-300'
-                      }`}
-                    >
-                      <AppIcon name={item.icon} className="h-5 w-5" />
-                    </span>
-                    <span>
-                      <span className="block text-sm font-medium">{item.label}</span>
-                      <span className="block text-xs text-slate-400">
-                        {item.id === 'dashboard' && 'Overview, progress, and action cards'}
-                        {item.id === 'planner' && 'Click-to-add roadmap across four years'}
-                        {item.id === 'checklist' && 'Track requirements and transfer credit'}
-                        {item.id === 'chat' && 'General UCSB questions with official source links'}
-                        {item.id === 'dates' && 'Winter 2026 deadlines and calendar'}
-                      </span>
-                    </span>
-                  </button>
-                )
-              })}
-            </nav>
-          </div>
-        </aside>
-
-        <main key={activeView} className="page-enter min-w-0 flex-1">
-          {activeContent}
-        </main>
-      </div>
+    <>
+      <AppShell
+        studentProfile={studentProfile}
+        navItems={navItems}
+        activeView={activeView}
+        onNavigate={setActiveView}
+        renderNavDescription={(id) => navDescriptions[id] ?? ''}
+      >
+        {activeContent}
+      </AppShell>
 
       <CourseGradesDetailModal
         course={selectedCourseGrades}
         onClose={() => setSelectedCourseGrades(null)}
       />
-    </div>
+    </>
   )
 }
 
@@ -596,7 +499,7 @@ function DashboardView({ checklistPercent, onNavigate, planner }) {
         <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-[#003660] via-[#0b2442] to-slate-950 p-6 shadow-[0_20px_90px_rgba(2,8,23,0.35)]">
           <div className="flex flex-col justify-between gap-6 lg:flex-row">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center rounded-full border border-[#FEBC11]/25 bg-[#FEBC11]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[#FEBC11]">
+              <div className="badge-silver inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em]">
                 Welcome back
               </div>
               <h2 className="mt-4 text-4xl font-semibold tracking-tight">
@@ -609,7 +512,7 @@ function DashboardView({ checklistPercent, onNavigate, planner }) {
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2 lg:w-[320px] lg:grid-cols-1">
-              <StatHighlight label="Degree progress" value={`${checklistPercent}%`} tone="gold" />
+              <StatHighlight label="Degree progress" value={`${checklistPercent}%`} tone="silver" />
               <StatHighlight label="Total planned units" value={String(totalPlannedUnits)} tone="sky" />
               <StatHighlight label="Major declaration" value="Window open Jan 12" tone="emerald" />
             </div>
@@ -619,10 +522,10 @@ function DashboardView({ checklistPercent, onNavigate, planner }) {
         <div className="rounded-[32px] border border-white/10 bg-white/6 p-6 shadow-[0_20px_90px_rgba(2,8,23,0.3)] backdrop-blur-xl">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Upcoming deadlines</p>
+              <p className="text-label-caps">Upcoming deadlines</p>
               <h3 className="mt-3 text-2xl font-semibold tracking-tight">Winter 2026 checklist</h3>
             </div>
-            <AppIcon name="calendar" className="h-6 w-6 text-[#FEBC11]" />
+            <AppIcon name="calendar" className="h-6 w-6 text-silver" />
           </div>
 
           <div className="mt-6 space-y-4">
@@ -640,7 +543,7 @@ function DashboardView({ checklistPercent, onNavigate, planner }) {
                       deadline.priority === 'urgent'
                         ? 'bg-rose-500/18 text-rose-200'
                         : deadline.priority === 'upcoming'
-                          ? 'bg-[#FEBC11]/15 text-[#FEBC11]'
+                          ? 'badge-silver-strong'
                           : 'bg-sky-500/15 text-sky-200'
                     }`}
                   >
@@ -664,7 +567,7 @@ function DashboardView({ checklistPercent, onNavigate, planner }) {
       <section className="space-y-4">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Quick access</p>
+            <p className="text-label-caps">Quick access</p>
             <h3 className="mt-2 text-2xl font-semibold tracking-tight">Jump into the tools you need</h3>
           </div>
           <div className="hidden text-sm text-slate-400 lg:block">All screens are interactive in this prototype.</div>
@@ -680,7 +583,7 @@ function DashboardView({ checklistPercent, onNavigate, planner }) {
                     <h4 className="text-lg font-semibold tracking-tight">{card.title}</h4>
                     <p className="mt-3 text-sm leading-6 text-slate-400">{card.description}</p>
                   </div>
-                  <span className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition group-hover:border-[#FEBC11]/25 group-hover:text-[#FEBC11]">
+                  <span className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-200 transition group-hover:border-silver/25 group-hover:text-silver">
                     <AppIcon name="arrow-up-right" className="h-4 w-4" />
                   </span>
                 </div>
@@ -729,7 +632,7 @@ function PlannerView({
         <div className="rounded-[32px] border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">4-Year Planner</p>
+              <p className="text-label-caps">4-Year Planner</p>
               <h2 className="mt-2 text-3xl font-semibold tracking-tight">Map every quarter at a glance</h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
                 Click a quarter card to target it, then use the recommendation panel to add a course.
@@ -793,7 +696,7 @@ function PlannerView({
                       tabIndex={0}
                       className={`rounded-[24px] border p-4 text-left transition ${
                         isSelected
-                          ? 'border-[#FEBC11]/40 bg-[#FEBC11]/10 shadow-[0_0_0_1px_rgba(254,188,17,0.14)]'
+                          ? 'border-silver/40 bg-silver/10 shadow-[0_0_0_1px_rgba(203,213,225,0.14)]'
                           : 'border-white/10 bg-slate-950/45 hover:border-white/20 hover:bg-slate-900/70'
                       }`}
                     >
@@ -803,7 +706,7 @@ function PlannerView({
                           <div className="mt-1 text-lg font-semibold">{quarterUnits} units</div>
                         </div>
                         {isSelected && (
-                          <span className="rounded-full bg-[#FEBC11] px-3 py-1 text-xs font-bold text-[#003660]">
+                          <span className="rounded-full bg-silver px-3 py-1 text-xs font-bold text-ucsb-navy">
                             Selected
                           </span>
                         )}
@@ -846,8 +749,8 @@ function PlannerView({
       </section>
 
       <aside className="space-y-6 xl:sticky xl:top-24 xl:self-start">
-        <div className="rounded-[32px] border border-[#FEBC11]/25 bg-gradient-to-br from-[#FEBC11]/16 via-[#003660] to-slate-950 p-6">
-          <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Selected quarter</p>
+        <div className="rounded-[32px] border border-silver/25 bg-gradient-to-br from-silver/16 via-ucsb-navy to-slate-950 p-6">
+          <p className="text-label-caps">Selected quarter</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             {selectedQuarterKey.replace('|', ' · ')}
           </h3>
@@ -859,10 +762,10 @@ function PlannerView({
         <div className="rounded-[32px] border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Recommended adds</p>
+              <p className="text-label-caps">Recommended adds</p>
               <h3 className="mt-2 text-2xl font-semibold tracking-tight">Next quarter options</h3>
             </div>
-            <AppIcon name="spark" className="h-6 w-6 text-[#FEBC11]" />
+            <AppIcon name="spark" className="h-6 w-6 text-silver" />
           </div>
 
           <div className="mt-5 space-y-4">
@@ -903,7 +806,7 @@ function PlannerView({
                       className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                         isAdded
                           ? 'cursor-not-allowed border border-white/10 bg-white/5 text-slate-500'
-                          : 'bg-[#FEBC11] text-[#003660] hover:bg-[#ffd457]'
+                          : 'bg-silver text-ucsb-navy hover:bg-silver-bright'
                       }`}
                     >
                       {isAdded ? 'Added' : `Add to ${selectedQuarterKey.split('|')[1]}`}
@@ -920,6 +823,10 @@ function PlannerView({
               without it.
             </div>
           )}
+
+          <div className="mt-4 flex justify-end">
+            <GoldLink variant="button">Verify in Gaucho GOLD</GoldLink>
+          </div>
         </div>
       </aside>
     </div>
@@ -1119,7 +1026,7 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
             href={professorReview.profileUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-[#FEBC11]/35 hover:text-[#FEBC11]"
+            className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-silver/35 hover:text-silver"
           >
             View on Rate My Professors
           </a>
@@ -1187,7 +1094,7 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
                 {review.ratingTags.map((tag) => (
                   <span
                     key={`${review.id}-${tag}`}
-                    className="rounded-full border border-[#FEBC11]/20 bg-[#FEBC11]/10 px-3 py-1 text-xs font-semibold text-[#FEBC11]"
+                    className="badge-silver rounded-full px-3 py-1 text-xs font-semibold"
                   >
                     {tag}
                   </span>
@@ -1253,7 +1160,7 @@ function CourseGradesDetailModal({ course, onClose }) {
       >
         <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-5">
           <div>
-            <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Daily Nexus grade history</p>
+            <p className="text-label-caps">Daily Nexus grade history</p>
             <h3 className="mt-2 text-2xl font-semibold tracking-tight">{course.code}</h3>
             <p className="mt-2 text-sm leading-6 text-slate-300">{course.title}</p>
             {course.note && <p className="mt-2 text-sm leading-6 text-slate-400">{course.note}</p>}
@@ -1292,7 +1199,7 @@ function CourseGradesDetailModal({ course, onClose }) {
                     taught that offering.
                   </div>
                 </div>
-                <AppIcon name="spark" className="h-5 w-5 text-[#FEBC11]" />
+                <AppIcon name="spark" className="h-5 w-5 text-silver" />
               </div>
 
               <OfferingDistributionCharts offeringDistributions={visibleOfferingDistributions} />
@@ -1332,7 +1239,7 @@ function CourseGradesDetailModal({ course, onClose }) {
                     Recent reviews for the instructors shown in the current offering charts.
                   </div>
                 </div>
-                <AppIcon name="arrow-up-right" className="h-5 w-5 text-[#FEBC11]" />
+                <AppIcon name="arrow-up-right" className="h-5 w-5 text-silver" />
               </div>
 
               <div className="mt-5 space-y-4">
@@ -1370,7 +1277,7 @@ function ChecklistView({
     <div className="space-y-6">
       <section className="grid gap-6 xl:grid-cols-[0.9fr,1.4fr]">
         <div className="rounded-[32px] border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
-          <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Degree Checklist</p>
+          <p className="text-label-caps">Degree Checklist</p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight">Requirement progress</h2>
           <p className="mt-3 text-sm leading-6 text-slate-400">
             Toggle transfer credit, review what is already mapped in the planner, and manually mark
@@ -1432,7 +1339,7 @@ function ChecklistView({
             </div>
           )}
 
-          <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+          <div className="mt-4 rounded-2xl border border-silver/20 bg-silver/5 p-4 text-sm text-slate-300">
             {plannedRequirementCount} additional requirements are already accounted for in the 4-year
             planner.
             {hasLoadedSavedState && (
@@ -1440,6 +1347,10 @@ function ChecklistView({
                 Checklist and planner changes are saved automatically in this browser.
               </span>
             )}
+          </div>
+
+          <div className="mt-4 flex justify-end">
+            <GoldLink variant="button">Open degree audit in GOLD</GoldLink>
           </div>
         </div>
 
@@ -1487,7 +1398,7 @@ function ChecklistView({
                       <span className="flex flex-wrap items-center gap-2">
                         <span className="font-semibold">{item.label}</span>
                         {item.autoFilled && (
-                          <span className="rounded-full bg-[#FEBC11]/12 px-2 py-1 text-[11px] font-semibold text-[#FEBC11]">
+                          <span className="badge-silver rounded-full px-2 py-1 text-[11px] font-semibold">
                             Transfer
                           </span>
                         )}
@@ -1550,10 +1461,10 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
       <section className="rounded-[32px] border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
         <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">L&S Campus Q&A</p>
+            <p className="text-label-caps">L&S Campus Q&A</p>
             <h2 className="mt-2 text-3xl font-semibold tracking-tight">General questions, official sources</h2>
           </div>
-          <div className="rounded-full border border-[#FEBC11]/25 bg-[#FEBC11]/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#FEBC11]">
+          <div className="badge-silver rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]">
             Demo mode
           </div>
         </div>
@@ -1567,7 +1478,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
               <div
                 className={`max-w-3xl rounded-[24px] border p-4 ${
                   message.sender === 'user'
-                    ? 'border-[#FEBC11]/30 bg-[#FEBC11]/14 text-white'
+                    ? 'border-silver/30 bg-silver/14 text-white'
                     : 'border-white/10 bg-slate-950/55'
                 }`}
               >
@@ -1580,7 +1491,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
                   <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
                     {message.bullets.map((bullet, index) => (
                       <li key={`${message.id}-b-${index}`} className="flex gap-2">
-                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#FEBC11]" />
+                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-silver" />
                         <span>{bullet}</span>
                       </li>
                     ))}
@@ -1589,7 +1500,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
 
                 {message.sender === 'bot' && message.resources?.length > 0 && (
                   <div className="mt-4 border-t border-white/10 pt-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FEBC11]">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
                       Official sources for this answer
                     </p>
                     <p className="mt-1 text-xs leading-5 text-slate-500">
@@ -1598,15 +1509,11 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {message.resources.map((resource) => (
-                        <a
+                        <GoldSourceChip
                           key={resource.url}
                           href={resource.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-[#FEBC11]/35 hover:text-[#FEBC11]"
-                        >
-                          {resource.label}
-                        </a>
+                          label={resource.label}
+                        />
                       ))}
                     </div>
                   </div>
@@ -1631,12 +1538,12 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
                 }
               }}
               placeholder="Try deadlines, GE, prerequisites, or billing — then read the linked sources…"
-              className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-[#FEBC11]/40"
+              className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus-silver focus:border-silver/40"
             />
             <button
               type="button"
               onClick={onSendMessage}
-              className="rounded-2xl bg-[#FEBC11] px-5 py-3 text-sm font-semibold text-[#003660] transition hover:bg-[#ffd457]"
+              className="btn-silver rounded-2xl px-5 py-3"
             >
               Send
             </button>
@@ -1645,8 +1552,8 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
       </section>
 
       <aside className="space-y-6">
-        <div className="rounded-[32px] border border-[#FEBC11]/25 bg-gradient-to-br from-[#003660] via-[#17395f] to-slate-950 p-6">
-          <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Sample next quarter</p>
+        <div className="rounded-[32px] border border-gold/25 bg-gradient-to-br from-ucsb-navy via-[#17395f] to-slate-950 p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gold">Gaucho GOLD</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">Courses to explore in GOLD</h3>
           <div className="mt-4 space-y-3">
             {advisorSuggestedCourses.map((course) => (
@@ -1684,7 +1591,7 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
         </div>
 
         <div className="rounded-[32px] border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
-          <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">How this panel works</p>
+          <p className="text-label-caps">How this panel works</p>
           <div className="mt-4 space-y-4 text-sm leading-6 text-slate-300">
             <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
               Every bot reply includes at least one official UCSB link so you can verify information yourself.
@@ -1714,7 +1621,7 @@ function DatesView() {
   return (
     <div className="grid gap-6 xl:grid-cols-[1.1fr,1fr]">
       <section className="rounded-[32px] border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
-        <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Important Dates</p>
+        <p className="text-label-caps">Important Dates</p>
         <h2 className="mt-2 text-3xl font-semibold tracking-tight">Winter 2026 timeline</h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
           Key academic and advising milestones for the Winter quarter, plus billing timing on BARC when relevant.
@@ -1726,7 +1633,7 @@ function DatesView() {
               <div className="absolute left-6 top-5 h-[calc(100%-2.5rem)] w-px bg-white/10" />
               <div className="relative z-10 flex gap-4">
                 <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl bg-[#003660] text-center shadow-[0_10px_30px_rgba(0,54,96,0.35)]">
-                  <span className="text-[11px] uppercase tracking-[0.18em] text-[#FEBC11]">{event.month}</span>
+                  <span className="text-[11px] uppercase tracking-[0.18em] text-silver">{event.month}</span>
                   <span className="text-lg font-semibold">{event.day}</span>
                 </div>
                 <div className="min-w-0 flex-1">
@@ -1736,7 +1643,7 @@ function DatesView() {
                       event.category === 'billing'
                         ? 'bg-emerald-400/15 text-emerald-200'
                         : event.category === 'major'
-                          ? 'bg-[#FEBC11]/12 text-[#FEBC11]'
+                          ? 'badge-silver-strong'
                           : 'bg-sky-500/15 text-sky-200'
                     }`}>
                       {event.category}
@@ -1751,8 +1658,8 @@ function DatesView() {
       </section>
 
       <section className="space-y-6">
-        <div className="rounded-[32px] border border-[#FEBC11]/25 bg-gradient-to-br from-[#FEBC11]/14 via-[#003660] to-slate-950 p-6">
-          <p className="text-sm uppercase tracking-[0.24em] text-[#FEBC11]">Calendar view</p>
+        <div className="rounded-[32px] border border-silver/25 bg-gradient-to-br from-silver/14 via-ucsb-navy to-slate-950 p-6">
+          <p className="text-label-caps">Calendar view</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">Quarter at a glance</h3>
           <p className="mt-3 text-sm leading-6 text-slate-300">
             Highlighted dates mark registration, billing timing on BARC, and major advising milestones across January through March.
@@ -1798,7 +1705,7 @@ function MonthCard({ label, monthIndex, highlightedDays }) {
               className={`flex aspect-square items-center justify-center rounded-xl text-sm ${
                 day
                   ? isHighlighted
-                    ? 'bg-[#FEBC11] font-semibold text-[#003660]'
+                    ? 'bg-silver font-semibold text-ucsb-navy'
                     : 'bg-slate-950/45 text-slate-200'
                   : 'bg-transparent'
               }`}
@@ -1817,7 +1724,7 @@ function ProgressRing({ percent }) {
     <div
       className="relative flex h-36 w-36 items-center justify-center rounded-full"
       style={{
-        background: `conic-gradient(#FEBC11 0deg ${percent * 3.6}deg, rgba(255,255,255,0.08) ${percent * 3.6}deg 360deg)`,
+        background: `conic-gradient(var(--color-silver) 0deg ${percent * 3.6}deg, rgba(255,255,255,0.08) ${percent * 3.6}deg 360deg)`,
       }}
     >
       <div className="flex h-28 w-28 items-center justify-center rounded-full bg-slate-950 text-3xl font-semibold">
@@ -1830,7 +1737,7 @@ function ProgressRing({ percent }) {
 function MetricCard({ metric }) {
   const toneStyles = {
     sky: 'from-sky-500/16 to-sky-500/0 text-sky-100',
-    gold: 'from-[#FEBC11]/18 to-[#FEBC11]/0 text-[#fff1bd]',
+    silver: 'from-silver/18 to-silver/0 text-slate-100',
     emerald: 'from-emerald-500/16 to-emerald-500/0 text-emerald-100',
     indigo: 'from-indigo-500/16 to-indigo-500/0 text-indigo-100',
   }
@@ -1847,7 +1754,7 @@ function MetricCard({ metric }) {
 
 function StatHighlight({ label, value, tone }) {
   const toneClasses = {
-    gold: 'border-[#FEBC11]/25 bg-[#FEBC11]/10 text-[#FEBC11]',
+    silver: 'border-silver/25 bg-silver/10 text-silver',
     sky: 'border-sky-400/25 bg-sky-400/10 text-sky-200',
     emerald: 'border-emerald-400/25 bg-emerald-400/10 text-emerald-200',
   }
@@ -1866,115 +1773,6 @@ function InfoTile({ label, value }) {
       <div className="text-xs uppercase tracking-[0.16em] text-slate-400">{label}</div>
       <div className="mt-2 font-medium text-white">{value}</div>
     </div>
-  )
-}
-
-function AppIcon({ name, className = 'h-5 w-5' }) {
-  const icons = {
-    dashboard: (
-      <path
-        d="M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z"
-        fill="currentColor"
-      />
-    ),
-    planner: (
-      <path
-        d="M5 5h14v14H5zM9 3v4M15 3v4M5 9h14"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
-    ),
-    checklist: (
-      <path
-        d="M9 7h10M9 12h10M9 17h10M5 7l1.5 1.5L8.5 6M5 12l1.5 1.5L8.5 11M5 17l1.5 1.5L8.5 16"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
-    ),
-    chat: (
-      <path
-        d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v6A2.5 2.5 0 0 1 16.5 15H10l-4 4v-4H7.5A2.5 2.5 0 0 1 5 12.5z"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
-    ),
-    calendar: (
-      <path
-        d="M6 4v3M18 4v3M5 8h14M6 6h12a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zm3 5h2m4 0h2m-8 4h2"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
-    ),
-    bell: (
-      <path
-        d="M12 4a4 4 0 0 1 4 4v2.6c0 .7.2 1.4.6 2l1.1 1.7c.5.8-.1 1.7-1 1.7H7.3c-.9 0-1.5-.9-1-1.7l1.1-1.7c.4-.6.6-1.3.6-2V8a4 4 0 0 1 4-4Zm-1.5 14h3"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
-    ),
-    'arrow-up-right': (
-      <path
-        d="M7 17 17 7M9 7h8v8"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
-    ),
-    spark: (
-      <path
-        d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7L12 3Zm6 11 1 2.5L21.5 18 19 19l-1 2.5L17 19l-2.5-1 2.5-1.5L18 14Zm-12 0 1 2.5L9.5 18 7 19l-1 2.5L5 19l-2.5-1L5 16.5 6 14Z"
-        fill="currentColor"
-      />
-    ),
-    check: (
-      <path
-        d="m5 12 4.2 4.2L19 6.5"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
-    ),
-    chevron: (
-      <path
-        d="m6 9 6 6 6-6"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
-    ),
-  }
-
-  return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {icons[name]}
-    </svg>
   )
 }
 
