@@ -15,16 +15,16 @@ export function FlowchartLauncher() {
         </p>
         <ul className="mt-4 space-y-2 text-sm text-slate-400">
           <li className="flex gap-2">
-            <span className="text-blue-300">●</span>
-            Step 1 — Pre-major admission (ECON 1, 2, 10A)
+            <span className="text-gold">●</span>
+            Step 1 — Gold · Pre-major admission (ECON 1, 2, 10A)
           </li>
           <li className="flex gap-2">
-            <span className="text-teal-300">●</span>
-            Step 2 — Preparation (ECON 5 or PSTAT 120A + calculus)
+            <span className="text-slate-300">●</span>
+            Step 2 — Silver · Preparation (ECON 5 or PSTAT 120A + calculus)
           </li>
           <li className="flex gap-2">
-            <span className="text-amber-300">●</span>
-            Step 3 — Upper-division major (40 units)
+            <span className="text-[#cd7f32]">●</span>
+            Step 3 — Bronze · Upper-division major (40 units)
           </li>
         </ul>
         <Link

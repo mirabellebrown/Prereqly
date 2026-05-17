@@ -21,49 +21,48 @@ const ZOOM_MAX = 1.45
 const ZOOM_STEP = 0.08
 const ZOOM_DEFAULT = 0.58
 
+/** Step 1 = gold, Step 2 = silver, Step 3 = bronze */
 const ZONE_STYLES = {
   admission: {
-    fill: 'rgba(37, 99, 235, 0.28)',
-    stroke: '#60a5fa',
-    headerFill: '#1d4ed8',
-    stepFill: '#3b82f6',
+    fill: 'rgba(212, 175, 55, 0.14)',
+    stroke: '#e6c04a',
+    headerFill: '#7a5c10',
+    stepFill: '#d4af37',
     titleClass: 'fill-white',
-    subClass: 'fill-blue-100',
+    subClass: 'fill-amber-50',
   },
   prep: {
-    fill: 'rgba(13, 148, 136, 0.24)',
-    stroke: '#2dd4bf',
-    headerFill: '#0f766e',
-    stepFill: '#14b8a6',
+    fill: 'rgba(203, 213, 225, 0.1)',
+    stroke: '#cbd5e1',
+    headerFill: '#475569',
+    stepFill: '#94a3b8',
     titleClass: 'fill-white',
-    subClass: 'fill-teal-100',
+    subClass: 'fill-slate-200',
   },
   major: {
-    fill: 'rgba(146, 64, 14, 0.32)',
-    stroke: '#fbbf24',
-    headerFill: '#b45309',
-    stepFill: '#f59e0b',
+    fill: 'rgba(183, 110, 50, 0.16)',
+    stroke: '#cd7f32',
+    headerFill: '#6b3f12',
+    stepFill: '#b87333',
     titleClass: 'fill-white',
-    subClass: 'fill-amber-100',
+    subClass: 'fill-orange-50',
   },
 }
 
-const TRACK_STYLES = {
-  admission: {
-    locked: { fill: 'rgba(30, 58, 138, 0.75)', stroke: '#60a5fa' },
-    unlocked: { fill: 'rgba(59, 130, 246, 0.45)', stroke: '#93c5fd' },
-    complete: { fill: 'rgba(37, 99, 235, 0.5)', stroke: '#bfdbfe' },
-  },
-  prep: {
-    locked: { fill: 'rgba(15, 60, 55, 0.8)', stroke: '#2dd4bf' },
-    unlocked: { fill: 'rgba(20, 120, 110, 0.5)', stroke: '#5eead4' },
-    complete: { fill: 'rgba(13, 148, 136, 0.45)', stroke: '#99f6e4' },
-  },
-  major: {
-    locked: { fill: 'rgba(69, 45, 10, 0.75)', stroke: '#fbbf24' },
-    unlocked: { fill: 'rgba(180, 120, 20, 0.5)', stroke: '#fde047' },
-    complete: { fill: 'rgba(146, 64, 14, 0.55)', stroke: '#fcd34d' },
-  },
+const COURSE_LOCKED = {
+  fill: 'rgba(2, 6, 12, 0.94)',
+  stroke: 'rgba(51, 65, 85, 0.65)',
+}
+
+const COURSE_COMPLETE = {
+  fill: 'rgba(6, 95, 70, 0.55)',
+  stroke: '#34d399',
+}
+
+const COURSE_UNLOCKED = {
+  admission: { fill: 'rgba(212, 175, 55, 0.28)', stroke: '#fcd34d' },
+  prep: { fill: 'rgba(148, 163, 184, 0.22)', stroke: '#e2e8f0' },
+  major: { fill: 'rgba(183, 110, 50, 0.3)', stroke: '#e8a35c' },
 }
 
 
@@ -132,7 +131,7 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
 
   const uniqueEdgeStrokes = useMemo(() => {
     const list = edges.map((e) => e.stroke || '#94a3b8')
-    return [...new Set(list)]
+    return [...new Set([...list, '#34d399'])]
   }, [edges])
 
   const zoomIn = useCallback(() => {
@@ -171,16 +170,14 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
   }
 
   function courseStroke(node) {
-    const track = node.track ?? (node.phase === 'upper' ? 'major' : 'prep')
-    const palette = TRACK_STYLES[track] ?? TRACK_STYLES.prep
-
     if (isCompleteCourse(node)) {
-      return palette.complete
+      return COURSE_COMPLETE
     }
-    if (isUnlockedCourse(node)) {
-      return palette.unlocked
+    if (!isUnlockedCourse(node)) {
+      return COURSE_LOCKED
     }
-    return palette.locked
+    const track = node.track ?? (node.phase === 'upper' ? 'major' : 'prep')
+    return COURSE_UNLOCKED[track] ?? COURSE_UNLOCKED.prep
   }
 
   function renderZone(zone) {
@@ -266,21 +263,29 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
 
       {isStandalone && (
         <p className="text-sm leading-6 text-slate-400">
-          {ECON_MAJOR_SHEET_LABEL} Economics B.A. — blue/teal = pre-major path; gold = upper division. Zoom
-          with <strong className="font-semibold text-slate-200">− / +</strong>, then scroll the map.
+          {ECON_MAJOR_SHEET_LABEL} Economics B.A. — <span className="text-gold">gold</span>,{' '}
+          <span className="text-slate-300">silver</span>, and <span className="text-[#cd7f32]">bronze</span>{' '}
+          steps; <span className="text-emerald-400">green</span> = done, dark = locked. Zoom with{' '}
+          <strong className="font-semibold text-slate-200">− / +</strong>, then scroll.
         </p>
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-silver/30 bg-slate-950/40 px-3 py-2">
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-blue-400/40 bg-blue-500/15 px-2 py-1 text-blue-200">
-            Step 1 · Admission
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-gold/45 bg-gold/12 px-2 py-1 text-gold">
+            Step 1 · Gold
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-teal-400/40 bg-teal-500/15 px-2 py-1 text-teal-200">
-            Step 2 · Prep
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-silver/40 bg-slate-400/12 px-2 py-1 text-slate-200">
+            Step 2 · Silver
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400/40 bg-amber-500/15 px-2 py-1 text-amber-200">
-            Step 3 · Major
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-[#cd7f32]/50 bg-[#cd7f32]/12 px-2 py-1 text-[#e8a35c]">
+            Step 3 · Bronze
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/35 bg-emerald-500/10 px-2 py-1 text-emerald-300">
+            Done
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-lg border border-slate-600/50 bg-slate-950 px-2 py-1 text-slate-500">
+            Locked
           </span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -337,10 +342,10 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
             y1={stepDividerY}
             x2={616}
             y2={stepDividerY}
-            stroke="#2dd4bf"
+            stroke="#94a3b8"
             strokeWidth={1.5}
             strokeDasharray="8 5"
-            strokeOpacity={0.45}
+            strokeOpacity={0.4}
           />
 
           <line
@@ -348,7 +353,7 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
             y1={24}
             x2={dividerX}
             y2={height - 24}
-            stroke="rgba(251, 191, 36, 0.2)"
+            stroke="rgba(205, 127, 50, 0.2)"
             strokeWidth={10}
           />
           <line
@@ -356,14 +361,14 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
             y1={24}
             x2={dividerX}
             y2={height - 24}
-            stroke="#fbbf24"
+            stroke="#cd7f32"
             strokeWidth={2.5}
             strokeOpacity={0.85}
           />
           <text
             x={dividerX + 12}
             y={height / 2}
-            className="fill-amber-200/90 text-[10px] font-bold uppercase tracking-[0.1em]"
+            className="fill-[#e8a35c]/90 text-[10px] font-bold uppercase tracking-[0.1em]"
             transform={`rotate(-90 ${dividerX + 12} ${height / 2})`}
           >
             Declare major →
@@ -379,16 +384,17 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
             const stroke = edge.stroke || '#94a3b8'
             const markerIdx = uniqueEdgeStrokes.indexOf(stroke)
             const headDone = toNode.kind === 'course' && done.has(edge.to)
-            const opacity = headDone ? 0.9 : 0.55
+            const edgeStroke = headDone ? '#34d399' : stroke
+            const opacity = headDone ? 0.85 : 0.5
             return (
               <path
                 key={`${edge.from}-${edge.to}`}
                 d={d}
                 fill="none"
-                stroke={stroke}
+                stroke={edgeStroke}
                 strokeOpacity={opacity}
                 strokeWidth="1.5"
-                markerEnd={`url(#flow-arrow-${markerIdx >= 0 ? markerIdx : 0})`}
+                markerEnd={`url(#flow-arrow-${headDone ? uniqueEdgeStrokes.indexOf('#34d399') : markerIdx >= 0 ? markerIdx : 0})`}
               />
             )
           })}
@@ -422,7 +428,14 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
             const missing = courseNode ? missingLabels(node) : []
             const interactive = courseNode && (unlocked || complete)
             const { fill, stroke } = courseStroke(node)
+            const track = node.track ?? (node.phase === 'upper' ? 'major' : 'prep')
             const title = !unlocked && missing.length ? `Locked — needs: ${missing.join(', ')}` : node.label
+            const tapLabelClass =
+              track === 'admission'
+                ? 'fill-gold'
+                : track === 'major'
+                  ? 'fill-[#e8a35c]'
+                  : 'fill-slate-200'
 
             return (
               <g
@@ -444,11 +457,17 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
                 <text
                   x={node.x + 10}
                   y={node.y + 22}
-                  className="fill-white text-[12px] font-semibold tracking-tight"
+                  className={`text-[12px] font-semibold tracking-tight ${
+                    complete ? 'fill-white' : unlocked ? 'fill-white' : 'fill-slate-400'
+                  }`}
                 >
                   {node.label}
                 </text>
-                <text x={node.x + 10} y={node.y + 40} className="fill-slate-300 text-[9px]">
+                <text
+                  x={node.x + 10}
+                  y={node.y + 40}
+                  className={`text-[9px] ${complete ? 'fill-emerald-100' : unlocked ? 'fill-slate-300' : 'fill-slate-600'}`}
+                >
                   {node.subtitle}
                 </text>
                 {complete && (
@@ -466,7 +485,7 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
                     x={node.x + node.w - 8}
                     y={node.y + node.h - 8}
                     textAnchor="end"
-                    className="fill-sky-200 text-[8px] font-bold uppercase tracking-[0.1em]"
+                    className={`text-[8px] font-bold uppercase tracking-[0.1em] ${tapLabelClass}`}
                   >
                     Tap
                   </text>
