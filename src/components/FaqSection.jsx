@@ -11,19 +11,19 @@ import {
 
 function FaqItem({ item, isOpen, onToggle, onAskInChat }) {
   return (
-    <article className="overflow-hidden rounded-2xl border border-silver/30 bg-white/[0.06]">
+    <article className="overflow-hidden rounded-2xl border border-silver/30 bg-slate-950/50">
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="flex w-full items-start justify-between gap-4 px-5 py-4 text-left transition hover:bg-white/5"
+        className="flex w-full items-start justify-between gap-4 px-5 py-4 text-left transition hover:bg-slate-950/40"
       >
         <h4 className="text-base font-semibold leading-6 text-white">{item.question}</h4>
         <span
           className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition ${
             isOpen
               ? 'border-gold/40 bg-gold/14 text-gold'
-              : 'border-silver/35 bg-white/[0.06] text-slate-400'
+              : 'border-silver/35 bg-slate-950/50 text-slate-400'
           }`}
         >
           <AppIcon
@@ -64,7 +64,7 @@ export function FaqSection({ onAskInChat }) {
   const filtered = useMemo(() => filterFaqByCategory(category), [category])
 
   return (
-    <section className="panel border border-silver/30 bg-white/[0.06] p-6 backdrop-blur-xl">
+    <section className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-label-caps">Frequently asked questions</p>
@@ -85,7 +85,7 @@ export function FaqSection({ onAskInChat }) {
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition ${
                   isActive
                     ? 'border-silver/35 bg-silver/15 text-silver-bright'
-                    : 'border-silver/30 bg-white/[0.06] text-slate-400 hover:border-silver/40 hover:text-white'
+                    : 'border-silver/30 bg-slate-950/50 text-slate-400 hover:border-silver/40 hover:text-white'
                 }`}
               >
                 {cat.label}

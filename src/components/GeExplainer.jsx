@@ -3,7 +3,7 @@ import { LS_GE_AREAS, LS_GE_SPECIAL_REQUIREMENTS } from '../data/lsGeRequirement
 
 export function GeExplainer() {
   return (
-    <details className="mt-4 rounded-2xl border border-silver/30 bg-white/[0.05] open:bg-white/[0.07]">
+    <details className="mt-4 rounded-2xl border border-silver/30 bg-slate-950/45 open:bg-slate-950/55">
       <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-slate-100 [&::-webkit-details-marker]:hidden">
         <span className="text-silver">+</span> How L&S general education works
       </summary>

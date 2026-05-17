@@ -8,7 +8,7 @@ export function CampusLinkRow({ link, compact = false }) {
 
   return (
     <li
-      className={`flex flex-col gap-2 rounded-2xl border border-silver/30 bg-white/[0.05] ${
+      className={`flex flex-col gap-2 rounded-2xl border border-silver/30 bg-slate-950/45 ${
         compact ? 'p-3' : 'p-4 sm:flex-row sm:items-center sm:justify-between'
       }`}
     >

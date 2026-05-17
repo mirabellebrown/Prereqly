@@ -26,8 +26,8 @@
   -moz-osx-font-smoothing: grayscale;
 
   --surface-base: var(--color-app-bg);
-  --surface-elevated: rgba(255, 255, 255, 0.04);
-  --surface-box: rgba(255, 255, 255, 0.035);
+  --surface-elevated: rgba(15, 23, 42, 0.72);
+  --surface-box: rgba(15, 23, 42, 0.55);
   --border-subtle: rgba(203, 213, 225, 0.32);
   --border-box: rgba(241, 245, 249, 0.28);
   --silver-glow: rgba(203, 213, 225, 0.35);
@@ -174,9 +174,9 @@ input {
   border: 1px solid var(--border-box);
   background: linear-gradient(
     135deg,
-    #041018 0%,
-    #020a12 55%,
-    var(--color-app-bg) 100%
+    var(--color-ucsb-navy) 0%,
+    #0b2d52 55%,
+    #020617 100%
   );
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--color-silver) 12%, transparent),

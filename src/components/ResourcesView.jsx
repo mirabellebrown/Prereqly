@@ -33,7 +33,7 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet, onAskInChat }) {
 
   return (
     <div className="space-y-6">
-      <section className="panel-hero border border-silver/30 bg-gradient-to-br from-[#041018] via-[#020a12] to-app-bg p-6 shadow-[0_20px_90px_rgba(1,8,16,0.5)]">
+      <section className="panel-hero border border-silver/30 bg-gradient-to-br from-ucsb-navy via-[#0b2442] to-[#020617] p-6 shadow-[0_20px_90px_rgba(1,8,16,0.5)]">
         <p className="text-label-caps-gold">Resource Hub</p>
         <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
           FAQ, useful links & official resources
@@ -66,7 +66,7 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet, onAskInChat }) {
             key={group.id}
             className={`panel border border-silver/30 bg-gradient-to-br ${group.accent} p-[1px]`}
           >
-            <div className="h-full rounded-[calc(var(--radius-panel)-1px)] bg-white/[0.07] p-5">
+            <div className="h-full rounded-[calc(var(--radius-panel)-1px)] bg-slate-950/55 p-5">
               <h3 className="text-lg font-semibold tracking-tight">{group.title}</h3>
               <p className="mt-2 text-sm leading-6 text-slate-400">{group.description}</p>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -80,7 +80,7 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet, onAskInChat }) {
         </div>
       </section>
 
-      <section className="panel border border-silver/30 bg-white/[0.06] p-6 backdrop-blur-xl">
+      <section className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-label-caps">Policy snippet library</p>
@@ -101,7 +101,7 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet, onAskInChat }) {
                   className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition ${
                     isActive
                       ? 'border-gold/40 bg-gold/14 text-gold'
-                      : 'border-silver/30 bg-white/[0.06] text-slate-400 hover:border-silver/40 hover:text-white'
+                      : 'border-silver/30 bg-slate-950/50 text-slate-400 hover:border-silver/40 hover:text-white'
                   }`}
                 >
                   {category.label}
@@ -115,7 +115,7 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet, onAskInChat }) {
           {filteredSnippets.map((snippet) => (
             <article
               key={snippet.id}
-              className="rounded-2xl border border-silver/30 bg-white/[0.06] p-5"
+              className="rounded-2xl border border-silver/30 bg-slate-950/50 p-5"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h4 className="text-base font-semibold text-white">{snippet.title}</h4>
@@ -139,7 +139,7 @@ export function ResourcesView({ onNavigate, onAskAboutSnippet, onAskInChat }) {
         </div>
       </section>
 
-      <section className="panel border border-silver/25 bg-gradient-to-br from-silver/12 via-ucsb-navy to-app-bg p-6">
+      <section className="panel border border-silver/25 bg-gradient-to-br from-silver/12 via-ucsb-navy to-slate-950/45 p-6">
         <div className="flex items-start gap-4">
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-silver/25 bg-silver/10 text-silver">
             <AppIcon name="chat" className="h-6 w-6" />

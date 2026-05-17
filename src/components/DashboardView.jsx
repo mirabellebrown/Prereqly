@@ -23,7 +23,7 @@ const quarters = ['Fall', 'Winter', 'Spring', 'Summer']
 
 function ProfileStat({ label, value }) {
   return (
-    <div className="rounded-2xl border border-silver/30 bg-white/[0.06] px-4 py-3">
+    <div className="rounded-2xl border border-silver/30 bg-slate-950/50 px-4 py-3">
       <div className="text-xs uppercase tracking-[0.16em] text-gold/80">{label}</div>
       <div className="mt-1 text-lg font-semibold text-white">{value}</div>
     </div>
@@ -34,7 +34,7 @@ function DestinationCard({ destination, onNavigate }) {
   const shellClass = `group panel w-full border border-silver/30 bg-gradient-to-br ${destination.accent} from-10% to-90% p-[1px] text-left transition hover:-translate-y-0.5 hover:border-silver/50 hover:shadow-[0_12px_40px_rgba(203,213,225,0.1)]`
 
   const inner = (
-    <div className="flex h-full flex-col bg-white/[0.07] p-5">
+    <div className="flex h-full flex-col bg-slate-950/55 p-5">
       <div className="flex items-start justify-between gap-3">
         <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-gold/20 bg-gold/8 text-gold transition group-hover:border-gold/40 group-hover:bg-gold/14">
           <AppIcon name={destination.icon} className="h-5 w-5" />
@@ -95,7 +95,7 @@ export function DashboardView({ checklistSections, onNavigate, planner }) {
 
   return (
     <div className="dashboard-landing space-y-8">
-      <section className="panel-hero min-h-[min(42vh,420px)] border border-silver/35 bg-gradient-to-br from-gold/8 via-[#041018] to-app-bg p-6 shadow-[0_20px_90px_rgba(1,8,16,0.65)] sm:p-8">
+      <section className="panel-hero min-h-[min(42vh,420px)] border border-silver/35 bg-gradient-to-br from-gold/10 via-ucsb-navy via-[#0b2d52] to-[#020617] p-6 shadow-[0_20px_90px_rgba(1,8,16,0.65)] sm:p-8">
         <div className="flex h-full flex-col justify-between gap-8">
           <div className="flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
             <div className="flex min-w-0 flex-1 flex-col gap-5 sm:flex-row sm:items-start">
@@ -164,7 +164,7 @@ export function DashboardView({ checklistSections, onNavigate, planner }) {
               {dashboardMetrics.map((metric) => (
                 <div
                   key={metric.label}
-                  className="rounded-2xl border border-silver/28 bg-white/[0.05] px-4 py-3"
+                  className="rounded-2xl border border-silver/28 bg-slate-950/45 px-4 py-3"
                 >
                   <div className="text-xs text-slate-400">{metric.label}</div>
                   <div className="mt-1 font-semibold text-white">{metric.value}</div>
@@ -214,7 +214,7 @@ export function DashboardView({ checklistSections, onNavigate, planner }) {
       </section>
 
       {upcoming.length > 0 && (
-        <section className="panel border border-silver/30 bg-gradient-to-br from-gold/8 via-white/[0.06] to-app-bg/90 p-5 backdrop-blur-xl sm:p-6">
+        <section className="panel border border-silver/30 bg-gradient-to-br from-gold/8 via-slate-950/50 to-slate-950/45 p-5 backdrop-blur-xl sm:p-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-label-caps-gold">Coming up</p>
@@ -235,7 +235,7 @@ export function DashboardView({ checklistSections, onNavigate, planner }) {
               return (
                 <div
                   key={event.date + event.title}
-                  className="rounded-2xl border border-silver/28 bg-white/[0.05] p-4"
+                  className="rounded-2xl border border-silver/28 bg-slate-950/45 p-4"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">
@@ -266,7 +266,7 @@ export function DashboardView({ checklistSections, onNavigate, planner }) {
         </section>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-silver/30 bg-gradient-to-r from-gold/10 via-white/[0.05] to-app-bg px-5 py-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-silver/30 bg-gradient-to-r from-gold/10 via-slate-950/50 to-slate-950/45 px-5 py-4">
         <p className="text-sm text-slate-300">
           SILVER plans alongside <span className="text-gold">Gaucho GOLD</span> — enroll and verify your
           record in the official system.

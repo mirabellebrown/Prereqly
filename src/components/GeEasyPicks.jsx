@@ -14,7 +14,7 @@ export function GeEasyPicks({
 
   if (isLoading) {
     return (
-      <div className="mt-3 rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-2 text-xs text-slate-400">
+      <div className="mt-3 rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-2 text-xs text-slate-400">
         Loading easiest {areaLabel} courses from Daily Nexus…
       </div>
     )
@@ -64,7 +64,7 @@ export function GeEasyPicks({
               <button
                 type="button"
                 onClick={() => onOpenCourseGrades({ code: pick.courseCode, title: pick.courseCode })}
-                className="flex w-full items-center justify-between gap-3 rounded-xl border border-silver/30 bg-white/[0.06] px-3 py-2 text-left transition hover:border-silver/40"
+                className="flex w-full items-center justify-between gap-3 rounded-xl border border-silver/30 bg-slate-950/50 px-3 py-2 text-left transition hover:border-silver/40"
               >
                 <span className="font-semibold text-white">
                   {index + 1}. {pick.courseCode}
@@ -74,7 +74,7 @@ export function GeEasyPicks({
                 </span>
               </button>
             ) : (
-              <div className="flex items-center justify-between gap-3 rounded-xl border border-silver/30 bg-white/[0.06] px-3 py-2">
+              <div className="flex items-center justify-between gap-3 rounded-xl border border-silver/30 bg-slate-950/50 px-3 py-2">
                 <span className="font-semibold text-white">
                   {index + 1}. {pick.courseCode}
                 </span>

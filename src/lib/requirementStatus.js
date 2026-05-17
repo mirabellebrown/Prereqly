@@ -2,7 +2,7 @@ const STATUS_STYLES = {
   completed: 'border-emerald-400/30 bg-emerald-400/12 text-emerald-100',
   transfer: 'border-silver/30 bg-silver/12 text-silver-bright',
   planned: 'border-sky-400/30 bg-sky-400/12 text-sky-100',
-  needed: 'border-silver/35 bg-white/[0.06] text-slate-400',
+  needed: 'border-silver/35 bg-slate-950/50 text-slate-400',
 }
 
 /**

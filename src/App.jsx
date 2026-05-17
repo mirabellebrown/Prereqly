@@ -362,7 +362,7 @@ function App() {
     ),
     flowchart: (
       <div className="space-y-6">
-        <section className="panel border border-silver/30 bg-white/[0.06] p-6 backdrop-blur-xl">
+        <section className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
           <p className="text-label-caps-gold">Economics pathway</p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight">Prep flowchart</h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
@@ -511,7 +511,7 @@ function PlannerView({
   return (
     <div className="grid gap-6 xl:grid-cols-[1.6fr,0.9fr]">
       <section>
-        <div className="panel border border-silver/30 bg-white/[0.06] p-6 backdrop-blur-xl">
+        <div className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-label-caps">4-Year Planner</p>
@@ -539,14 +539,14 @@ function PlannerView({
           {planner.map((yearPlan) => (
             <div
               key={yearPlan.year}
-              className="panel border border-silver/30 bg-white/[0.06] p-4 shadow-[0_20px_60px_rgba(2,8,23,0.22)]"
+              className="panel border border-silver/30 bg-slate-950/50 p-4 shadow-[0_20px_60px_rgba(2,8,23,0.22)]"
             >
               <div className="flex items-center justify-between gap-3 px-2 pb-4">
                 <div>
                   <h3 className="text-xl font-semibold tracking-tight">{yearPlan.year}</h3>
                   <p className="text-sm text-slate-400">Fall, Winter, and Spring planning block</p>
                 </div>
-                <span className="rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-1 text-xs text-slate-300">
+                <span className="rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-1 text-xs text-slate-300">
                   {quarters.reduce(
                     (sum, quarter) =>
                       sum +
@@ -580,7 +580,7 @@ function PlannerView({
                       className={`rounded-2xl border p-4 text-left transition ${
                         isSelected
                           ? 'border-silver/40 bg-silver/10 shadow-[0_0_0_1px_rgba(203,213,225,0.14)]'
-                          : 'border-silver/30 bg-white/[0.05] hover:border-silver/40 hover:bg-white/[0.07]'
+                          : 'border-silver/30 bg-slate-950/45 hover:border-silver/40 hover:bg-slate-950/55'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-4">
@@ -650,7 +650,7 @@ function PlannerView({
       </section>
 
       <aside className="space-y-6 xl:sticky xl:top-24 xl:self-start">
-        <div className="panel border border-silver/30 bg-gradient-to-br from-gold/14 via-silver/12 via-ucsb-navy to-app-bg p-6">
+        <div className="panel border border-silver/30 bg-gradient-to-br from-gold/14 via-silver/12 via-ucsb-navy to-slate-950/45 p-6">
           <p className="text-label-caps-gold">Selected quarter</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">
             {selectedQuarterKey.replace('|', ' · ')}
@@ -661,7 +661,7 @@ function PlannerView({
           <QuarterLoadBanner load={selectedQuarterLoad} className="mt-4" />
         </div>
 
-        <div className="panel border border-silver/30 bg-white/[0.06] p-6 backdrop-blur-xl">
+        <div className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-label-caps">Recommended adds</p>
@@ -680,7 +680,7 @@ function PlannerView({
               return (
                 <div
                   key={course.code}
-                  className="rounded-2xl border border-silver/30 bg-white/[0.05] p-4"
+                  className="rounded-2xl border border-silver/30 bg-slate-950/45 p-4"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <button
@@ -699,7 +699,7 @@ function PlannerView({
                         </span>
                         <span
                           className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-                            offeredInTarget ? 'badge-gold' : 'border border-silver/35 bg-white/[0.06] text-slate-400'
+                            offeredInTarget ? 'badge-gold' : 'border border-silver/35 bg-slate-950/50 text-slate-400'
                           }`}
                         >
                           {offeredLabel}
@@ -752,7 +752,7 @@ function PlannerView({
                       onClick={() => onAddSuggestedCourse(course)}
                       className={`rounded-2xl px-4 py-2 text-sm font-semibold transition ${
                         isAdded
-                          ? 'cursor-not-allowed border border-silver/30 bg-white/[0.06] text-slate-500'
+                          ? 'cursor-not-allowed border border-silver/30 bg-slate-950/50 text-slate-500'
                           : !canAdd
                             ? 'cursor-not-allowed border border-amber-400/30 bg-amber-400/10 text-amber-100'
                             : 'bg-silver text-ucsb-navy hover:bg-silver-bright'
@@ -789,7 +789,7 @@ function PlannerView({
 function CourseGradesSummary({ summary, isLoading }) {
   if (isLoading) {
     return (
-      <div className="mt-3 rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-2 text-xs text-slate-300">
+      <div className="mt-3 rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-2 text-xs text-slate-300">
         Loading Daily Nexus grades...
       </div>
     )
@@ -797,7 +797,7 @@ function CourseGradesSummary({ summary, isLoading }) {
 
   if (!summary) {
     return (
-      <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-2 text-xs text-slate-400">
+      <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-2 text-xs text-slate-400">
         <span>Daily Nexus grades unavailable for this course.</span>
         <span className="text-slate-500">Click for details</span>
       </div>
@@ -819,7 +819,7 @@ function CourseGradesSummary({ summary, isLoading }) {
 
 function GradeStat({ label, value }) {
   return (
-    <div className="rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-2">
+    <div className="rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-2">
       <div className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{label}</div>
       <div className="mt-1 text-sm font-semibold text-white">{value}</div>
     </div>
@@ -883,7 +883,7 @@ function OfferingDistributionChart({ offering }) {
   )
 
   return (
-    <div className="panel border border-silver/30 bg-white/[0.08] p-4 text-slate-100 shadow-[0_20px_60px_rgba(2,8,23,0.3)]">
+    <div className="panel border border-silver/30 bg-slate-950/60 p-4 text-slate-100 shadow-[0_20px_60px_rgba(2,8,23,0.3)]">
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="text-sm font-semibold text-white">{offering.instructor}</div>
@@ -946,7 +946,7 @@ function OfferingDistributionCharts({ offeringDistributions }) {
 function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta }) {
   if (!professorReview) {
     return (
-      <div className="panel border border-silver/30 bg-white/[0.06] p-5">
+      <div className="panel border border-silver/30 bg-slate-950/50 p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="text-lg font-semibold text-white">{instructorName}</div>
@@ -963,7 +963,7 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
   }
 
   return (
-    <div className="panel border border-silver/30 bg-white/[0.06] p-5">
+    <div className="panel border border-silver/30 bg-slate-950/50 p-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="text-lg font-semibold text-white">
@@ -979,7 +979,7 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
             href={professorReview.profileUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded-2xl border border-silver/30 bg-white/[0.06] px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-silver/35 hover:text-silver"
+            className="rounded-2xl border border-silver/30 bg-slate-950/50 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-silver/35 hover:text-silver"
           >
             View on Rate My Professors
           </a>
@@ -1011,7 +1011,7 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
         {professorReview.reviews.map((review) => (
           <div
             key={review.id}
-            className="rounded-2xl border border-silver/30 bg-white/[0.05] p-4 text-sm"
+            className="rounded-2xl border border-silver/30 bg-slate-950/45 p-4 text-sm"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="font-semibold text-white">{review.class || 'Course not listed'}</div>
@@ -1024,13 +1024,13 @@ function ProfessorReviewSection({ instructorName, professorReview, snapshotMeta 
                   Grade {review.grade}
                 </span>
               )}
-              <span className="rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-1.5 font-semibold text-slate-200">
+              <span className="rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-1.5 font-semibold text-slate-200">
                 Helpfulness {review.helpfulRating ?? 'N/A'}/5
               </span>
-              <span className="rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-1.5 font-semibold text-slate-200">
+              <span className="rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-1.5 font-semibold text-slate-200">
                 Clarity {review.clarityRating ?? 'N/A'}/5
               </span>
-              <span className="rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-1.5 font-semibold text-slate-200">
+              <span className="rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-1.5 font-semibold text-slate-200">
                 Difficulty {review.difficultyRating ?? 'N/A'}/5
               </span>
               {review.isForOnlineClass && (
@@ -1071,7 +1071,7 @@ function HistoricalInstructorsList({ instructors }) {
       {instructors.map((instructor) => (
         <span
           key={instructor}
-          className="rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-1.5 text-sm text-slate-100"
+          className="rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-1.5 text-sm text-slate-100"
         >
           {instructor}
         </span>
@@ -1104,11 +1104,11 @@ function CourseGradesDetailModal({ course, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-white/[0.08] px-4 py-6 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 px-4 py-6 backdrop-blur-sm"
       onClick={handleClose}
     >
       <div
-        className="max-h-[90vh] w-full max-w-4xl overflow-y-auto panel border border-silver/30 bg-app-bg-elevated p-6 shadow-[0_30px_120px_rgba(0,0,0,0.75)]"
+        className="max-h-[90vh] w-full max-w-4xl overflow-y-auto panel border border-silver/30 bg-slate-950/80 p-6 shadow-[0_30px_120px_rgba(0,0,0,0.75)]"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4 border-b border-silver/30 pb-5">
@@ -1121,14 +1121,14 @@ function CourseGradesDetailModal({ course, onClose }) {
           <button
             type="button"
             onClick={handleClose}
-            className="rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-1.5 text-sm font-semibold text-slate-200 transition hover:border-silver/40"
+            className="rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-1.5 text-sm font-semibold text-slate-200 transition hover:border-silver/40"
           >
             Close
           </button>
         </div>
 
         {!summary ? (
-          <div className="mt-6 rounded-2xl border border-silver/30 bg-white/[0.06] p-5 text-sm leading-6 text-slate-300">
+          <div className="mt-6 rounded-2xl border border-silver/30 bg-slate-950/50 p-5 text-sm leading-6 text-slate-300">
             Daily Nexus grade history is not available for this course yet.
           </div>
         ) : (
@@ -1143,7 +1143,7 @@ function CourseGradesDetailModal({ course, onClose }) {
               <GradeStat label="Latest term" value={summary.latestTerm} />
             </div>
 
-            <div className="mt-6 panel border border-silver/30 bg-white/[0.05] p-5">
+            <div className="mt-6 panel border border-silver/30 bg-slate-950/45 p-5">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <div className="text-sm font-semibold text-white">Recent grade distributions</div>
@@ -1163,7 +1163,7 @@ function CourseGradesDetailModal({ course, onClose }) {
                   onClick={() =>
                     setExpandedCourseCode((current) => (current === course.code ? '' : course.code))
                   }
-                  className="mt-4 rounded-2xl border border-silver/30 bg-white/[0.06] px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-silver/40 hover:bg-white/[0.08]"
+                  className="mt-4 rounded-2xl border border-silver/30 bg-slate-950/50 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-silver/40 hover:bg-slate-950/60"
                 >
                   {showAllHistory ? 'Show only last three years' : 'View all data'}
                 </button>
@@ -1171,11 +1171,11 @@ function CourseGradesDetailModal({ course, onClose }) {
             </div>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-silver/30 bg-white/[0.06] p-4">
+              <div className="rounded-2xl border border-silver/30 bg-slate-950/50 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Historically taught by</div>
                 <HistoricalInstructorsList instructors={summary.historicalInstructors} />
               </div>
-              <div className="rounded-2xl border border-silver/30 bg-white/[0.06] p-4">
+              <div className="rounded-2xl border border-silver/30 bg-slate-950/50 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Best planning signal</div>
                 <div className="mt-2 text-sm leading-6 text-slate-300">
                   This course is most commonly offered in {summary.usualOfferedLabel.toLowerCase()}, so
@@ -1184,7 +1184,7 @@ function CourseGradesDetailModal({ course, onClose }) {
               </div>
             </div>
 
-            <div className="mt-6 panel border border-silver/30 bg-white/[0.05] p-5">
+            <div className="mt-6 panel border border-silver/30 bg-slate-950/45 p-5">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <div className="text-sm font-semibold text-white">Rate My Professor</div>
@@ -1264,7 +1264,7 @@ function ChecklistView({
   return (
     <div className="space-y-6">
       <section className="grid gap-6 xl:grid-cols-[0.9fr,1.4fr]">
-        <div className="panel border border-silver/30 bg-white/[0.06] p-6 backdrop-blur-xl">
+        <div className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
           <p className="text-label-caps">Degree Checklist</p>
           <h2 className="mt-2 text-3xl font-semibold tracking-tight">Requirement progress</h2>
           <p className="mt-3 text-sm leading-6 text-slate-400">
@@ -1272,7 +1272,7 @@ function ChecklistView({
             requirements completed when they happen outside the current roadmap.
           </p>
 
-          <div className="mt-6 flex flex-col items-center gap-4 panel border border-silver/30 bg-white/[0.05] p-6 text-center">
+          <div className="mt-6 flex flex-col items-center gap-4 panel border border-silver/30 bg-slate-950/45 p-6 text-center">
             <ProgressRing percent={checklistPercent} />
             <div>
               <div className="text-lg font-semibold">{checklistPercent}% complete</div>
@@ -1283,7 +1283,7 @@ function ChecklistView({
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-silver/30 bg-white/[0.06] p-4">
+            <div className="rounded-2xl border border-silver/30 bg-slate-950/50 p-4">
               <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Completed now</div>
               <div className="mt-2 text-2xl font-semibold">{completedRequirementCount}</div>
             </div>
@@ -1299,7 +1299,7 @@ function ChecklistView({
             className={`mt-6 flex w-full items-center justify-between rounded-2xl border px-4 py-4 text-left transition ${
               transferCredits
                 ? 'border-emerald-400/30 bg-emerald-400/10'
-                : 'border-silver/30 bg-white/[0.06] hover:border-silver/40'
+                : 'border-silver/30 bg-slate-950/50 hover:border-silver/40'
             }`}
           >
             <div>
@@ -1335,7 +1335,7 @@ function ChecklistView({
             className={`mt-4 flex w-full items-center justify-between rounded-2xl border px-4 py-3 text-left text-sm transition ${
               showMinorPreview
                 ? 'border-silver/35 bg-silver/10'
-                : 'border-silver/30 bg-white/[0.06] hover:border-silver/40'
+                : 'border-silver/30 bg-slate-950/50 hover:border-silver/40'
             }`}
           >
             <span>
@@ -1349,7 +1349,7 @@ function ChecklistView({
             </span>
           </button>
 
-          <div className="mt-4 rounded-2xl border border-silver/30 bg-white/[0.05] p-4 text-sm text-slate-300">
+          <div className="mt-4 rounded-2xl border border-silver/30 bg-slate-950/45 p-4 text-sm text-slate-300">
             {plannedRequirementCount} additional requirements are already accounted for in the 4-year
             planner.
             {hasLoadedSavedState && (
@@ -1365,7 +1365,7 @@ function ChecklistView({
         </div>
 
         <div className="grid gap-4">
-          <div className="flex flex-wrap items-center gap-2 border border-silver/30 bg-white/[0.04] px-3 py-2 text-[11px]">
+          <div className="flex flex-wrap items-center gap-2 border border-silver/30 bg-slate-950/40 px-3 py-2 text-[11px]">
             <span className="uppercase tracking-wide text-slate-500">Status:</span>
             <RequirementStatusChip item={{ source: 'record', status: 'completed' }} />
             <RequirementStatusChip item={{ source: 'transfer', status: 'completed' }} />
@@ -1376,7 +1376,7 @@ function ChecklistView({
           {sections.map((section) => (
             <div
               key={section.id}
-              className="panel border border-silver/30 bg-white/[0.06] p-5 shadow-[0_20px_60px_rgba(2,8,23,0.22)]"
+              className="panel border border-silver/30 bg-slate-950/50 p-5 shadow-[0_20px_60px_rgba(2,8,23,0.22)]"
             >
               <div className="flex flex-col gap-3 border-b border-silver/30 pb-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -1391,7 +1391,7 @@ function ChecklistView({
                     </Link>
                   )}
                 </div>
-                <div className="rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-1 text-sm text-slate-300">
+                <div className="rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-1 text-sm text-slate-300">
                   {section.completedCount} complete
                   {section.plannedCount > 0 && ` • ${section.plannedCount} planned`}
                 </div>
@@ -1408,7 +1408,7 @@ function ChecklistView({
                         ? 'border-emerald-400/25 bg-emerald-400/10'
                         : item.status === 'planned'
                           ? 'border-sky-400/25 bg-sky-400/10'
-                          : 'border-silver/30 bg-white/[0.05]'
+                          : 'border-silver/30 bg-slate-950/45'
                     }`}
                   >
                     <span
@@ -1445,8 +1445,8 @@ function ChecklistView({
                           disabled={!item.isInteractive}
                           className={`rounded-2xl px-3 py-1.5 text-xs font-semibold transition ${
                             item.isInteractive
-                              ? 'border border-silver/30 bg-white/[0.06] text-slate-100 hover:border-silver/40 hover:bg-white/[0.08]'
-                              : 'cursor-not-allowed border border-silver/30 bg-white/[0.06] text-slate-500'
+                              ? 'border border-silver/30 bg-slate-950/50 text-slate-100 hover:border-silver/40 hover:bg-slate-950/60'
+                              : 'cursor-not-allowed border border-silver/30 bg-slate-950/50 text-slate-500'
                           }`}
                         >
                           {item.actionLabel}
@@ -1460,7 +1460,7 @@ function ChecklistView({
           ))}
 
           {showMinorPreview && (
-            <div className="panel border border-dashed border-silver/30 bg-white/[0.06] p-5">
+            <div className="panel border border-dashed border-silver/30 bg-slate-950/50 p-5">
               <p className="text-label-caps">Minor preview</p>
               <h3 className="mt-2 text-lg font-semibold tracking-tight">
                 {politicalScienceMinorPreview.title}
@@ -1472,13 +1472,13 @@ function ChecklistView({
                 {politicalScienceMinorPreview.items.map((minorItem) => (
                   <li
                     key={minorItem.id}
-                    className="flex items-start justify-between gap-3 rounded-2xl border border-silver/30 bg-white/[0.06] px-3 py-2 text-sm"
+                    className="flex items-start justify-between gap-3 rounded-2xl border border-silver/30 bg-slate-950/50 px-3 py-2 text-sm"
                   >
                     <div>
                       <div className="font-medium text-white">{minorItem.label}</div>
                       <div className="text-slate-400">{minorItem.detail}</div>
                     </div>
-                    <span className="shrink-0 rounded-2xl border border-silver/35 bg-white/[0.06] px-2 py-0.5 text-[11px] font-semibold text-slate-300">
+                    <span className="shrink-0 rounded-2xl border border-silver/35 bg-slate-950/50 px-2 py-0.5 text-[11px] font-semibold text-slate-300">
                       {minorItem.statusLabel}
                     </span>
                   </li>
@@ -1507,7 +1507,7 @@ function ChatView({
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1.4fr,0.8fr]">
-      <section className="panel border border-silver/30 bg-white/[0.06] p-6 backdrop-blur-xl">
+      <section className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
         <div className="flex items-center justify-between gap-4 border-b border-silver/30 pb-4">
           <div>
             <p className="text-label-caps">L&S Campus Q&A</p>
@@ -1528,7 +1528,7 @@ function ChatView({
                 className={`max-w-3xl rounded-2xl border p-4 ${
                   message.sender === 'user'
                     ? 'border-silver/30 bg-silver/14 text-white'
-                    : 'border-silver/30 bg-white/[0.06]'
+                    : 'border-silver/30 bg-slate-950/50'
                 }`}
               >
                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
@@ -1548,7 +1548,7 @@ function ChatView({
                 )}
 
                 {message.sender === 'bot' && message.policySnippet && (
-                  <div className="mt-4 rounded-2xl border border-silver/30 bg-white/[0.05] p-4">
+                  <div className="mt-4 rounded-2xl border border-silver/30 bg-slate-950/45 p-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
                       Related policy snippet
                     </p>
@@ -1588,7 +1588,7 @@ function ChatView({
           ))}
         </div>
 
-        <div className="mt-6 panel border border-silver/30 bg-white/[0.05] p-4">
+        <div className="mt-6 panel border border-silver/30 bg-slate-950/45 p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <label className="text-sm font-medium text-slate-300" htmlFor="campus-qa-input">
               Ask a general question
@@ -1607,7 +1607,7 @@ function ChatView({
                 key={prompt}
                 type="button"
                 onClick={() => onSelectPrompt(prompt)}
-                className="rounded-full border border-silver/30 bg-white/[0.06] px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:border-gold/30 hover:bg-gold/10 hover:text-gold"
+                className="rounded-full border border-silver/30 bg-slate-950/50 px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:border-gold/30 hover:bg-gold/10 hover:text-gold"
               >
                 {prompt}
               </button>
@@ -1624,7 +1624,7 @@ function ChatView({
                 }
               }}
               placeholder="Try deadlines, GE, prerequisites, or billing — then read the linked sources…"
-              className="flex-1 rounded-2xl border border-silver/30 bg-white/[0.06] px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus-silver focus:border-silver/40"
+              className="flex-1 rounded-2xl border border-silver/30 bg-slate-950/50 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus-silver focus:border-silver/40"
             />
             <button
               type="button"
@@ -1638,7 +1638,7 @@ function ChatView({
       </section>
 
       <aside className="space-y-6">
-        <div className="panel border border-silver/30 bg-gradient-to-br from-[#041018] via-[#020a12] to-app-bg p-6">
+        <div className="panel border border-silver/30 bg-gradient-to-br from-ucsb-navy via-[#17395f] to-[#020617] p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gold">Gaucho GOLD</p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight">Courses to explore in GOLD</h3>
           <div className="mt-4 space-y-3">
@@ -1651,7 +1651,7 @@ function ChatView({
                     onOpenCourseGrades(course, gradeSummaries[course.code] ?? null)
                   }
                 }}
-                className="w-full rounded-2xl border border-silver/30 bg-white/[0.06] px-4 py-3 text-left transition hover:border-silver/40"
+                className="w-full rounded-2xl border border-silver/30 bg-slate-950/50 px-4 py-3 text-left transition hover:border-silver/40"
               >
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">{course.code}</span>
@@ -1676,21 +1676,21 @@ function ChatView({
           )}
         </div>
 
-        <div className="panel border border-silver/30 bg-white/[0.06] p-6 backdrop-blur-xl">
+        <div className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
           <p className="text-label-caps">How this panel works</p>
           <div className="mt-4 space-y-4 text-sm leading-6 text-slate-300">
-            <div className="rounded-2xl border border-silver/30 bg-white/[0.05] p-4">
+            <div className="rounded-2xl border border-silver/30 bg-slate-950/45 p-4">
               Every bot reply includes at least one official UCSB link so you can verify information yourself.
             </div>
-            <div className="rounded-2xl border border-silver/30 bg-white/[0.05] p-4">
+            <div className="rounded-2xl border border-silver/30 bg-slate-950/45 p-4">
               Matching questions may attach a policy snippet from the Resource Hub—always confirm on the linked
               official page.
             </div>
-            <div className="rounded-2xl border border-silver/30 bg-white/[0.05] p-4">
+            <div className="rounded-2xl border border-silver/30 bg-slate-950/45 p-4">
               Questions about petitions, standing, exceptions, or your specific transcript are routed to L&S General
               Academic Advising rather than answered in detail here.
             </div>
-            <div className="rounded-2xl border border-silver/30 bg-white/[0.05] p-4">
+            <div className="rounded-2xl border border-silver/30 bg-slate-950/45 p-4">
               The course tiles are only sample ideas for this Economics demo; GOLD and your advisors decide what you
               may actually enroll in.
             </div>
@@ -1711,7 +1711,7 @@ function DatesView({ onNavigateResources }) {
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1.1fr,1fr]">
-      <section className="panel border border-silver/30 bg-white/[0.06] p-6 backdrop-blur-xl">
+      <section className="panel border border-silver/30 bg-slate-950/50 p-6 backdrop-blur-xl">
         <p className="text-label-caps">Important dates</p>
         <h2 className="mt-2 text-3xl font-semibold tracking-tight">Winter 2026 timeline</h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
@@ -1730,7 +1730,7 @@ function DatesView({ onNavigateResources }) {
                 className={`rounded-2xl border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition ${
                   isActive
                     ? 'border-silver/35 bg-silver/15 text-silver-bright'
-                    : 'border-silver/30 bg-white/[0.06] text-slate-400 hover:border-silver/40 hover:text-white'
+                    : 'border-silver/30 bg-slate-950/50 text-slate-400 hover:border-silver/40 hover:text-white'
                 }`}
               >
                 {filter.label}
@@ -1741,7 +1741,7 @@ function DatesView({ onNavigateResources }) {
 
         <div className="mt-6 space-y-4">
           {filteredEvents.map((event) => (
-            <div key={event.date} className="relative rounded-2xl border border-silver/30 bg-white/[0.05] p-5">
+            <div key={event.date} className="relative rounded-2xl border border-silver/30 bg-slate-950/45 p-5">
               <div className="absolute left-6 top-5 h-[calc(100%-2.5rem)] w-px bg-white/10" />
               <div className="relative z-10 flex gap-4">
                 <div
@@ -1807,7 +1807,7 @@ function StatHighlight({ label, value, tone }) {
 
 function InfoTile({ label, value }) {
   return (
-    <div className="rounded-2xl border border-silver/30 bg-white/[0.06] p-3">
+    <div className="rounded-2xl border border-silver/30 bg-slate-950/50 p-3">
       <div className="text-xs uppercase tracking-[0.16em] text-slate-400">{label}</div>
       <div className="mt-2 font-medium text-white">{value}</div>
     </div>

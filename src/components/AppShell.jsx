@@ -9,7 +9,7 @@ import { countUpcomingEvents, getTimelineEvents } from '../lib/academicDates'
 
 function InfoTile({ label, value }) {
   return (
-    <div className="rounded-2xl border border-silver/30 bg-white/[0.06] p-3">
+    <div className="rounded-2xl border border-silver/30 bg-slate-950/50 p-3">
       <div className="text-xs uppercase tracking-[0.16em] text-slate-400">{label}</div>
       <div className="mt-2 font-medium text-white">{value}</div>
     </div>
@@ -43,7 +43,7 @@ export function AppShell({
           </div>
 
           <div className="hidden items-center gap-3 lg:flex">
-            <div className="rounded-2xl border border-silver/30 bg-white/[0.06] px-4 py-2 text-sm text-slate-300">
+            <div className="rounded-2xl border border-silver/30 bg-slate-950/50 px-4 py-2 text-sm text-slate-300">
               Winter 2026 planning snapshot for {studentProfile.firstName}
             </div>
             <GoldLink variant="pill">Open Gaucho GOLD</GoldLink>
@@ -54,7 +54,7 @@ export function AppShell({
               type="button"
               aria-label="Open deadline reminders"
               onClick={() => setRemindersOpen(true)}
-              className="relative flex h-11 w-11 items-center justify-center rounded-full border border-silver/30 bg-white/[0.06] text-slate-200 transition hover:border-silver/40 hover:text-silver"
+              className="relative flex h-11 w-11 items-center justify-center rounded-full border border-silver/30 bg-slate-950/50 text-slate-200 transition hover:border-silver/40 hover:text-silver"
             >
               <AppIcon name="bell" className="h-5 w-5" />
               {upcomingCount > 0 && (
@@ -63,7 +63,7 @@ export function AppShell({
                 </span>
               )}
             </button>
-            <div className="flex items-center gap-3 rounded-2xl border border-silver/30 bg-white/[0.06] px-2 py-2">
+            <div className="flex items-center gap-3 rounded-2xl border border-silver/30 bg-slate-950/50 px-2 py-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-ucsb-navy text-sm font-semibold text-silver">
                 {studentProfile.initials}
               </div>
@@ -140,7 +140,7 @@ export function AppShell({
                     className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition ${
                       isActive
                         ? 'nav-active'
-                        : 'border-silver/30 bg-white/[0.06] text-slate-300 hover:border-silver/40 hover:bg-white/[0.08] hover:text-white'
+                        : 'border-silver/30 bg-slate-950/50 text-slate-300 hover:border-silver/40 hover:bg-slate-950/60 hover:text-white'
                     }`}
                   >
                     <span

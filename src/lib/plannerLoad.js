@@ -6,7 +6,7 @@ export const QUARTER_UNIT_THRESHOLDS = {
 }
 
 const LOAD_STYLES = {
-  empty: 'border-silver/35 bg-white/[0.06] text-slate-400',
+  empty: 'border-silver/35 bg-slate-950/50 text-slate-400',
   light: 'border-amber-400/30 bg-amber-400/10 text-amber-100',
   balanced: 'border-emerald-400/25 bg-emerald-400/10 text-emerald-100',
   heavy: 'border-gold/35 bg-gold/12 text-gold',
