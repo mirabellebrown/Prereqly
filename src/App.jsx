@@ -43,7 +43,10 @@ import {
   parseQuarterKey,
 } from './lib/plannerLoad'
 import { GeExplainer } from './components/GeExplainer'
+import { ResourcesView } from './components/ResourcesView'
 import { politicalScienceMinorPreview } from './data/politicalScienceMinorPreview'
+import { chatPromptSuggestions } from './data/campusResources'
+import { buildChatReply, ensureOfficialSources, OFFICIAL_SOURCE } from './lib/chatIntents'
 
 const quarters = ['Fall', 'Winter', 'Spring']
 const storageKeys = {
@@ -58,69 +61,6 @@ const legacyStorageKeys = {
   manualRequirementCompletions: 'prereqly-manual-requirements',
 }
 
-/** Official UCSB pages cited by the Campus Q&A tool (L&S–centric). */
-const OFFICIAL_SOURCE = {
-  lsAdvising: { label: 'L&S General Academic Advising (source)', url: 'https://uged.ucsb.edu/advising' },
-  registrar: { label: 'Office of the Registrar (source)', url: 'https://registrar.sa.ucsb.edu/' },
-  gold: { label: 'GOLD (source)', url: 'https://my.sa.ucsb.edu/gold/' },
-  catalog: { label: 'UCSB General Catalog (source)', url: 'https://catalog.ucsb.edu/' },
-  mybarc: { label: 'myBARC (source)', url: 'https://mybarc.ucsb.edu/' },
-  finAid: { label: 'Office of Financial Aid and Scholarships (source)', url: 'https://www.finaid.ucsb.edu/faq' },
-}
-
-function chatNeedsCampusAdvisor(normalized) {
-  const hints = [
-    'petition',
-    'probation',
-    'appeal',
-    'dismiss',
-    'disqualif',
-    'readmission',
-    'reinstate',
-    'concurrent enrollment',
-    'grade dispute',
-    'grade change',
-    'transcript hold',
-    'enrollment hold',
-    'registration hold',
-    'substitution',
-    'waiver',
-    'retroactive',
-    'medical withdrawal',
-    'medical leave',
-    'degree audit',
-    'graduation filing',
-    'double major',
-    'two majors',
-    'triple major',
-    'minor in ',
-    'academic dishonesty',
-    'satisfactory academic',
-    ' sap ',
-    ' ferpa',
-  ]
-  return hints.some((fragment) => normalized.includes(fragment))
-}
-
-function ensureOfficialSources(reply) {
-  const resources = Array.isArray(reply.resources) ? [...reply.resources] : []
-  if (resources.length === 0) {
-    resources.push(OFFICIAL_SOURCE.lsAdvising)
-  }
-  const seen = new Set()
-  const deduped = resources.filter((item) => {
-    if (!item?.url) {
-      return false
-    }
-    if (seen.has(item.url)) {
-      return false
-    }
-    seen.add(item.url)
-    return true
-  })
-  return { ...reply, resources: deduped }
-}
-
 function createPlannerState() {
   return plannerTemplate.map((yearPlan) => ({
     ...yearPlan,
@@ -131,84 +71,6 @@ function createPlannerState() {
       ]),
     ),
   }))
-}
-
-function buildChatResponse(input) {
-  const normalized = input.toLowerCase()
-
-  if (chatNeedsCampusAdvisor(normalized)) {
-    return {
-      text: 'That usually depends on your specific record, policies for your term, or staff judgment. This Campus Q&A view is only for general information with links to official UCSB sources—not for decisions about petitions, standing, or exceptions.',
-      bullets: [
-        'Talk with L&S General Academic Advising about transcripts, progress checks, readmission, most petitions, and cross-college questions.',
-        'For major requirements, substitutions, or department paperwork, use your L&S department’s undergraduate advising (for this sample path, Economics).',
-      ],
-      resources: [OFFICIAL_SOURCE.lsAdvising, OFFICIAL_SOURCE.catalog],
-    }
-  }
-
-  if (normalized.includes('aid') || normalized.includes('scholarship') || normalized.includes('loan')) {
-    return {
-      text: 'Billing and aid are handled outside this planner. Use myBARC for account detail and the Financial Aid office for policy questions; L&S General Advising can help interpret how enrollment choices interact with degree progress, but not replace those offices.',
-      bullets: [
-        'Review posted aid and charges in myBARC rather than relying on any mock numbers in demos.',
-        'If a schedule change might drop you below full time, confirm aid impact with Financial Aid before you finalize the change.',
-      ],
-      resources: [OFFICIAL_SOURCE.mybarc, OFFICIAL_SOURCE.finAid],
-    }
-  }
-
-  if (normalized.includes('deadline') || normalized.includes('drop') || normalized.includes('add')) {
-    return {
-      text: 'Registrar-published deadlines drive add, drop, and withdrawal dates each quarter. Your Winter 2026 prototype timeline highlights Jan 16 (add), Feb 2 (drop), and Mar 6 (withdrawal), but you should always verify the live calendar for your term.',
-      bullets: [
-        'Perform adds and drops in GOLD before late deadlines so you understand fees and grading options in real time.',
-        'Use L&S General Advising if you are unsure how a deadline interacts with probation, part-time status, or major certification.',
-      ],
-      resources: [OFFICIAL_SOURCE.registrar, OFFICIAL_SOURCE.gold],
-    }
-  }
-
-  if (
-    normalized.includes('elective') ||
-    normalized.includes('general education') ||
-    /\bge\b/.test(normalized)
-  ) {
-    return {
-      text: 'GE planning for L&S students is spelled out in the General Catalog and your GOLD degree audit. This prototype shows one possible mix of breadth courses alongside an Economics major, but your remaining letters depend on what you have already completed.',
-      bullets: [
-        'Use GOLD and the catalog’s General Education section to confirm which courses carry which GE credit.',
-        'Meet L&S General Advising if you are deciding between overlapping options, education abroad, or substitutions.',
-      ],
-      resources: [OFFICIAL_SOURCE.catalog, OFFICIAL_SOURCE.gold, OFFICIAL_SOURCE.lsAdvising],
-    }
-  }
-
-  if (
-    normalized.includes('prereq') ||
-    normalized.includes('prerequisite') ||
-    normalized.includes('sequence') ||
-    normalized.includes('requirement')
-  ) {
-    return {
-      text: 'Prerequisites and major requirements are defined in the General Catalog and enforced through GOLD. A human advisor should confirm anything that looks like an edge case, especially if two courses overlap in time or content.',
-      bullets: [
-        'Check the Economics major sheet and catalog course entries before you rely on schedule suggestions from any demo.',
-        'Open the Economics prep flowchart from the dashboard for this demo path.',
-        'L&S General Advising and Economics undergraduate advising are the right places to confirm sequencing if you have transfer work or substitutions.',
-      ],
-      resources: [OFFICIAL_SOURCE.catalog, OFFICIAL_SOURCE.gold, OFFICIAL_SOURCE.lsAdvising],
-    }
-  }
-
-  return {
-    text: 'For very general L&S questions, compare any sample roadmap to your GOLD degree audit and the General Catalog. This Economics-focused demo often places ECON 101 and ECON 134A after ECON 10A and PSTAT 109, but that is illustrative—not advice about your personal record.',
-    bullets: [
-      'Use L&S General Academic Advising when you need a human review of progress, exceptions, or long-term plans.',
-      'Aim for a sustainable unit load (commonly around 12–14 units) unless an advisor has helped you plan otherwise.',
-    ],
-    resources: [OFFICIAL_SOURCE.catalog, OFFICIAL_SOURCE.lsAdvising, OFFICIAL_SOURCE.gold],
-  }
 }
 
 function getMonthMatrix(year, monthIndex) {
@@ -447,7 +309,7 @@ function App() {
               { label: 'Economics prep flowchart (demo)', url: '/econ-prep-map' },
             ],
           }
-        : buildChatResponse(trimmed),
+        : buildChatReply(trimmed),
     )
     setChatMessages((currentMessages) => [
       ...currentMessages,
@@ -458,9 +320,21 @@ function App() {
         text: reply.text,
         bullets: reply.bullets,
         resources: reply.resources,
+        policySnippet: reply.policySnippet ?? null,
+        intentId: reply.intentId ?? null,
       },
     ])
     setDraftMessage('')
+  }
+
+  function handleAskAboutSnippet(snippet) {
+    setActiveView('chat')
+    setDraftMessage(`What should I know about: ${snippet.title}?`)
+  }
+
+  function handleChatPrompt(prompt) {
+    setDraftMessage(prompt)
+    setActiveView('chat')
   }
 
   function handleOpenCourseGrades(course, summary) {
@@ -503,13 +377,19 @@ function App() {
         onToggleRequirement={handleToggleRequirement}
       />
     ),
+    resources: (
+      <ResourcesView onNavigate={setActiveView} onAskAboutSnippet={handleAskAboutSnippet} />
+    ),
     chat: (
       <ChatView
         draftMessage={draftMessage}
         messages={chatMessages}
         onDraftChange={setDraftMessage}
+        onNavigate={setActiveView}
         onOpenCourseGrades={handleOpenCourseGrades}
+        onSelectPrompt={handleChatPrompt}
         onSendMessage={handleSendMessage}
+        promptSuggestions={chatPromptSuggestions}
       />
     ),
     dates: <DatesView />,
@@ -519,6 +399,7 @@ function App() {
     dashboard: 'Overview, progress, and action cards',
     planner: 'Click-to-add roadmap across four years',
     checklist: 'Track requirements and transfer credit',
+    resources: 'Official links and policy snippet library',
     chat: 'General UCSB questions with official source links',
     dates: 'Winter 2026 deadlines and calendar',
   }
@@ -1708,7 +1589,16 @@ function ChecklistView({
   )
 }
 
-function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, onSendMessage }) {
+function ChatView({
+  draftMessage,
+  messages,
+  onDraftChange,
+  onNavigate,
+  onOpenCourseGrades,
+  onSelectPrompt,
+  onSendMessage,
+  promptSuggestions,
+}) {
   const { error: gradesError, isLoading: isLoadingGrades, summaries: gradeSummaries } =
     useCourseGradeSummaries(advisorSuggestedCourses.map((course) => course.code))
 
@@ -1754,6 +1644,22 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
                   </ul>
                 )}
 
+                {message.sender === 'bot' && message.policySnippet && (
+                  <div className="mt-4 rounded-2xl border border-gold/25 bg-gold/8 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
+                      Related policy snippet
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-white">{message.policySnippet.title}</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-300">{message.policySnippet.excerpt}</p>
+                    <div className="mt-3">
+                      <GoldSourceChip
+                        href={message.policySnippet.sourceUrl}
+                        label={`${message.policySnippet.sourceLabel} (source)`}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {message.sender === 'bot' && message.resources?.length > 0 && (
                   <div className="mt-4 border-t border-white/10 pt-4">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
@@ -1780,9 +1686,30 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
         </div>
 
         <div className="mt-6 panel border border-white/10 bg-slate-950/45 p-4">
-          <label className="text-sm font-medium text-slate-300" htmlFor="campus-qa-input">
-            Ask a general question
-          </label>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <label className="text-sm font-medium text-slate-300" htmlFor="campus-qa-input">
+              Ask a general question
+            </label>
+            <button
+              type="button"
+              onClick={() => onNavigate('resources')}
+              className="text-xs font-semibold text-gold hover:text-gold-hover"
+            >
+              Browse Resource Hub →
+            </button>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {promptSuggestions.map((prompt) => (
+              <button
+                key={prompt}
+                type="button"
+                onClick={() => onSelectPrompt(prompt)}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:border-gold/30 hover:bg-gold/10 hover:text-gold"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
           <div className="mt-3 flex flex-col gap-3 sm:flex-row">
             <input
               id="campus-qa-input"
@@ -1851,6 +1778,10 @@ function ChatView({ draftMessage, messages, onDraftChange, onOpenCourseGrades, o
           <div className="mt-4 space-y-4 text-sm leading-6 text-slate-300">
             <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
               Every bot reply includes at least one official UCSB link so you can verify information yourself.
+            </div>
+            <div className="rounded-2xl border border-gold/20 bg-gold/8 p-4">
+              Matching questions may attach a policy snippet from the Resource Hub—always confirm on the linked
+              official page.
             </div>
             <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4">
               Questions about petitions, standing, exceptions, or your specific transcript are routed to L&S General

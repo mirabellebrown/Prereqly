@@ -2,6 +2,7 @@ export const navItems = [
   { id: 'dashboard', label: 'Dashboard', shortLabel: 'Home', icon: 'dashboard' },
   { id: 'planner', label: '4-Year Planner', shortLabel: 'Planner', icon: 'planner' },
   { id: 'checklist', label: 'Degree Checklist', shortLabel: 'Checklist', icon: 'checklist' },
+  { id: 'resources', label: 'Resource Hub', shortLabel: 'Resources', icon: 'resources' },
   { id: 'chat', label: 'Campus Q&A', shortLabel: 'Q&A', icon: 'chat' },
   { id: 'dates', label: 'Important Dates', shortLabel: 'Dates', icon: 'calendar' },
 ]
@@ -45,6 +46,12 @@ export const quickAccessCards = [
     description: 'Full-page prerequisite map with color-coded paths (opens in its own view).',
     accent: 'from-violet-500/22 to-violet-400/0',
     href: '/econ-prep-map',
+  },
+  {
+    id: 'resources',
+    title: 'Resource Hub',
+    description: 'Official UCSB links, policy snippets, and demo tools in one place.',
+    accent: 'from-gold/20 to-gold/0',
   },
   {
     id: 'chat',

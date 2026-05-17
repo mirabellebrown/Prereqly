@@ -36,6 +36,16 @@ export function AppIcon({ name, className = 'h-5 w-5' }) {
         strokeWidth="1.8"
       />
     ),
+    resources: (
+      <path
+        d="M6 4h12v16H6zM8 4V2h8v2M9 9h6M9 13h6M9 17h4"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+    ),
     calendar: (
       <path
         d="M6 4v3M18 4v3M5 8h14M6 6h12a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zm3 5h2m4 0h2m-8 4h2"
