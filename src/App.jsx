@@ -43,7 +43,10 @@ import {
   parseQuarterKey,
 } from './lib/plannerLoad'
 import { GeExplainer } from './components/GeExplainer'
+import { GeEasyPicks } from './components/GeEasyPicks'
 import { ResourcesView } from './components/ResourcesView'
+import { parseGePlaceholderCode, resolveGeAreaKey } from './lib/gePlaceholder'
+import { useGeEasyPicks } from './lib/useGeEasyPicks'
 import { politicalScienceMinorPreview } from './data/politicalScienceMinorPreview'
 import { chatPromptSuggestions } from './data/campusResources'
 import { buildChatReply, ensureOfficialSources, OFFICIAL_SOURCE } from './lib/chatIntents'
@@ -352,6 +355,7 @@ function App() {
       <DashboardView
         checklistSections={checklistSections}
         onNavigate={setActiveView}
+        onOpenCourseGrades={handleOpenCourseGrades}
         planner={planner}
       />
     ),
@@ -368,6 +372,7 @@ function App() {
     ),
     checklist: (
       <ChecklistView
+        onOpenCourseGrades={handleOpenCourseGrades}
         checklistPercent={checklistPercent}
         completedRequirementCount={completedRequirementCount}
         plannedCoveragePercent={plannedCoveragePercent}
@@ -431,12 +436,28 @@ function App() {
   )
 }
 
-function DashboardView({ checklistSections, onNavigate, planner }) {
+function DashboardView({ checklistSections, onNavigate, onOpenCourseGrades, planner }) {
   const totalPlannedUnits = planner
     .flatMap((yearPlan) => quarters.flatMap((quarter) => yearPlan.quarters[quarter]))
     .reduce((sum, course) => sum + course.units, 0)
 
   const graduation = buildGraduationSummary({ studentProfile, checklistSections })
+
+  const openGeAreaKeys = useMemo(
+    () =>
+      [
+        ...new Set(
+          graduation.whatsLeft.map((item) => item.geAreaKey).filter(Boolean),
+        ),
+      ],
+    [graduation.whatsLeft],
+  )
+
+  const {
+    error: gePicksError,
+    isLoading: gePicksLoading,
+    picksByArea: gePicksByArea,
+  } = useGeEasyPicks(openGeAreaKeys)
 
   return (
     <div className="space-y-6">
@@ -499,18 +520,30 @@ function DashboardView({ checklistSections, onNavigate, planner }) {
           </p>
           <ul className="mt-4 divide-y divide-white/10">
             {graduation.whatsLeft.map((item) => (
-              <li key={item.id} className="flex items-start justify-between gap-3 py-3 text-sm">
-                <div>
-                  <div className="font-medium text-white">{item.label}</div>
-                  <div className="text-slate-400">{item.detail}</div>
+              <li key={item.id} className="py-3 text-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-medium text-white">{item.label}</div>
+                    <div className="text-slate-400">{item.detail}</div>
+                  </div>
+                  <span
+                    className={`shrink-0 rounded-2xl px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${
+                      item.isPlanned ? 'badge-silver' : 'border border-white/15 bg-white/5 text-slate-400'
+                    }`}
+                  >
+                    {item.isPlanned ? 'In planner' : 'Open'}
+                  </span>
                 </div>
-                <span
-                  className={`shrink-0 rounded-2xl px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${
-                    item.isPlanned ? 'badge-silver' : 'border border-white/15 bg-white/5 text-slate-400'
-                  }`}
-                >
-                  {item.isPlanned ? 'In planner' : 'Open'}
-                </span>
+                {item.geAreaKey && (
+                  <GeEasyPicks
+                    areaKey={item.geAreaKey}
+                    picks={gePicksByArea[item.geAreaKey] ?? []}
+                    isLoading={gePicksLoading}
+                    error={gePicksError}
+                    compact
+                    onOpenCourseGrades={onOpenCourseGrades}
+                  />
+                )}
               </li>
             ))}
           </ul>
@@ -674,6 +707,33 @@ function PlannerView({
   const selectedQuarterUnits = selectedYearPlan ? getQuarterUnits(selectedYearPlan, selectedQuarterName) : 0
   const selectedQuarterLoad = getQuarterLoadStatus(selectedQuarterUnits)
 
+  const geAreaKeys = useMemo(() => {
+    const keys = new Set()
+    planner.forEach((yearPlan) => {
+      quarters.forEach((quarter) => {
+        yearPlan.quarters[quarter].forEach((course) => {
+          const area = parseGePlaceholderCode(course.code)
+          if (area) {
+            keys.add(area)
+          }
+        })
+      })
+    })
+    plannerSuggestions.forEach((course) => {
+      const area = parseGePlaceholderCode(course.code)
+      if (area) {
+        keys.add(area)
+      }
+    })
+    return [...keys]
+  }, [planner])
+
+  const {
+    error: gePicksError,
+    isLoading: gePicksLoading,
+    picksByArea: gePicksByArea,
+  } = useGeEasyPicks(geAreaKeys)
+
   return (
     <div className="grid gap-6 xl:grid-cols-[1.6fr,0.9fr]">
       <section className="space-y-6">
@@ -783,10 +843,26 @@ function PlannerView({
                               </span>
                             </div>
                             <div className="mt-1 text-sm leading-6 text-slate-100/90">{course.title}</div>
-                            <CourseGradesSummary
-                              isLoading={isLoadingGrades}
-                              summary={gradeSummaries[course.code] ?? null}
-                            />
+                            {parseGePlaceholderCode(course.code) ? (
+                              <GeEasyPicks
+                                areaKey={parseGePlaceholderCode(course.code)}
+                                picks={gePicksByArea[parseGePlaceholderCode(course.code)] ?? []}
+                                isLoading={gePicksLoading}
+                                error={gePicksError}
+                                compact
+                                onOpenCourseGrades={(pickCourse) =>
+                                  onOpenCourseGrades(
+                                    pickCourse,
+                                    gradeSummaries[pickCourse.code] ?? null,
+                                  )
+                                }
+                              />
+                            ) : (
+                              <CourseGradesSummary
+                                isLoading={isLoadingGrades}
+                                summary={gradeSummaries[course.code] ?? null}
+                              />
+                            )}
                           </button>
                         ))}
                       </div>
@@ -869,6 +945,20 @@ function PlannerView({
                       )}
                       <p className="mt-2 text-sm text-slate-300">{course.title}</p>
                       <p className="mt-2 text-sm leading-6 text-slate-400">{course.note}</p>
+                      {parseGePlaceholderCode(course.code) && (
+                        <GeEasyPicks
+                          areaKey={parseGePlaceholderCode(course.code)}
+                          picks={gePicksByArea[parseGePlaceholderCode(course.code)] ?? []}
+                          isLoading={gePicksLoading}
+                          error={gePicksError}
+                          onOpenCourseGrades={(pickCourse) =>
+                            onOpenCourseGrades(
+                              pickCourse,
+                              gradeSummaries[pickCourse.code] ?? null,
+                            )
+                          }
+                        />
+                      )}
                       {!prereqCheck.ok && (
                         <p className="mt-2 text-xs leading-5 text-amber-200">
                           Missing prerequisites: {prereqCheck.missing.join(', ')}.{' '}
@@ -1372,8 +1462,30 @@ function ChecklistView({
   hasLoadedSavedState,
   onToggleTransferCredits,
   onToggleRequirement,
+  onOpenCourseGrades,
 }) {
   const [showMinorPreview, setShowMinorPreview] = useState(false)
+
+  const openGeAreaKeys = useMemo(
+    () =>
+      [
+        ...new Set(
+          sections
+            .filter((section) => section.id === 'ge')
+            .flatMap((section) => section.items)
+            .filter((item) => !item.isSatisfied)
+            .map((item) => resolveGeAreaKey(item))
+            .filter(Boolean),
+        ),
+      ],
+    [sections],
+  )
+
+  const {
+    error: gePicksError,
+    isLoading: gePicksLoading,
+    picksByArea: gePicksByArea,
+  } = useGeEasyPicks(openGeAreaKeys)
 
   return (
     <div className="space-y-6">
@@ -1542,6 +1654,16 @@ function ChecklistView({
                         <RequirementStatusChip item={item} />
                       </span>
                       <span className="mt-1 block text-sm leading-6 text-slate-400">{item.detail}</span>
+                      {resolveGeAreaKey(item) && !item.isSatisfied && (
+                        <GeEasyPicks
+                          areaKey={resolveGeAreaKey(item)}
+                          picks={gePicksByArea[resolveGeAreaKey(item)] ?? []}
+                          isLoading={gePicksLoading}
+                          error={gePicksError}
+                          compact
+                          onOpenCourseGrades={onOpenCourseGrades}
+                        />
+                      )}
                       <div className="mt-3 flex flex-wrap items-center gap-3">
                         <button
                           type="button"

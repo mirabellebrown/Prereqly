@@ -393,6 +393,11 @@ const getCachedGradesIndex = unstable_cache(buildGradesIndex, ['daily-nexus-grad
   revalidate: CACHE_REVALIDATE_SECONDS,
 })
 
+/** Shared grades index for GE easy-picks and course summaries. */
+export async function getGradesIndex() {
+  return getCachedGradesIndex()
+}
+
 export async function getCourseGradeSummaries(courseCodes) {
   const index = await getCachedGradesIndex()
   const baseSummaries = {}
