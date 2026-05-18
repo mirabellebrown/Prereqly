@@ -21,48 +21,63 @@ const ZOOM_MAX = 1.45
 const ZOOM_STEP = 0.08
 const ZOOM_DEFAULT = 1
 
-/** Step 1 = gold, Step 2 = silver, Step 3 = bronze */
+/** Frosted silver glass — zones sit above app bg; step accent is border-only */
+const SILVER_RGB = {
+  bright: '241, 245, 249',
+  base: '203, 213, 225',
+  dim: '148, 163, 184',
+}
+
 const ZONE_STYLES = {
   admission: {
-    fill: 'rgba(212, 175, 55, 0.14)',
-    stroke: '#e6c04a',
-    headerFill: '#7a5c10',
-    stepFill: '#d4af37',
-    titleClass: 'fill-white',
-    subClass: 'fill-amber-50',
+    fill: `rgba(${SILVER_RGB.bright}, 0.08)`,
+    stroke: 'rgba(254, 188, 17, 0.42)',
+    headerFill: `rgba(${SILVER_RGB.bright}, 0.16)`,
+    stepFill: 'rgba(254, 188, 17, 0.22)',
+    titleClass: 'fill-slate-100',
+    subClass: 'fill-slate-300',
   },
   prep: {
-    fill: 'rgba(203, 213, 225, 0.1)',
-    stroke: '#cbd5e1',
-    headerFill: '#475569',
-    stepFill: '#94a3b8',
-    titleClass: 'fill-white',
-    subClass: 'fill-slate-200',
+    fill: `rgba(${SILVER_RGB.base}, 0.1)`,
+    stroke: `rgba(${SILVER_RGB.base}, 0.4)`,
+    headerFill: `rgba(${SILVER_RGB.bright}, 0.16)`,
+    stepFill: `rgba(${SILVER_RGB.base}, 0.26)`,
+    titleClass: 'fill-slate-100',
+    subClass: 'fill-slate-300',
   },
   major: {
-    fill: 'rgba(183, 110, 50, 0.16)',
-    stroke: '#cd7f32',
-    headerFill: '#6b3f12',
-    stepFill: '#b87333',
-    titleClass: 'fill-white',
-    subClass: 'fill-orange-50',
+    fill: `rgba(${SILVER_RGB.bright}, 0.08)`,
+    stroke: 'rgba(205, 127, 50, 0.44)',
+    headerFill: `rgba(${SILVER_RGB.bright}, 0.16)`,
+    stepFill: 'rgba(205, 127, 50, 0.22)',
+    titleClass: 'fill-slate-100',
+    subClass: 'fill-slate-300',
   },
 }
 
 const COURSE_LOCKED = {
-  fill: 'rgba(2, 6, 12, 0.94)',
-  stroke: 'rgba(51, 65, 85, 0.65)',
+  fill: 'rgba(2, 6, 12, 0.78)',
+  stroke: `rgba(${SILVER_RGB.dim}, 0.4)`,
 }
 
 const COURSE_COMPLETE = {
-  fill: 'rgba(6, 95, 70, 0.55)',
-  stroke: '#34d399',
+  fill: 'rgba(52, 211, 153, 0.3)',
+  stroke: 'rgba(52, 211, 153, 0.7)',
 }
 
 const COURSE_UNLOCKED = {
-  admission: { fill: 'rgba(212, 175, 55, 0.28)', stroke: '#fcd34d' },
-  prep: { fill: 'rgba(148, 163, 184, 0.22)', stroke: '#e2e8f0' },
-  major: { fill: 'rgba(183, 110, 50, 0.3)', stroke: '#e8a35c' },
+  admission: {
+    fill: `rgba(${SILVER_RGB.bright}, 0.15)`,
+    stroke: 'rgba(254, 188, 17, 0.55)',
+  },
+  prep: {
+    fill: `rgba(${SILVER_RGB.bright}, 0.18)`,
+    stroke: `rgba(${SILVER_RGB.base}, 0.58)`,
+  },
+  major: {
+    fill: `rgba(${SILVER_RGB.bright}, 0.15)`,
+    stroke: 'rgba(205, 127, 50, 0.55)',
+  },
 }
 
 
@@ -194,7 +209,7 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
           rx={16}
           fill={style.fill}
           stroke={style.stroke}
-          strokeWidth={2}
+          strokeWidth={1.5}
         />
         <rect
           x={zone.x}
@@ -203,6 +218,9 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
           height={headerH}
           rx={16}
           fill={style.headerFill}
+          stroke={style.stroke}
+          strokeWidth={1}
+          strokeOpacity={0.35}
         />
         <rect x={zone.x} y={zone.y + 38} width={zone.w} height={12} fill={style.headerFill} />
         <rect
@@ -305,7 +323,7 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
       </div>
 
       <div
-        className={`overflow-auto rounded-2xl border border-silver/30 bg-slate-950/40 p-6 shadow-inner ${
+        className={`overflow-auto rounded-2xl border border-silver/25 bg-transparent p-6 ${
           isStandalone ? 'max-h-[min(88vh,920px)] min-h-[420px]' : 'max-h-[min(72vh,620px)]'
         }`}
       >
@@ -342,10 +360,10 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
             y1={stepDividerY}
             x2={616}
             y2={stepDividerY}
-            stroke="#94a3b8"
+            stroke={`rgba(${SILVER_RGB.base}, 0.35)`}
             strokeWidth={1.5}
             strokeDasharray="8 5"
-            strokeOpacity={0.4}
+            strokeOpacity={0.5}
           />
 
           <line
@@ -353,7 +371,7 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
             y1={24}
             x2={dividerX}
             y2={height - 24}
-            stroke="rgba(205, 127, 50, 0.2)"
+            stroke={`rgba(${SILVER_RGB.base}, 0.12)`}
             strokeWidth={10}
           />
           <line
@@ -361,9 +379,8 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
             y1={24}
             x2={dividerX}
             y2={height - 24}
-            stroke="#cd7f32"
-            strokeWidth={2.5}
-            strokeOpacity={0.85}
+            stroke={`rgba(${SILVER_RGB.base}, 0.45)`}
+            strokeWidth={1.5}
           />
           <text
             x={dividerX + 12}
@@ -406,15 +423,15 @@ export function EconPrepMapFlowchart({ showBackLink = true, variant = 'standalon
                 <g key={node.id}>
                   <polygon
                     points={gateDiamondPoints(node)}
-                    fill={isOr ? 'rgba(254, 243, 199, 0.92)' : 'rgba(248, 250, 252, 0.94)'}
-                    stroke={isOr ? 'rgba(251, 191, 36, 0.85)' : 'rgba(100, 116, 139, 0.9)'}
+                    fill={`rgba(${SILVER_RGB.bright}, 0.2)`}
+                    stroke={`rgba(${SILVER_RGB.base}, 0.55)`}
                     strokeWidth="1.25"
                   />
                   <text
                     x={node.x + node.w / 2}
                     y={node.y + node.h / 2 + 4}
                     textAnchor="middle"
-                    className={`text-[10px] font-bold ${isOr ? 'fill-amber-800' : 'fill-slate-700'}`}
+                    className="fill-slate-200 text-[10px] font-bold"
                   >
                     {node.label}
                   </text>
