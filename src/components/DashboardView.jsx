@@ -99,7 +99,10 @@ export function DashboardView({ checklistSections, onNavigate, planner }) {
         <div className="flex h-full flex-col justify-between gap-8">
           <div className="flex flex-col gap-8 xl:flex-row xl:items-start xl:justify-between">
             <div className="flex min-w-0 flex-1 flex-col gap-5 sm:flex-row sm:items-start">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-gold/25 to-slate-100 text-2xl font-black text-ucsb-navy shadow-[0_0_36px_var(--gold-glow)] ring-2 ring-gold/30">
+              <div
+                className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-slate-200/90 to-slate-100 text-4xl font-black tracking-tight text-ucsb-navy shadow-[0_0_28px_rgba(203,213,225,0.25)] ring-2 ring-silver/50"
+                aria-hidden
+              >
                 {studentProfile.initials}
               </div>
               <div className="min-w-0">
@@ -110,7 +113,7 @@ export function DashboardView({ checklistSections, onNavigate, planner }) {
                 <p className="mt-1 text-lg text-slate-200">{studentProfile.major}</p>
                 <p className="mt-1 text-sm text-slate-400">{studentProfile.college}</p>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <span className="badge-gold rounded-2xl px-3 py-1 text-xs font-semibold">
+                  <span className="badge-silver rounded-2xl px-3 py-1 text-xs font-semibold">
                     {studentProfile.year}
                   </span>
                   <span className="surface-frost rounded-2xl px-3 py-1 text-xs text-slate-200">
@@ -154,7 +157,7 @@ export function DashboardView({ checklistSections, onNavigate, planner }) {
               <span>Requirements complete (demo)</span>
               <span className="font-semibold text-gold">{graduation.checklistPercent}%</span>
             </div>
-            <div className="h-2.5 overflow-hidden rounded-full bg-slate-800/80 ring-1 ring-gold/10">
+            <div className="h-2.5 overflow-hidden rounded-full bg-slate-800/50 ring-1 ring-silver/25">
               <div
                 className="progress-silver h-full rounded-full"
                 style={{ width: `${graduation.checklistPercent}%` }}
